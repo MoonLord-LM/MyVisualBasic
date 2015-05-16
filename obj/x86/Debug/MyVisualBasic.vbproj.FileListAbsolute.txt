@@ -1,0 +1,9 @@
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\bin\Debug\MyVisualBasic.exe
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\bin\Debug\MyVisualBasic.pdb
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\bin\Debug\MyVisualBasic.xml
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\obj\x86\Debug\MyVisualBasic.FormMain.resources
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\obj\x86\Debug\MyVisualBasic.Resources.resources
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\obj\x86\Debug\MyVisualBasic.vbproj.GenerateResource.Cache
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\obj\x86\Debug\MyVisualBasic.exe
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\obj\x86\Debug\MyVisualBasic.xml
+F:\Documents\Visual Studio成品示例\【2015】\MyVisualBasic\obj\x86\Debug\MyVisualBasic.pdb
