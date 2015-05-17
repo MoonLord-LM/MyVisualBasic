@@ -6,17 +6,7 @@ MyVisualBasic
 </name>
 </assembly>
 <members>
-<member name="T:MyVisualBasic.My.MyApplication">
-	<summary>
- My.Application
- </summary>
-	<remarks>访问应用程序信息和服务。</remarks>
-</member><member name="T:MyVisualBasic.My.MyComputer">
-	<summary>
- My.Computer
- </summary>
-	<remarks>访问主机及其资源、服务和数据。</remarks>
-</member><member name="P:MyVisualBasic.My.Resources.Resources.ResourceManager">
+<member name="P:MyVisualBasic.My.Resources.Resources.ResourceManager">
 	<summary>
   Returns the cached ResourceManager instance used by this class.
 </summary>
@@ -29,6 +19,326 @@ MyVisualBasic
 	<summary>
   A strongly-typed resource class, for looking up localized strings, etc.
 </summary>
+</member><member name="M:MyVisualBasic.My.Security.Base64_Encode(System.String)">
+	<summary>
+ Base64加密算法
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.Base64_Encode(System.String,System.Text.Encoding)">
+	<summary>
+ Base64加密算法
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<param name="Encoding">使用的编码格式（默认UTF-8）</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.Base64_Decode(System.String)">
+	<summary>
+ Base64解密算法
+ </summary>
+	<param name="Source">要解密的字符串</param>
+	<returns>解密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.Base64_Decode(System.String,System.Text.Encoding)">
+	<summary>
+ Base64解密算法
+ </summary>
+	<param name="Source">要解密的字符串</param>
+	<param name="Encoding">使用的编码格式（默认UTF-8）</param>
+	<returns>解密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.MD5_Lower16_Encode(System.String)">
+	<summary>
+ MD5加密算法（返回16位小写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.MD5_Upper16_Encode(System.String)">
+	<summary>
+ MD5加密算法（返回16位大写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.MD5_Lower32_Encode(System.String)">
+	<summary>
+ MD5加密算法（返回32位小写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.MD5_Upper32_Encode(System.String)">
+	<summary>
+ MD5加密算法（返回32位大写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA1_Lower40_Encode(System.String)">
+	<summary>
+ SHA1加密算法（返回40位小写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA1_Upper40_Encode(System.String)">
+	<summary>
+ SHA1加密算法（返回40位大写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA256_Lower64_Encode(System.String)">
+	<summary>
+ SHA256加密算法（返回64位小写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA256_Upper64_Encode(System.String)">
+	<summary>
+ SHA256加密算法（返回64位大写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA384_Lower96_Encode(System.String)">
+	<summary>
+ SHA384加密算法（返回96位小写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA384_Upper96_Encode(System.String)">
+	<summary>
+ SHA384加密算法（返回96位大写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA512_Lower128_Encode(System.String)">
+	<summary>
+ SHA512加密算法（返回128位小写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.SHA512_Upper128_Encode(System.String)">
+	<summary>
+ SHA512加密算法（返回128位大写结果）
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.DES_Encode(System.String,System.String)">
+	<summary>
+ DES加密算法
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<param name="SecretKey">加密密钥（8的整数倍字节数的字符串）</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.DES_Decode(System.Byte[],System.String)">
+	<summary>
+ DES解密算法
+ </summary>
+	<param name="Source">要解密的字符串</param>
+	<param name="SecretKey">解密密钥（8的整数倍字节数的字符串）</param>
+	<returns>解密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.RSA_Encode(System.String)">
+	<summary>
+ RSA加密算法
+ </summary>
+	<param name="Source">要加密的字符串</param>
+	<returns>加密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Security.RSA_Decode(System.Byte[])">
+	<summary>
+ RSA解密算法
+ </summary>
+	<param name="Source">要解密的字符串</param>
+	<returns>解密后的结果字符串</returns>
+	<remarks></remarks>
+</member><member name="T:MyVisualBasic.My.Security">
+	<summary>
+ 编码与解码函数
+ </summary>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Http.GetString(System.String)">
+	<summary>
+ 获取网页源码
+ </summary>
+	<param name="URL">网页链接</param>
+	<returns>网页源码字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Http.GetString(System.String,System.Text.Encoding)">
+	<summary>
+ 获取网页源码
+ </summary>
+	<param name="URL">网页链接</param>
+	<param name="Encoding">使用的编码格式（默认UTF-8）</param>
+	<returns>网页源码字符串</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Http.DownloadFile(System.String,System.String)">
+	<summary>
+ 下载文件到磁盘
+ </summary>
+	<param name="URL">文件链接</param>
+	<param name="FilePath">文件保存路径（可以是相对路径）</param>
+	<returns>是否下载成功</returns>
+	<remarks></remarks>
+</member><member name="T:MyVisualBasic.My.Http">
+	<summary>
+ 网络访问函数
+ </summary>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.SaveStringArray(System.Collections.ArrayList@,System.String)">
+	<summary>
+ 将字符串数组写入文件
+ </summary>
+	<param name="StringArray">字符串数组</param>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<returns>是否写入成功</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.SaveStringArray(System.Collections.Generic.List{System.String}@,System.String)">
+	<summary>
+ 将字符串数组写入文件
+ </summary>
+	<param name="StringArray">字符串数组</param>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<returns>是否写入成功</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.SaveStringArray(System.String[]@,System.String)">
+	<summary>
+ 将字符串数组写入文件
+ </summary>
+	<param name="StringArray">字符串数组</param>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<returns>是否写入成功</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.ReadStringArray(System.Collections.ArrayList@,System.String)">
+	<summary>
+ 读取文件中的字符串数组
+ </summary>
+	<param name="StringArray">字符串数组</param>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<returns>是否读取成功</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.ReadStringArray(System.Collections.Generic.List{System.String}@,System.String)">
+	<summary>
+ 读取文件中的字符串数组
+ </summary>
+	<param name="StringArray">字符串数组</param>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<returns>是否读取成功</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.ReadStringArray(System.String[]@,System.String)">
+	<summary>
+ 读取文件中的字符串数组
+ </summary>
+	<param name="StringArray">字符串数组</param>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<returns>是否读取成功</returns>
+	<remarks></remarks>
+</member><member name="T:MyVisualBasic.My.IO">
+	<summary>
+ 磁盘读写函数
+ </summary>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.StringData.SearchForward(System.String@,System.String,System.String)">
+	<summary>
+ 搜索字符串（从第一个开始字符串的位置，向后搜寻结束字符串，取出中间的部分）
+ </summary>
+	<param name="SourceCode">要搜索的字符串</param>
+	<param name="BeginString">开始字符串</param>
+	<param name="EndString">结束字符串</param>
+	<returns>搜索结果字符串（无结果时返回空字符串）</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.StringData.SearchBackward(System.String@,System.String,System.String)">
+	<summary>
+ 搜索字符串（从最后一个结束字符串的位置，向前搜寻开始字符串，取出中间的部分）
+ </summary>
+	<param name="SourceCode">要搜索的字符串</param>
+	<param name="BeginString">开始字符串</param>
+	<param name="EndString">结束字符串</param>
+	<returns>搜索结果字符串（无结果时返回空字符串）</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.StringData.SearchMiddle(System.String@,System.String,System.String)">
+	<summary>
+ 搜索字符串（从第一个开始字符串的位置，向后搜寻最后一个结束字符串的位置，取出中间的部分）
+ </summary>
+	<param name="SourceCode">要搜索的字符串</param>
+	<param name="BeginString">开始字符串</param>
+	<param name="EndString">结束字符串</param>
+	<returns>搜索结果字符串（无结果时返回空字符串）</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.StringData.SearchAllForward(System.String@,System.String,System.String)">
+	<summary>
+ 搜索字符串（从第一个开始字符串的位置，向后搜寻结束字符串，取出中间的部分，重复向后搜索，返回数组）
+ </summary>
+	<param name="SourceCode">要搜索的字符串</param>
+	<param name="BeginString">开始字符串</param>
+	<param name="EndString">结束字符串</param>
+	<returns>搜索结果字符串数组（无结果时返回空数组）</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.StringData.SearchAllBackward(System.String@,System.String,System.String)">
+	<summary>
+ 搜索字符串（从最后一个结束字符串的位置，向前搜寻开始字符串，取出中间的部分，重复向前搜索，返回数组）
+ </summary>
+	<param name="SourceCode">要搜索的字符串</param>
+	<param name="BeginString">开始字符串</param>
+	<param name="EndString">结束字符串</param>
+	<returns>搜索结果字符串数组（无结果时返回空数组）</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.StringData.SearchAllMiddle(System.String@,System.String,System.String)">
+	<summary>
+ 搜索字符串（从第一个开始字符串的位置，向后搜寻最后一个结束字符串的位置，取出中间的部分，重复向中间搜索，返回数组）
+ </summary>
+	<param name="SourceCode">要搜索的字符串</param>
+	<param name="BeginString">开始字符串</param>
+	<param name="EndString">结束字符串</param>
+	<returns>搜索结果字符串数组（无结果时返回空数组）</returns>
+	<remarks></remarks>
+</member><member name="T:MyVisualBasic.My.StringData">
+	<summary>
+ 字符串处理函数
+ </summary>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Html.GetTextByTagName(System.String,System.String)">
+	<summary>
+ 获取网页源码中指定标签的元素的文本
+ </summary>
+	<param name="Source">网页源代码</param>
+	<param name="HtmlTag">元素标签</param>
+	<returns>文本字符串数组</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.Html.GetTextById(System.String,System.String)">
+	<summary>
+ 获取网页源码中指定ID的元素的文本
+ </summary>
+	<param name="Source">网页源代码</param>
+	<param name="Id">元素ID</param>
+	<returns>文本字符串</returns>
+	<remarks></remarks>
+</member><member name="T:MyVisualBasic.My.Html">
+	<summary>
+ HTML代码处理函数
+ </summary>
+	<remarks></remarks>
+</member><member name="T:MyVisualBasic.My.MyApplication">
+	<summary>
+ My.Application
+ </summary>
+	<remarks>访问应用程序信息和服务。</remarks>
+</member><member name="T:MyVisualBasic.My.MyComputer">
+	<summary>
+ My.Computer
+ </summary>
+	<remarks>访问主机及其资源、服务和数据。</remarks>
 </member>
 </members>
 </doc>

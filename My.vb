@@ -24,7 +24,7 @@
         ''' <returns>加密后的结果字符串</returns>
         ''' <remarks></remarks>
         Public Shared Function Base64_Encode(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
-            Return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Source))
+            Return Convert.ToBase64String(Encoding.GetBytes(Source))
         End Function
         ''' <summary>
         ''' Base64解密算法
@@ -43,7 +43,7 @@
         ''' <returns>解密后的结果字符串</returns>
         ''' <remarks></remarks>
         Public Shared Function Base64_Decode(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
-            Return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Source))
+            Return Encoding.GetString(Convert.FromBase64String(Source))
         End Function
         ''' <summary>
         ''' MD5加密算法（返回16位小写结果）
@@ -220,6 +220,331 @@
             Catch ex As Exception
                 Return ""
             End Try
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' 网络访问函数
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public NotInheritable Class Http
+        ''' <summary>
+        ''' 获取网页源码
+        ''' </summary>
+        ''' <param name="URL">网页链接</param>
+        ''' <returns>网页源码字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetString(ByVal URL As String) As String
+            Dim Client As System.Net.WebClient = New System.Net.WebClient
+            Client.Encoding = System.Text.Encoding.UTF8
+            Try
+                Return Client.DownloadString(URL)
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取网页源码
+        ''' </summary>
+        ''' <param name="URL">网页链接</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>网页源码字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetString(ByVal URL As String, ByVal Encoding As System.Text.Encoding) As String
+            Dim Client As System.Net.WebClient = New System.Net.WebClient
+            Client.Encoding = Encoding
+            Try
+                Return Client.DownloadString(URL)
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Function
+        ''' <summary>
+        ''' 下载文件到磁盘
+        ''' </summary>
+        ''' <param name="URL">文件链接</param>
+        ''' <param name="FilePath">文件保存路径（可以是相对路径）</param>
+        ''' <returns>是否下载成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function DownloadFile(ByVal URL As String, ByVal FilePath As String) As Boolean
+            Dim Client As System.Net.WebClient = New System.Net.WebClient
+            Try
+                Client.DownloadFile(New System.Uri(URL), FilePath)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' 磁盘读写函数
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public NotInheritable Class IO
+        ''' <summary>
+        ''' 将字符串数组写入文件
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SaveStringArray(ByRef StringArray As ArrayList, ByVal FilePath As String) As Boolean
+            Dim Builder As System.Text.StringBuilder
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Builder = New System.Text.StringBuilder()
+                For I = 0 To StringArray.Count - 2
+                    Builder.Append(StringArray(I).ToString() & vbCrLf)
+                Next
+                If StringArray.Count > 0 Then Builder.Append(StringArray(StringArray.Count - 1))
+                Writer = New System.IO.StreamWriter(FilePath, False, System.Text.Encoding.UTF8)
+                Writer.Write(Builder)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将字符串数组写入文件
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SaveStringArray(ByRef StringArray As List(Of String), ByVal FilePath As String) As Boolean
+            Dim Builder As System.Text.StringBuilder
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Builder = New System.Text.StringBuilder()
+                For I = 0 To StringArray.Count - 2
+                    Builder.Append(StringArray(I) & vbCrLf)
+                Next
+                If StringArray.Count > 0 Then Builder.Append(StringArray(StringArray.Count - 1))
+                Writer = New System.IO.StreamWriter(FilePath, False, System.Text.Encoding.UTF8)
+                Writer.Write(Builder)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将字符串数组写入文件
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SaveStringArray(ByRef StringArray As String(), ByVal FilePath As String) As Boolean
+            Dim Builder As System.Text.StringBuilder
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Builder = New System.Text.StringBuilder()
+                For I = 0 To StringArray.Length - 2
+                    Builder.Append(StringArray(I) & vbCrLf)
+                Next
+                If StringArray.Length > 0 Then Builder.Append(StringArray(StringArray.Length - 1))
+                Writer = New System.IO.StreamWriter(FilePath, False, System.Text.Encoding.UTF8)
+                Writer.Write(Builder)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取文件中的字符串数组
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadStringArray(ByRef StringArray As ArrayList, ByVal FilePath As String) As Boolean
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
+                StringArray = New ArrayList(Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Reader.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取文件中的字符串数组
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadStringArray(ByRef StringArray As List(Of String), ByVal FilePath As String) As Boolean
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
+                StringArray = New List(Of String)(Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Reader.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取文件中的字符串数组
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadStringArray(ByRef StringArray As String(), ByVal FilePath As String) As Boolean
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
+                StringArray = Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)})
+                Reader.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' 字符串处理函数
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public NotInheritable Class StringData
+        ''' <summary>
+        ''' 搜索字符串（从第一个开始字符串的位置，向后搜寻结束字符串，取出中间的部分）
+        ''' </summary>
+        ''' <param name="SourceCode">要搜索的字符串</param>
+        ''' <param name="BeginString">开始字符串</param>
+        ''' <param name="EndString">结束字符串</param>
+        ''' <returns>搜索结果字符串（无结果时返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchForward(ByRef SourceCode As String, ByVal BeginString As String, ByVal EndString As String) As String
+            If SourceCode.Contains(BeginString) = False Then Return ""
+            SourceCode = SourceCode.Substring(SourceCode.IndexOf(BeginString) + BeginString.Length)
+            If SourceCode.Contains(EndString) = False Then Return ""
+            Return SourceCode.Substring(0, SourceCode.IndexOf(EndString))
+        End Function
+        ''' <summary>
+        ''' 搜索字符串（从最后一个结束字符串的位置，向前搜寻开始字符串，取出中间的部分）
+        ''' </summary>
+        ''' <param name="SourceCode">要搜索的字符串</param>
+        ''' <param name="BeginString">开始字符串</param>
+        ''' <param name="EndString">结束字符串</param>
+        ''' <returns>搜索结果字符串（无结果时返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchBackward(ByRef SourceCode As String, ByVal BeginString As String, ByVal EndString As String) As String
+            If SourceCode.Contains(EndString) = False Then Return ""
+            SourceCode = SourceCode.Substring(0, SourceCode.LastIndexOf(EndString))
+            If SourceCode.Contains(BeginString) = False Then Return ""
+            Return SourceCode.Substring(SourceCode.LastIndexOf(BeginString) + BeginString.Length)
+        End Function
+        ''' <summary>
+        ''' 搜索字符串（从第一个开始字符串的位置，向后搜寻最后一个结束字符串的位置，取出中间的部分）
+        ''' </summary>
+        ''' <param name="SourceCode">要搜索的字符串</param>
+        ''' <param name="BeginString">开始字符串</param>
+        ''' <param name="EndString">结束字符串</param>
+        ''' <returns>搜索结果字符串（无结果时返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchMiddle(ByRef SourceCode As String, ByVal BeginString As String, ByVal EndString As String) As String
+            If SourceCode.Contains(BeginString) = False Then Return ""
+            SourceCode = SourceCode.Substring(SourceCode.IndexOf(BeginString) + BeginString.Length)
+            If SourceCode.Contains(EndString) = False Then Return ""
+            Return SourceCode.Substring(0, SourceCode.LastIndexOf(EndString))
+        End Function
+        ''' <summary>
+        ''' 搜索字符串（从第一个开始字符串的位置，向后搜寻结束字符串，取出中间的部分，重复向后搜索，返回数组）
+        ''' </summary>
+        ''' <param name="SourceCode">要搜索的字符串</param>
+        ''' <param name="BeginString">开始字符串</param>
+        ''' <param name="EndString">结束字符串</param>
+        ''' <returns>搜索结果字符串数组（无结果时返回空数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchAllForward(ByRef SourceCode As String, ByVal BeginString As String, ByVal EndString As String) As List(Of String)
+            Dim Temp = New List(Of String)()
+            While SourceCode.Contains(BeginString)
+                SourceCode = SourceCode.Substring(SourceCode.IndexOf(BeginString) + BeginString.Length)
+                If SourceCode.Contains(EndString) = False Then Exit While
+                Temp.Add(SourceCode.Substring(0, SourceCode.IndexOf(EndString)))
+            End While
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 搜索字符串（从最后一个结束字符串的位置，向前搜寻开始字符串，取出中间的部分，重复向前搜索，返回数组）
+        ''' </summary>
+        ''' <param name="SourceCode">要搜索的字符串</param>
+        ''' <param name="BeginString">开始字符串</param>
+        ''' <param name="EndString">结束字符串</param>
+        ''' <returns>搜索结果字符串数组（无结果时返回空数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchAllBackward(ByRef SourceCode As String, ByVal BeginString As String, ByVal EndString As String) As List(Of String)
+            Dim Temp = New List(Of String)()
+            While SourceCode.Contains(EndString)
+                SourceCode = SourceCode.Substring(0, SourceCode.LastIndexOf(EndString))
+                If SourceCode.Contains(BeginString) = False Then Exit While
+                Temp.Add(SourceCode.Substring(SourceCode.LastIndexOf(BeginString) + BeginString.Length))
+            End While
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 搜索字符串（从第一个开始字符串的位置，向后搜寻最后一个结束字符串的位置，取出中间的部分，重复向中间搜索，返回数组）
+        ''' </summary>
+        ''' <param name="SourceCode">要搜索的字符串</param>
+        ''' <param name="BeginString">开始字符串</param>
+        ''' <param name="EndString">结束字符串</param>
+        ''' <returns>搜索结果字符串数组（无结果时返回空数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchAllMiddle(ByRef SourceCode As String, ByVal BeginString As String, ByVal EndString As String) As List(Of String)
+            Dim Temp = New List(Of String)()
+            While SourceCode.Contains(BeginString)
+                SourceCode = SourceCode.Substring(SourceCode.IndexOf(BeginString) + BeginString.Length)
+                If SourceCode.Contains(EndString) = False Then Exit While
+                Temp.Add(SourceCode.Substring(0, SourceCode.LastIndexOf(EndString)))
+            End While
+            Return Temp
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' HTML代码处理函数
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public NotInheritable Class Html
+        ''' <summary>
+        ''' 获取网页源码中指定标签的元素的文本
+        ''' </summary>
+        ''' <param name="Source">网页源代码</param>
+        ''' <param name="HtmlTag">元素标签</param>
+        ''' <returns>文本字符串数组</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetTextByTagName(ByVal Source As String, ByVal HtmlTag As String) As List(Of String)
+            Dim Temp As List(Of String) = New List(Of String)
+            Dim Browser As WebBrowser = New WebBrowser
+            Browser.DocumentText = ""
+            Browser.Document.OpenNew(True).Write(Source)
+            Dim Elements As HtmlElementCollection = Browser.Document.GetElementsByTagName(HtmlTag)
+            For I = 0 To Elements.Count - 1
+                Temp.Add(Elements(I).InnerText)
+            Next
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 获取网页源码中指定ID的元素的文本
+        ''' </summary>
+        ''' <param name="Source">网页源代码</param>
+        ''' <param name="Id">元素ID</param>
+        ''' <returns>文本字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetTextById(ByVal Source As String, ByVal Id As String) As String
+            Dim Browser As WebBrowser = New WebBrowser
+            Browser.DocumentText = ""
+            Browser.Document.OpenNew(True).Write(Source)
+            Return Browser.Document.GetElementById(Id).InnerText
         End Function
     End Class
 
