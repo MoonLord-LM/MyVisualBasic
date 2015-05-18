@@ -244,6 +244,29 @@ MyVisualBasic
 	<param name="FilePath">文件路径（可以是相对路径）</param>
 	<returns>是否读取成功</returns>
 	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.GetAllFilePath(System.Collections.Generic.List{System.String}@,System.String)">
+	<summary>
+ 获取指定目录下的全部的文件
+ </summary>
+	<param name="FilePathArray">保存文件路径的字符串数组</param>
+	<param name="SearchDirectory">要搜索的文件夹路径</param>
+	<returns>是否获取成功</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.GetFileLine(System.String)">
+	<summary>
+ 获取指定文件的行数
+ </summary>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<returns>行数（获取失败时返回0）</returns>
+	<remarks></remarks>
+</member><member name="M:MyVisualBasic.My.IO.GetFileLine(System.String,System.Text.Encoding)">
+	<summary>
+ 获取指定文件的行数
+ </summary>
+	<param name="FilePath">文件路径（可以是相对路径）</param>
+	<param name="Encoding">使用的编码格式（默认UTF-8）</param>
+	<returns>行数（获取失败时返回0）</returns>
+	<remarks></remarks>
 </member><member name="T:MyVisualBasic.My.IO">
 	<summary>
  磁盘读写函数

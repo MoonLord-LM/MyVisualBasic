@@ -408,6 +408,69 @@
                 Return False
             End Try
         End Function
+        ''' <summary>
+        ''' 获取指定目录下的全部的文件
+        ''' </summary>
+        ''' <param name="FilePathArray">保存文件路径的字符串数组</param>
+        ''' <param name="SearchDirectory">要搜索的文件夹路径</param>
+        ''' <returns>是否获取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetAllFilePath(ByRef FilePathArray As List(Of String), ByVal SearchDirectory As String) As Boolean
+            Dim Directory As List(Of String) = New List(Of String)
+            Try
+                For Each Temp As String In System.IO.Directory.GetFiles(SearchDirectory)
+                    FilePathArray.Add(Temp)
+                Next
+                For Each Temp As String In System.IO.Directory.GetDirectories(SearchDirectory)
+                    Directory.Add(Temp)
+                Next
+                Dim Index As Integer = 0
+                While Directory.Count > Index
+                    SearchDirectory = Directory(Index)
+                    Index = Index + 1
+                    For Each Temp As String In System.IO.Directory.GetFiles(SearchDirectory)
+                        FilePathArray.Add(Temp)
+                    Next
+                    For Each Temp As String In System.IO.Directory.GetDirectories(SearchDirectory)
+                        Directory.Add(Temp)
+                    Next
+                End While
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取指定文件的行数
+        ''' </summary>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>行数（获取失败时返回0）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetFileLine(ByVal FilePath As String) As Integer
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
+                Return Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}).Length
+            Catch ex As Exception
+                Return 0
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取指定文件的行数
+        ''' </summary>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>行数（获取失败时返回0）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetFileLine(ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Integer
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, Encoding)
+                Return Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}).Length
+            Catch ex As Exception
+                Return 0
+            End Try
+        End Function
     End Class
 
     ''' <summary>
