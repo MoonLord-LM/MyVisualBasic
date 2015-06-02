@@ -1,6 +1,7 @@
 ﻿Namespace My
-    '2015/5/10
+    '2015/6/2
     'My命名空间的扩展
+    '引入此文件，需要确保该工程引用System，System.Drawing，System.Web，System.Windows.Forms
 
     ''' <summary>
     ''' 编码与解码函数
@@ -309,6 +310,31 @@
         ''' <summary>
         ''' 将字符串数组写入文件
         ''' </summary>
+        ''' <param name="StringArray">字符串数组<</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SaveStringArray(ByRef StringArray As ArrayList, ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Builder As System.Text.StringBuilder
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Builder = New System.Text.StringBuilder()
+                For I = 0 To StringArray.Count - 2
+                    Builder.Append(StringArray(I).ToString() & vbCrLf)
+                Next
+                If StringArray.Count > 0 Then Builder.Append(StringArray(StringArray.Count - 1))
+                Writer = New System.IO.StreamWriter(FilePath, False, Encoding)
+                Writer.Write(Builder)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将字符串数组写入文件
+        ''' </summary>
         ''' <param name="StringArray">字符串数组</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <returns>是否写入成功</returns>
@@ -323,6 +349,31 @@
                 Next
                 If StringArray.Count > 0 Then Builder.Append(StringArray(StringArray.Count - 1))
                 Writer = New System.IO.StreamWriter(FilePath, False, System.Text.Encoding.UTF8)
+                Writer.Write(Builder)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将字符串数组写入文件
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组<</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SaveStringArray(ByRef StringArray As List(Of String), ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Builder As System.Text.StringBuilder
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Builder = New System.Text.StringBuilder()
+                For I = 0 To StringArray.Count - 2
+                    Builder.Append(StringArray(I) & vbCrLf)
+                Next
+                If StringArray.Count > 0 Then Builder.Append(StringArray(StringArray.Count - 1))
+                Writer = New System.IO.StreamWriter(FilePath, False, Encoding)
                 Writer.Write(Builder)
                 Writer.Dispose()
                 Return True
@@ -355,6 +406,31 @@
             End Try
         End Function
         ''' <summary>
+        ''' 将字符串数组写入文件
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组<</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SaveStringArray(ByRef StringArray As String(), ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Builder As System.Text.StringBuilder
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Builder = New System.Text.StringBuilder()
+                For I = 0 To StringArray.Length - 2
+                    Builder.Append(StringArray(I) & vbCrLf)
+                Next
+                If StringArray.Length > 0 Then Builder.Append(StringArray(StringArray.Length - 1))
+                Writer = New System.IO.StreamWriter(FilePath, False, Encoding)
+                Writer.Write(Builder)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
         ''' 读取文件中的字符串数组
         ''' </summary>
         ''' <param name="StringArray">字符串数组</param>
@@ -365,6 +441,25 @@
             Dim Reader As System.IO.StreamReader
             Try
                 Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
+                StringArray = New ArrayList(Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Reader.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取文件中的字符串数组
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadStringArray(ByRef StringArray As ArrayList, ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, Encoding)
                 StringArray = New ArrayList(Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
                 Reader.Dispose()
                 Return True
@@ -395,12 +490,50 @@
         ''' </summary>
         ''' <param name="StringArray">字符串数组</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadStringArray(ByRef StringArray As List(Of String), ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, Encoding)
+                StringArray = New List(Of String)(Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Reader.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取文件中的字符串数组
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <returns>是否读取成功</returns>
         ''' <remarks></remarks>
         Public Shared Function ReadStringArray(ByRef StringArray As String(), ByVal FilePath As String) As Boolean
             Dim Reader As System.IO.StreamReader
             Try
                 Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
+                StringArray = Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)})
+                Reader.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取文件中的字符串数组
+        ''' </summary>
+        ''' <param name="StringArray">字符串数组</param>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadStringArray(ByRef StringArray As String(), ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, Encoding)
                 StringArray = Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)})
                 Reader.Dispose()
                 Return True
@@ -443,32 +576,292 @@
         ''' <summary>
         ''' 获取指定文件的行数
         ''' </summary>
+        ''' <param name="FileLine">文件行数</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
-        ''' <returns>行数（获取失败时返回0）</returns>
+        ''' <returns>是否获取成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function GetFileLine(ByVal FilePath As String) As Integer
+        Public Shared Function GetFileLine(ByRef FileLine As Integer, ByVal FilePath As String) As Boolean
             Dim Reader As System.IO.StreamReader
             Try
                 Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
-                Return Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}).Length
+                FileLine = Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}).Length
+                Return True
             Catch ex As Exception
-                Return 0
+                Return False
             End Try
         End Function
         ''' <summary>
         ''' 获取指定文件的行数
         ''' </summary>
+        ''' <param name="FileLine">文件行数</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
-        ''' <returns>行数（获取失败时返回0）</returns>
+        ''' <returns>是否获取成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function GetFileLine(ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Integer
+        Public Shared Function GetFileLine(ByRef FileLine As Integer, ByVal FilePath As String, ByVal Encoding As System.Text.Encoding) As Boolean
             Dim Reader As System.IO.StreamReader
             Try
                 Reader = New System.IO.StreamReader(FilePath, Encoding)
-                Return Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}).Length
+                FileLine = Reader.ReadToEnd().Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}).Length
+                Return True
             Catch ex As Exception
-                Return 0
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将程序嵌入的资源文件写入为磁盘文件（注意必须在解决方案资源管理器中，将图片资源的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="FilePath">写入到磁盘的文件路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function WriteResourceFile(ByVal ResourceName As String, ByVal FilePath As String) As Boolean
+            Dim Reader As System.IO.Stream
+            Dim Writer As System.IO.FileStream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Writer = New System.IO.FileStream(FilePath, System.IO.FileMode.OpenOrCreate, System.IO.FileAccess.ReadWrite)
+                Reader.Read(I, 0, I.Length)
+                Writer.Write(I, 0, I.Length)
+                Reader.Dispose()
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的图片类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourcePicture">图片</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourcePicture(ByRef ResourcePicture As Bitmap, ByVal ResourceName As String) As Boolean
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                ResourcePicture = New Bitmap(MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName))
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的文本类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceString">文本</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceString(ByRef ResourceString As String, ByVal ResourceName As String) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceString = System.Text.Encoding.UTF8.GetString(I)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的文本类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceString">文本</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceString(ByRef ResourceString As String, ByVal ResourceName As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceString = Encoding.GetString(I)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceArray">字符串数组</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceArray(ByRef ResourceArray As ArrayList, ByVal ResourceName As String) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceArray = New ArrayList(System.Text.Encoding.UTF8.GetString(I).Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceArray">字符串数组</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceArray(ByRef ResourceArray As ArrayList, ByVal ResourceName As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceArray = New ArrayList(Encoding.GetString(I).Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceArray">字符串数组</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceArray(ByRef ResourceArray As List(Of String), ByVal ResourceName As String) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceArray = New List(Of String)(System.Text.Encoding.UTF8.GetString(I).Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceArray">字符串数组</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceArray(ByRef ResourceArray As List(Of String), ByVal ResourceName As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceArray = New List(Of String)(Encoding.GetString(I).Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)}))
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceArray">字符串数组</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceArray(ByRef ResourceArray As String(), ByVal ResourceName As String) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceArray = System.Text.Encoding.UTF8.GetString(I).Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)})
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
+        ''' </summary>
+        ''' <param name="ResourceArray">字符串数组</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadResourceArray(ByRef ResourceArray As String(), ByVal ResourceName As String, ByVal Encoding As System.Text.Encoding) As Boolean
+            Dim Reader As System.IO.Stream
+            Try
+                Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Reader = MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName)
+                Dim I(CInt(Reader.Length - 1)) As Byte
+                Reader.Read(I, 0, I.Length)
+                Reader.Dispose()
+                ResourceArray = Encoding.GetString(I).Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)})
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 创建快捷方式
+        ''' </summary>
+        ''' <param name="TargetPath">快捷方式指向的路径（建议使用绝对路径，使用相对路径时，默认将以桌面作为父目录）</param>
+        ''' <param name="LinkFilePath">快捷方式文件的路径（可以是相对路径，如"1.lnk"）</param>
+        ''' <param name="Arguments">打开程序的参数（例如"/?"）</param>
+        ''' <param name="Description">鼠标悬停在快捷方式上的描述</param>
+        ''' <param name="WorkingDirectory">快捷方式的起始位置（不设置此参数时，按照系统默认，自动设置为快捷方式指向的路径的父目录）</param>
+        ''' <returns>是否创建成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function CreatLinkFile(ByVal TargetPath As String, ByVal LinkFilePath As String, Optional ByVal Arguments As String = "", Optional ByVal Description As String = "", Optional ByVal WorkingDirectory As String = "") As Boolean
+            Try
+                If System.IO.File.Exists(LinkFilePath) = True Then System.IO.File.Delete(LinkFilePath)
+                Dim Shortcut As Object = CreateObject("WScript.Shell").CreateShortcut(LinkFilePath)
+                If WorkingDirectory = "" Then WorkingDirectory = System.IO.Directory.GetParent(LinkFilePath).FullName
+                With Shortcut
+                    .TargetPath = TargetPath
+                    .IconLocation = TargetPath
+                    .Arguments = Arguments
+                    .Description = Description
+                    .WorkingDirectory = WorkingDirectory
+                    .Save()
+                End With
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 读取快捷方式指向的路径
+        ''' </summary>
+        ''' <param name="TargetPath">快捷方式指向的路径（获得完整的绝对路径）</param>
+        ''' <param name="LinkFilePath">快捷方式文件的路径（可以是相对路径，如"1.lnk"）</param>
+        ''' <returns>是否读取成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadLinkFile(ByRef TargetPath As String, ByVal LinkFilePath As String) As Boolean
+            Try
+                Dim Shortcut As Object = CreateObject("WScript.Shell").CreateShortcut(LinkFilePath)
+                TargetPath = Shortcut.TargetPath
+                Return True
+            Catch ex As Exception
+                Return False
             End Try
         End Function
     End Class
@@ -571,6 +964,186 @@
             End While
             Return Temp
         End Function
+        ''' <summary>
+        ''' 对两个字符串数组取交集（取出满足在第一个数组里，也在第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Intersect(ByRef StringArray1 As ArrayList, ByRef StringArray2 As ArrayList) As ArrayList
+            Dim Temp As ArrayList = New ArrayList
+            For Each S1 As String In StringArray1
+                For Each S2 As String In StringArray2
+                    If S1 = S2 Then
+                        Temp.Add(S1)
+                        Exit For
+                    End If
+                Next
+            Next
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取交集（取出满足在第一个数组里，也在第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Intersect(ByRef StringArray1 As List(Of String), ByRef StringArray2 As List(Of String)) As List(Of String)
+            Dim Temp As List(Of String) = New List(Of String)
+            For Each S1 As String In StringArray1
+                For Each S2 As String In StringArray2
+                    If S1 = S2 Then
+                        Temp.Add(S1)
+                        Exit For
+                    End If
+                Next
+            Next
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取交集（取出满足在第一个数组里，也在第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Intersect(ByRef StringArray1 As String(), ByRef StringArray2 As String()) As String()
+            Dim Temp As List(Of String) = New List(Of String)
+            For Each S1 As String In StringArray1
+                For Each S2 As String In StringArray2
+                    If S1 = S2 Then
+                        Temp.Add(S1)
+                        Exit For
+                    End If
+                Next
+            Next
+            Return Temp.ToArray
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取并集（取出第一个数组里的元素，然后取出第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Union(ByRef StringArray1 As ArrayList, ByRef StringArray2 As ArrayList) As ArrayList
+            Dim Temp As ArrayList = New ArrayList
+            For Each S1 As String In StringArray1
+                Temp.Add(S1)
+            Next
+            For Each S2 As String In StringArray2
+                Temp.Add(S2)
+            Next
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取并集（取出第一个数组里的元素，然后取出第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Union(ByRef StringArray1 As List(Of String), ByRef StringArray2 As List(Of String)) As List(Of String)
+            Dim Temp As List(Of String) = New List(Of String)
+            For Each S1 As String In StringArray1
+                Temp.Add(S1)
+            Next
+            For Each S2 As String In StringArray2
+                Temp.Add(S2)
+            Next
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取并集（取出第一个数组里的元素，然后取出第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Union(ByRef StringArray1 As String(), ByRef StringArray2 As String()) As String()
+            Dim Temp As List(Of String) = New List(Of String)
+            For Each S1 As String In StringArray1
+                Temp.Add(S1)
+            Next
+            For Each S2 As String In StringArray2
+                Temp.Add(S2)
+            Next
+            Return Temp.ToArray
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取差集（取出满足在第一个数组里，但是不在第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Except(ByRef StringArray1 As ArrayList, ByRef StringArray2 As ArrayList) As ArrayList
+            Dim Temp As ArrayList = New ArrayList
+            Dim Contains As Boolean = False
+            For Each S1 As String In StringArray1
+                Contains = False
+                For Each S2 As String In StringArray2
+                    If S1 = S2 Then
+                        Contains = True
+                        Exit For
+                    End If
+                Next
+                If Contains = False Then
+                    Temp.Add(S1)
+                End If
+            Next
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取差集（取出满足在第一个数组里，但是不在第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Except(ByRef StringArray1 As List(Of String), ByRef StringArray2 As List(Of String)) As List(Of String)
+            Dim Temp As List(Of String) = New List(Of String)
+            Dim Contains As Boolean = False
+            For Each S1 As String In StringArray1
+                Contains = False
+                For Each S2 As String In StringArray2
+                    If S1 = S2 Then
+                        Contains = True
+                        Exit For
+                    End If
+                Next
+                If Contains = False Then
+                    Temp.Add(S1)
+                End If
+            Next
+            Return Temp
+        End Function
+        ''' <summary>
+        ''' 对两个字符串数组取差集（取出满足在第一个数组里，但是不在第二个数组里的元素）
+        ''' </summary>
+        ''' <param name="StringArray1">字符串数组</param>
+        ''' <param name="StringArray2">字符串数组</param>
+        ''' <returns>取出的元素的集合</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Except(ByRef StringArray1 As String(), ByRef StringArray2 As String()) As String()
+            Dim Temp As List(Of String) = New List(Of String)
+            Dim Contains As Boolean = False
+            For Each S1 As String In StringArray1
+                Contains = False
+                For Each S2 As String In StringArray2
+                    If S1 = S2 Then
+                        Contains = True
+                        Exit For
+                    End If
+                Next
+                If Contains = False Then
+                    Temp.Add(S1)
+                End If
+            Next
+            Return Temp.ToArray
+        End Function
     End Class
 
     ''' <summary>
@@ -611,20 +1184,474 @@
         End Function
     End Class
 
-
     '扩展已有的命名空间和类库
     ''' <summary>
-    ''' My.Application
+    ''' 访问应用程序信息和服务
     ''' </summary>
-    ''' <remarks>访问应用程序信息和服务。</remarks>
+    ''' <remarks></remarks>
     Partial Class MyApplication
     End Class
 
     ''' <summary>
-    ''' My.Computer
+    ''' 访问主机及其资源、服务和数据
     ''' </summary>
-    ''' <remarks>访问主机及其资源、服务和数据。</remarks>
+    ''' <remarks></remarks>
     Partial Class MyComputer
+        ''' <summary>
+        ''' 延时关闭计算机（注意会取代之前可能存在的关机计划）
+        ''' </summary>
+        ''' <param name="DelaySecond">延时时间（单位秒，最多可以延时10年）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ShutDown(Optional ByVal DelaySecond As Integer = 0) As Boolean
+            Try
+                Dim p As New Process
+                p.StartInfo.FileName = "cmd.exe"
+                p.StartInfo.UseShellExecute = False
+                p.StartInfo.RedirectStandardInput = True
+                p.StartInfo.RedirectStandardOutput = True
+                p.StartInfo.RedirectStandardError = True
+                p.StartInfo.CreateNoWindow = True
+                p.Start()
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) 'Microsoft Windows
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '版权所有
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '空行
+                p.StandardInput.WriteLine("shutdown -a >nul 2>nul")
+                p.StandardInput.WriteLine("shutdown -s -t " & DelaySecond & " >nul 2>nul")
+                p.StandardInput.WriteLine("exit")
+                p.StandardOutput.ReadToEnd()
+                p.StandardOutput.Close()
+                p.Dispose()
+                '因为已有关机计划，这一句不会起作用（仅供参考写法）
+                'Shell("shutdown -s -t " & DelaySecond, AppWinStyle.Hide)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 延时重启计算机（注意会取代之前可能存在的关机计划）
+        ''' </summary>
+        ''' <param name="DelaySecond">延时时间（单位秒，最多可以延时10年）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ShutDownReboot(Optional ByVal DelaySecond As Integer = 0) As Boolean
+            Try
+                Dim p As New Process
+                p.StartInfo.FileName = "cmd.exe"
+                p.StartInfo.UseShellExecute = False
+                p.StartInfo.RedirectStandardInput = True
+                p.StartInfo.RedirectStandardOutput = True
+                p.StartInfo.RedirectStandardError = True
+                p.StartInfo.CreateNoWindow = True
+                p.Start()
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) 'Microsoft Windows
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '版权所有
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '空行
+                p.StandardInput.WriteLine("shutdown -a >nul 2>nul")
+                p.StandardInput.WriteLine("shutdown -r -t " & DelaySecond & " >nul 2>nul")
+                p.StandardInput.WriteLine("exit")
+                p.StandardOutput.ReadToEnd()
+                p.StandardOutput.Close()
+                p.Dispose()
+                '因为已有关机计划，这一句不会起作用（仅供参考写法）
+                'Shell("shutdown -r -t " & DelaySecond, AppWinStyle.Hide)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 取消关机计划（没有关机计划时则无效果）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ShutDownAbort() As Boolean
+            Try
+                Dim p As New Process
+                p.StartInfo.FileName = "cmd.exe"
+                p.StartInfo.UseShellExecute = False
+                p.StartInfo.RedirectStandardInput = True
+                p.StartInfo.RedirectStandardOutput = True
+                p.StartInfo.RedirectStandardError = True
+                p.StartInfo.CreateNoWindow = True
+                p.Start()
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) 'Microsoft Windows
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '版权所有
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '空行
+                p.StandardInput.WriteLine("shutdown -a >nul 2>nul")
+                p.StandardInput.WriteLine("exit")
+                p.StandardOutput.ReadToEnd()
+                p.StandardOutput.Close()
+                p.Dispose()
+                '因为没有关机计划，这一句不会起作用（仅供参考写法）
+                'Shell("shutdown -a >nul 2>nul", AppWinStyle.Hide)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 打开指定的程序（多次调用本函数会打开程序的多个实例，新打开的程序会夺取鼠标焦点）
+        ''' </summary>
+        ''' <param name="TaskName">程序名称（例如"notepad"或"notepad.exe"）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function TaskRun(ByVal TaskName As String) As Boolean
+            Try
+                If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
+                Dim p As New Process
+                p.StartInfo.FileName = "cmd.exe"
+                p.StartInfo.UseShellExecute = False
+                p.StartInfo.RedirectStandardInput = True
+                p.StartInfo.RedirectStandardOutput = True
+                p.StartInfo.RedirectStandardError = True
+                p.StartInfo.CreateNoWindow = True
+                p.Start()
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) 'Microsoft Windows
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '版权所有
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '空行
+                p.StandardInput.WriteLine(TaskName)
+                p.StandardOutput.ReadLine()
+                '以下这种写法会导致线程一直阻塞，直到TaskName程序结束才继续执行（CMD认为执行的程序可能会无限输出数据，所以一直等待？？？）：
+                'p.StandardInput.WriteLine("exit")
+                'p.StandardOutput.ReadToEnd()
+                p.StandardOutput.Close()
+                p.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 打开指定的程序（多次调用本函数会打开程序的多个实例，新打开的程序不会夺取鼠标焦点）
+        ''' </summary>
+        ''' <param name="TaskName">程序名称（例如"notepad"或"notepad.exe"）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ShellRun(ByVal TaskName As String) As Boolean
+            Try
+                If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
+                Shell(TaskName, AppWinStyle.NormalNoFocus)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 关闭指定的程序（程序如果有多个实例，会一并结束，多次调用本函数无特别效果）
+        ''' </summary>
+        ''' <param name="TaskName">程序名称（例如"notepad"或"notepad.exe"）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function TaskKill(ByVal TaskName As String) As Boolean
+            Try
+                If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
+                Dim p As New Process
+                p.StartInfo.FileName = "cmd.exe"
+                p.StartInfo.UseShellExecute = False
+                p.StartInfo.RedirectStandardInput = True
+                p.StartInfo.RedirectStandardOutput = True
+                p.StartInfo.RedirectStandardError = True
+                p.StartInfo.CreateNoWindow = True
+                p.Start()
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) 'Microsoft Windows
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '版权所有
+                p.StandardOutput.ReadLine() 'MsgBox(p.StandardOutput.ReadLine()) '空行
+                p.StandardInput.WriteLine("taskkill /f /t /im " & TaskName)
+                p.StandardInput.WriteLine("exit")
+                p.StandardOutput.ReadToEnd()
+                p.StandardOutput.Close()
+                p.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 关闭指定的程序（程序如果有多个实例，会一并结束，多次调用本函数无特别效果）
+        ''' </summary>
+        ''' <param name="TaskName">程序名称（例如"notepad"或"notepad.exe"）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ShellKill(ByVal TaskName As String) As Boolean
+            Try
+                If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
+                Shell("taskkill /f /t /im " & TaskName, AppWinStyle.Hide)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（默认保存格式，实测1920*1080分辨率的截图文件大小为293K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreen(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（bmp格式，实测1920*1080分辨率的截图文件大小为7.91M，文件大小最大）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenBmp(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Bmp)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（png格式，实测1920*1080分辨率的截图文件大小为293K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenPng(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Png)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（jpeg格式，实测1920*1080分辨率的截图文件大小为212K，文件大小最小）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenJpeg(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Jpeg)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（gif格式，实测1920*1080分辨率的截图文件大小为232K，文件大小较小）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenGif(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Gif)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（ico格式，实测1920*1080分辨率的截图文件大小为294K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenIcon(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Icon)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（tiff格式，实测1920*1080分辨率的截图文件大小为388K，文件大小较大）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenTiff(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Tiff)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（exif格式，实测1920*1080分辨率的截图文件大小为294K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenExif(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Exif)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（memorybmp格式，实测1920*1080分辨率的截图文件大小为294K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenMemoryBmp(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.MemoryBmp)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（emf格式，实测1920*1080分辨率的截图文件大小为293K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenEmf(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Emf)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（wmf格式，实测1920*1080分辨率的截图文件大小为293K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenWmf(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Wmf)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕缩略图（默认保存格式，实测1920*1080【长宽都只保留50%】分辨率，缩略图文件大小为157K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenThumbnail(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp = MyBmp.GetThumbnailImage(MyRectangle.Width / 2, MyRectangle.Height / 2, Nothing, New System.IntPtr(0))
+                MyBmp.Save(ScreenFilePath)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕缩略图（png格式，实测1920*1080【长宽都只保留50%】分辨率，缩略图文件大小为157K，文件大小中等）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenPngThumbnail(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp = MyBmp.GetThumbnailImage(MyRectangle.Width / 2, MyRectangle.Height / 2, Nothing, New System.IntPtr(0))
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Png)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕缩略图（jpeg格式，实测1920*1080【长宽都只保留50%】分辨率，缩略图文件大小为64K，文件大小最小）
+        ''' </summary>
+        ''' <param name="ScreenFilePath">截图文件保存路径</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreenJpegThumbnail(ByVal ScreenFilePath As String) As Boolean
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                End Using
+                MyBmp = MyBmp.GetThumbnailImage(MyRectangle.Width / 2, MyRectangle.Height / 2, Nothing, New System.IntPtr(0))
+                MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Jpeg)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
     End Class
 
 End Namespace
