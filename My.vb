@@ -310,7 +310,7 @@
         ''' <summary>
         ''' 将字符串数组写入文件
         ''' </summary>
-        ''' <param name="StringArray">字符串数组<</param>
+        ''' <param name="StringArray">字符串数组</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
         ''' <returns>是否写入成功</returns>
@@ -359,7 +359,7 @@
         ''' <summary>
         ''' 将字符串数组写入文件
         ''' </summary>
-        ''' <param name="StringArray">字符串数组<</param>
+        ''' <param name="StringArray">字符串数组</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
         ''' <returns>是否写入成功</returns>
@@ -408,7 +408,7 @@
         ''' <summary>
         ''' 将字符串数组写入文件
         ''' </summary>
-        ''' <param name="StringArray">字符串数组<</param>
+        ''' <param name="StringArray">字符串数组</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
         ''' <returns>是否写入成功</returns>
@@ -1652,6 +1652,397 @@
                 Return False
             End Try
         End Function
+        ''' <summary>
+        ''' 发送按键（使用Microsoft.VisualBasic.Devices.Computer类的Keyboard.SendKeys方式）
+        ''' </summary>
+        ''' <param name="Keys">按键字符串（参照SendKeys的规则）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SendKeys(ByVal Keys As String) As Boolean
+            Try
+                Dim A As New Microsoft.VisualBasic.Devices.Computer()
+                A.Keyboard.SendKeys(Keys)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 发送按键（使用Wscript.Shell的SendKeys方式）
+        ''' </summary>
+        ''' <param name="Keys">按键字符串（参照SendKeys的规则）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SendKeysWshShell(ByVal Keys As String) As Boolean
+            Try
+                CreateObject("Wscript.Shell").SendKeys(Keys)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 发送按键（使用System.Windows.Forms.SendKeys.Send方式）
+        ''' </summary>
+        ''' <param name="Keys">按键字符串（参照SendKeys的规则）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function SendKeysWinForm(ByVal Keys As String) As Boolean
+            Try
+                System.Windows.Forms.SendKeys.Send(Keys)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        Private Declare Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
+        ''' <summary>
+        ''' 按下单个按键（并保持按下状态直到下次按同一个键，连续调用本函数，可执行组合键）
+        ''' </summary>
+        ''' <param name="Key">键位</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function PressKey(ByVal Key As Keys) As Boolean
+            Try
+                keybd_event(Key, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 按下单个按键（并保持按下状态直到下次按同一个键，连续调用本函数，可执行组合键）
+        ''' </summary>
+        ''' <param name="KeyChar">键位</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function PressKey(ByVal KeyChar As Char) As Boolean
+            Try
+                keybd_event(Asc(KeyChar), 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 按下多个按键（并保持按下状态直到下次按同一个键，连续调用本函数，可执行组合键）
+        ''' </summary>
+        ''' <param name="KeyString">键位（只允许字母和数字）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function PressKey(ByVal KeyString As String) As Boolean
+            Try
+                Dim Temp As Char() = KeyString.ToCharArray
+                For Each TempChar As Char In Temp
+                    keybd_event(Asc(TempChar), 0, 0, 0)
+                Next
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 释放单个按键（取消按下状态）
+        ''' </summary>
+        ''' <param name="Key">键位</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ReleaseKey(ByVal Key As Keys) As Boolean
+            Try
+                keybd_event(Key, 0, 2, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 释放单个按键（取消按下状态）
+        ''' </summary>
+        ''' <param name="KeyChar">键位</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ReleaseKey(ByVal KeyChar As Char) As Boolean
+            Try
+                keybd_event(Asc(KeyChar), 0, 2, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 释放多个按键（取消按下状态）
+        ''' </summary>
+        ''' <param name="KeyString">键位（只允许字母和数字）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ReleaseKey(ByVal KeyString As String) As Boolean
+            Try
+                Dim Temp As Char() = KeyString.ToCharArray
+                For Each TempChar As Char In Temp
+                    keybd_event(Asc(TempChar), 0, 2, 0)
+                Next
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        Private Declare Function mouse_event Lib "user32.dll" Alias "mouse_event" (ByVal dwFlags As MouseEvent, ByVal dX As Int32, ByVal dY As Int32, ByVal dwData As Int32, ByVal dwExtraInfo As Int32) As Boolean
+        <Flags()> _
+        Private Enum MouseEvent
+            Move = &H1
+            AbsoluteLocation = &H8000
+            LeftButtonDown = &H2
+            LeftButtonUp = &H4
+            MiddleButtonDown = &H20
+            MiddleButtonUp = &H40
+            RightButtonDown = &H8
+            RightButtonUp = &H10
+            Wheel = &H800
+            AbsoluteScale = 65535
+        End Enum
+        ''' <summary>
+        ''' 将鼠标位置移动一段距离（移动距离单位为像素）
+        ''' </summary>
+        ''' <param name="x">横向距离</param>
+        ''' <param name="y">纵向距离</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMoveByPixel(Optional ByVal x As Integer = 0, Optional ByVal y As Integer = 0) As Boolean
+            Try
+                mouse_event(MouseEvent.Move, x, y, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将鼠标位置移动一段距离（移动距离单位为屏幕百分比）
+        ''' </summary>
+        ''' <param name="x">横向距离</param>
+        ''' <param name="y">纵向距离</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMoveByPercent(Optional ByVal x As Double = 0, Optional ByVal y As Double = 0) As Boolean
+            Try
+                mouse_event(MouseEvent.Move, x * My.Computer.Screen.Bounds.Width, y * My.Computer.Screen.Bounds.Height, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 移动鼠标到指定位置（定位单位为像素）
+        ''' </summary>
+        ''' <param name="x">横坐标</param>
+        ''' <param name="y">纵坐标</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMoveToPixel(Optional ByVal x As Integer = 0, Optional ByVal y As Integer = 0) As Boolean
+            Try
+                mouse_event(MouseEvent.Move Or MouseEvent.AbsoluteLocation, x / My.Computer.Screen.Bounds.Width * MouseEvent.AbsoluteScale, y / My.Computer.Screen.Bounds.Height * MouseEvent.AbsoluteScale, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 移动鼠标到指定位置（定位单位为屏幕百分比）
+        ''' </summary>
+        ''' <param name="x">横坐标</param>
+        ''' <param name="y">纵坐标</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMoveToPercent(Optional ByVal x As Double = 0, Optional ByVal y As Double = 0) As Boolean
+            Try
+                mouse_event(MouseEvent.Move Or MouseEvent.AbsoluteLocation, x * MouseEvent.AbsoluteScale, y * MouseEvent.AbsoluteScale, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 按下鼠标左键（保持按下状态）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseLeftDown() As Boolean
+            Try
+                mouse_event(MouseEvent.LeftButtonDown, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 释放鼠标左键（取消按下状态）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseLeftUp() As Boolean
+            Try
+                mouse_event(MouseEvent.LeftButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标左键单击
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseLeftClick() As Boolean
+            Try
+                mouse_event(MouseEvent.LeftButtonDown Or MouseEvent.LeftButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标左键双击
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseLeftDoubleClick() As Boolean
+            Try
+                mouse_event(MouseEvent.LeftButtonDown Or MouseEvent.LeftButtonUp Or MouseEvent.LeftButtonDown Or MouseEvent.LeftButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 按下鼠标中键（保持按下状态）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMiddleDown() As Boolean
+            Try
+                mouse_event(MouseEvent.MiddleButtonDown, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 释放鼠标中键（取消按下状态）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMiddleUp() As Boolean
+            Try
+                mouse_event(MouseEvent.MiddleButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标中键单击
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMiddleClick() As Boolean
+            Try
+                mouse_event(MouseEvent.MiddleButtonDown Or MouseEvent.MiddleButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标中键双击
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMiddleDoubleClick() As Boolean
+            Try
+                mouse_event(MouseEvent.MiddleButtonDown Or MouseEvent.MiddleButtonUp Or MouseEvent.MiddleButtonDown Or MouseEvent.MiddleButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 按下鼠标右键（保持按下状态）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseRightDown() As Boolean
+            Try
+                mouse_event(MouseEvent.RightButtonDown, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 释放鼠标右键（取消按下状态）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseRightUp() As Boolean
+            Try
+                mouse_event(MouseEvent.RightButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标右键单击
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseRightClick() As Boolean
+            Try
+                mouse_event(MouseEvent.RightButtonDown Or MouseEvent.RightButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标右键双击
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseRightDoubleClick() As Boolean
+            Try
+                mouse_event(MouseEvent.RightButtonDown Or MouseEvent.RightButtonUp Or MouseEvent.RightButtonDown Or MouseEvent.RightButtonUp, 0, 0, 0, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标滚轮向上滚动（滚动距离单位为像素）
+        ''' </summary>
+        ''' <param name="ScrollValue">滚动距离</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseWheelUp(ByVal ScrollValue As Integer) As Boolean
+            Try
+                mouse_event(MouseEvent.Wheel, 0, 0, ScrollValue, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标滚轮向下滚动（滚动距离单位为像素）
+        ''' </summary>
+        ''' <param name="ScrollValue">滚动距离</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseWheelDown(ByVal ScrollValue As Integer) As Boolean
+            Try
+                mouse_event(MouseEvent.Wheel, 0, 0, -ScrollValue, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
     End Class
-
 End Namespace
