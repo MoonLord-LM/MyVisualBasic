@@ -1695,7 +1695,7 @@
                 Return False
             End Try
         End Function
-        Private Declare Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
+        Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
         ''' <summary>
         ''' 按下单个按键（并保持按下状态直到下次按同一个键，连续调用本函数，可执行组合键）
         ''' </summary>
@@ -2043,6 +2043,75 @@
             Catch ex As Exception
                 Return False
             End Try
+        End Function
+        Private Declare Function GetAsyncKeyState Lib "user32.dll" Alias "GetAsyncKeyState" (ByVal vKey As Long) As Integer
+        ''' <summary>
+        ''' 判断物理键盘设备上的单个键位是否正处于被按下的状态（侦测键盘的硬件中断）
+        ''' </summary>
+        ''' <param name="Key">键位</param>
+        ''' <returns>是否按下</returns>
+        ''' <remarks></remarks>
+        Public Function KeyBeingPressed(ByVal Key As Keys) As Boolean
+            Dim Temp As Integer = GetAsyncKeyState(Key)
+            If Temp = -32768 Or Temp = -32767 Then Return True
+            Return False
+        End Function
+        ''' <summary>
+        ''' 判断物理键盘设备上的单个键位是否正处于被按下的状态（侦测键盘的硬件中断）
+        ''' </summary>
+        ''' <param name="KeyChar">键位</param>
+        ''' <returns>是否按下</returns>
+        ''' <remarks></remarks>
+        Public Function KeyBeingPressed(ByVal KeyChar As Char) As Boolean
+            Dim Temp As Integer = GetAsyncKeyState(Asc(KeyChar))
+            If Temp = -32768 Or Temp = -32767 Then Return True
+            Return False
+        End Function
+        ''' <summary>
+        ''' 判断物理键盘设备上的多个键位是否都处于被按下的状态（侦测键盘的硬件中断）
+        ''' </summary>
+        ''' <param name="KeyString">键位（只允许字母和数字）</param>
+        ''' <returns>是否按下</returns>
+        ''' <remarks></remarks>
+        Public Function KeyBeingPressed(ByVal KeyString As String) As Boolean
+            Dim Temp As Char() = KeyString.ToCharArray
+            For Each TempChar As Char In Temp
+                Dim TempInteger As Integer = GetAsyncKeyState(Asc(TempChar))
+                If TempInteger <> -32768 And TempInteger <> -32767 Then Return False
+            Next
+            Return True
+        End Function
+        Private Declare Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
+        Private Declare Function GetWindowRect Lib "user32" Alias "GetWindowRect" (ByVal hwnd As IntPtr, ByRef lpRect As RECT) As IntPtr
+        Private Structure RECT
+            Dim Left As Integer
+            Dim Top As Integer
+            Dim Right As Integer
+            Dim Bottom As Integer
+        End Structure
+        ''' <summary>
+        ''' 根据窗口标题获取窗口的大小和位置（当多个标题相同的窗体存在时，默认获取上一个活动的窗体）
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <returns>窗口的大小和位置（System.Drawing.Rectangle）</returns>
+        ''' <remarks></remarks>
+        Public Function FindWindow(ByVal WindowTitle As String) As System.Drawing.Rectangle
+            Dim hWnd As IntPtr
+            Dim Rect As RECT
+            hWnd = FindWindow(vbNullString, WindowTitle)
+            GetWindowRect(hWnd, Rect)
+            Return New System.Drawing.Rectangle(Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top)
+        End Function
+        Private Declare Function GetForegroundWindow Lib "user32" () As IntPtr
+        ''' <summary>
+        ''' 获取当前的焦点窗口的大小和位置
+        ''' </summary>
+        ''' <returns>窗口的大小和位置（System.Drawing.Rectangle）</returns>
+        ''' <remarks></remarks>
+        Public Function FindFocusWindow() As System.Drawing.Rectangle
+            Dim Rect As RECT
+            GetWindowRect(GetForegroundWindow(), Rect)
+            Return New System.Drawing.Rectangle(Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top)
         End Function
     End Class
 End Namespace
