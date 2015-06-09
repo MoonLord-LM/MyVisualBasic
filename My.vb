@@ -1144,6 +1144,47 @@
             Next
             Return Temp.ToArray
         End Function
+        ''' <summary>
+        ''' 将一个对象转换为JSON字符串（必须为常见类型的数组对象，或是含有若干属性的自定义类的对象）
+        ''' </summary>
+        ''' <param name="JsonObject">含有JSON信息的对象（会识别是否为数组、会识别自定义的类的属性、会进行基本的字符串转义以保证满足JSON格式）</param>
+        ''' <returns>JSON字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ChangeObjectToJson(ByRef JsonObject As Object) As String
+            'IsPrimitive，基元类型，包含：Boolean、Byte、SByte、Int16、UInt16、Int32、UInt32、Int64、UInt64、Char、Double和Single
+            If JsonObject.GetType.IsPrimitive Or JsonObject.GetType Is GetType(System.String) Or JsonObject.GetType Is GetType(System.DateTime) Then
+                Return """" & JsonObject.ToString().Replace(vbCr, "\r").Replace(vbLf, "\n").Replace("""", "\""") & """"
+            End If
+            'IsGenericType包含了类似List(Of Object)的各种类型
+            If JsonObject.GetType.IsGenericType Or JsonObject.GetType.IsArray Or JsonObject.GetType Is GetType(ArrayList) Then
+                Dim Result As New System.Text.StringBuilder("[")
+                For Each Element As Object In JsonObject
+                    Result.Append(ChangeObjectToJson(Element) & ",")
+                Next
+                If Result.Length > 1 Then Result.Remove(Result.Length - 1, 1)
+                Result.Append("]")
+                Return Result.ToString()
+            Else
+                Dim Result As New System.Text.StringBuilder("{")
+                For Each P As System.Reflection.PropertyInfo In JsonObject.GetType().GetProperties()
+                    Result.Append("""" & P.Name & """" & ":")
+                    Dim Element As Object = P.GetValue(JsonObject, Nothing)
+                    If Element Is Nothing Then
+                        Result.Append("null" & ",")
+                    Else
+                        Dim ElementType As System.Type = Element.GetType()
+                        If ElementType.IsPrimitive Or ElementType Is GetType(System.String) Or ElementType Is GetType(System.DateTime) Then
+                            Result.Append("""" & P.GetValue(JsonObject, Nothing).ToString().Replace(vbCr, "\r").Replace(vbLf, "\n").Replace("""", "\""") & """" & ",")
+                        Else
+                            Result.Append(ChangeObjectToJson(P.GetValue(JsonObject, Nothing)) & ",")
+                        End If
+                    End If
+                Next
+                If Result.Length > 1 Then Result.Remove(Result.Length - 1, 1)
+                Result.Append("}")
+                Return Result.ToString()
+            End If
+        End Function
     End Class
 
     ''' <summary>
@@ -1801,7 +1842,7 @@
             AbsoluteScale = 65535
         End Enum
         ''' <summary>
-        ''' 将鼠标位置移动一段距离（移动距离单位为像素）
+        ''' 将鼠标位置移动一段距离（移动距离单位为像素，使用Win32 API）
         ''' </summary>
         ''' <param name="x">横向距离</param>
         ''' <param name="y">纵向距离</param>
@@ -2113,5 +2154,94 @@
             GetWindowRect(GetForegroundWindow(), Rect)
             Return New System.Drawing.Rectangle(Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top)
         End Function
+        Private Declare Function MoveWindow Lib "user32" Alias "MoveWindow" (ByVal hwnd As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal nHeight As Integer, ByVal bRepaint As Boolean) As Boolean
+        ''' <summary>
+        ''' 根据窗口标题修改窗口的位置（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意可能会把窗口移动到用户鼠标无法触及的位置）
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <param name="X">Left属性</param>
+        ''' <param name="Y">Top属性</param>
+        ''' <returns>是否修改成功</returns>
+        ''' <remarks></remarks>
+        Public Function MoveWindow(ByVal WindowTitle As String, Optional ByVal X As Integer = 0, Optional ByVal Y As Integer = 0) As Boolean
+            Dim hWnd As IntPtr
+            Dim Rect As RECT
+            hWnd = FindWindow(vbNullString, WindowTitle)
+            GetWindowRect(hWnd, Rect)
+            If hWnd = 0 Then Return False
+            MoveWindow(hWnd, Rect.Left + X, Rect.Top + Y, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top, True)
+            Return True
+        End Function
+        ''' <summary>
+        ''' 根据窗口标题修改窗口的大小（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意某些程序的窗口大小，实际上不能被修改的太小）
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <param name="Width">宽度</param>
+        ''' <param name="Height">高度</param>
+        ''' <returns>是否修改成功</returns>
+        ''' <remarks></remarks>
+        Public Function ResizeWindow(ByVal WindowTitle As String, Optional ByVal Width As Integer = 0, Optional ByVal Height As Integer = 0) As Boolean
+            Dim hWnd As IntPtr
+            Dim Rect As RECT
+            hWnd = FindWindow(vbNullString, WindowTitle)
+            GetWindowRect(hWnd, Rect)
+            If hWnd = 0 Then Return False
+            MoveWindow(hWnd, Rect.Left, Rect.Top, Width, Height, True)
+            Return True
+        End Function
+        ''' <summary>
+        ''' 将鼠标位置移动一段距离（移动距离单位为像素，使用System.Windows.Forms.Cursor）
+        ''' </summary>
+        ''' <param name="x">横向距离</param>
+        ''' <param name="y">纵向距离</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function MouseMove(ByVal x As Integer, ByVal y As Integer) As Boolean
+            Try
+                Dim P As System.Drawing.Point = System.Windows.Forms.Cursor.Position
+                P.Offset(x, y)
+                System.Windows.Forms.Cursor.Position = P
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取鼠标的当前位置（System.Windows.Forms.Cursor.Position）
+        ''' </summary>
+        ''' <returns>位置坐标（System.Drawing.Point）</returns>
+        ''' <remarks></remarks>
+        Public Function MousePosition() As System.Drawing.Point
+            Return System.Windows.Forms.Cursor.Position
+        End Function
+        ''' <summary>
+        ''' 获取鼠标的当前位置的屏幕颜色
+        ''' </summary>
+        ''' <returns>颜色值（System.Drawing.Color）</returns>
+        ''' <remarks></remarks>
+        Public Function MousePositionColor() As System.Drawing.Color
+            Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+            Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+            Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+            End Using
+            Return MyBmp.GetPixel(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y)
+        End Function
+        ''' <summary>
+        ''' 强制把所有运行的程序窗口最小化，显示桌面（效果类似Win7系统鼠标点击屏幕右下角）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function ShowDesktop() As Boolean
+            Try
+                CreateObject("Shell.Application").ToggleDesktop()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+
+
     End Class
 End Namespace
