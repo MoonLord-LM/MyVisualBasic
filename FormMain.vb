@@ -14,12 +14,14 @@
         D.Add(C)
         Clipboard.Clear()
         Clipboard.SetText(My.StringData.ChangeObjectToJson(A))
-        MsgBox(My.StringData.ChangeObjectToJson(A))
+        'MsgBox(My.StringData.ChangeObjectToJson(A))
+
+        'My.MyApplication.TestException()
+        Throw New Exception("窗体线程异常")
 
         'MsgBox(Json.ChangeObjectToString(D))
         'MsgBox(Json.ChangeObjectToString(New User() {C, C}))
-        MsgBox(My.StringData.ChangeObjectToJson(New String() {"123", "456", "789"}))
-
+        'MsgBox(My.StringData.ChangeObjectToJson(New String() {"123", "456", "789"}))
     End Sub
 
     Public Class User

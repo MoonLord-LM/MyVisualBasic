@@ -1231,6 +1231,34 @@
     ''' </summary>
     ''' <remarks></remarks>
     Partial Class MyApplication
+
+        '在这里处理UI线程异常
+        '注意：Application_ThreadException方法执行完成后，应用程序仍会继续运行
+        Private Shared Sub Application_ThreadException(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            'AddHandler Me.UnhandledException, New Threading.ThreadExceptionEventHandler(AddressOf MyApplication.Application_ThreadException)
+            MessageBox.Show(e.Exception.ToString())
+            'MessageBox.Show(e.ExitApplication)'默认为True
+            e.ExitApplication = False
+        End Sub
+
+        '在这里处理多线程异常
+        '注意：CurrentDomain_UnhandledException方法执行完成后，应用程序就会被终止
+        Private Shared Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs) Handles CurrentDomain.UnhandledException
+            'AddHandler AppDomain.CurrentDomain.UnhandledException, New UnhandledExceptionEventHandler(AddressOf MyApplication.CurrentDomain_UnhandledException)
+            MessageBox.Show(DirectCast(e.ExceptionObject, Exception).ToString())
+        End Sub
+        Friend WithEvents CurrentDomain As System.AppDomain = AppDomain.CurrentDomain
+
+        '测试抛出异常的效果
+        Public Shared Sub TestException()
+            Dim Temp As Threading.Thread = New Threading.Thread(New Threading.ThreadStart(AddressOf TestExceptionThread))
+            Temp.Start()
+            Throw New Exception("窗体线程异常")
+        End Sub
+        Private Shared Sub TestExceptionThread()
+            Throw (New Exception("非窗体线程异常"))
+        End Sub
+
     End Class
 
     ''' <summary>
