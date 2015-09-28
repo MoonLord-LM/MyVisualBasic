@@ -9,7 +9,53 @@
     ''' <remarks></remarks>
     Public NotInheritable Class Security
         ''' <summary>
-        ''' Base64加密算法
+        ''' URL编码（例如，"微软.NET"的编码结果为"%e5%be%ae%e8%bd%af.NET"）
+        ''' </summary>
+        ''' <param name="Source">要加密的字符串</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>加密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function URL_Encode(ByVal Source As String, Optional ByVal ToUpper As Boolean = False) As String
+            If ToUpper Then
+                Return System.Web.HttpUtility.UrlEncode(Source, System.Text.Encoding.UTF8).ToUpper
+            End If
+            Return System.Web.HttpUtility.UrlEncode(Source, System.Text.Encoding.UTF8)
+        End Function
+        ''' <summary>
+        ''' URL编码（例如，"微软.NET"的编码结果为"%e5%be%ae%e8%bd%af.NET"）
+        ''' </summary>
+        ''' <param name="Source">要加密的字符串</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>加密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function URL_Encode(ByVal Source As String, ByVal Encoding As System.Text.Encoding, Optional ByVal ToUpper As Boolean = False) As String
+            If ToUpper Then
+                Return System.Web.HttpUtility.UrlEncode(Source, Encoding).ToUpper
+            End If
+            Return System.Web.HttpUtility.UrlEncode(Source, Encoding)
+        End Function
+        ''' <summary>
+        ''' URL解码（大小写形式都可以识别）
+        ''' </summary>
+        ''' <param name="Source">要解密的字符串</param>
+        ''' <returns>解密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function URL_Decode(ByVal Source As String) As String
+            Return System.Web.HttpUtility.UrlDecode(Source, System.Text.Encoding.UTF8)
+        End Function
+        ''' <summary>
+        ''' URL解码（大小写形式都可以识别）
+        ''' </summary>
+        ''' <param name="Source">要解密的字符串</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>解密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function URL_Decode(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
+            Return System.Web.HttpUtility.UrlDecode(Source, Encoding)
+        End Function
+        ''' <summary>
+        ''' Base64加密算法（加密结果的字符串中包含字母A-Z，a-z，数字0-9，符号+/=）
         ''' </summary>
         ''' <param name="Source">要加密的字符串</param>
         ''' <returns>加密后的结果字符串</returns>
@@ -18,7 +64,7 @@
             Return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Source))
         End Function
         ''' <summary>
-        ''' Base64加密算法
+        ''' Base64加密算法（加密结果的字符串中包含字母A-Z，a-z，数字0-9，符号+/=）
         ''' </summary>
         ''' <param name="Source">要加密的字符串</param>
         ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
@@ -28,7 +74,26 @@
             Return Convert.ToBase64String(Encoding.GetBytes(Source))
         End Function
         ''' <summary>
-        ''' Base64解密算法
+        ''' Base64加密算法（用于URL的改进Base64编码，加密结果的字符串中包含字母A-Z，a-z，数字0-9，符号-_=）
+        ''' </summary>
+        ''' <param name="Source">要加密的字符串</param>
+        ''' <returns>加密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Base64_URL_Encode(ByVal Source As String) As String
+            Return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Source)).Replace("+", "-").Replace("/", "_")
+        End Function
+        ''' <summary>
+        ''' Base64加密算法（用于URL的改进Base64编码，加密结果的字符串中包含字母A-Z，a-z，数字0-9，符号-_=）
+        ''' </summary>
+        ''' <param name="Source">要加密的字符串</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>加密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Base64_URL_Encode(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
+            Return Convert.ToBase64String(Encoding.GetBytes(Source)).Replace("+", "-").Replace("/", "_")
+        End Function
+        ''' <summary>
+        ''' Base64解密算法（要解密的字符串可以包含字母A-Z，a-z，数字0-9，符号+/=）
         ''' </summary>
         ''' <param name="Source">要解密的字符串</param>
         ''' <returns>解密后的结果字符串</returns>
@@ -37,7 +102,7 @@
             Return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Source))
         End Function
         ''' <summary>
-        ''' Base64解密算法
+        ''' Base64解密算法（要解密的字符串可以包含字母A-Z，a-z，数字0-9，符号+/=）
         ''' </summary>
         ''' <param name="Source">要解密的字符串</param>
         ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
@@ -45,6 +110,25 @@
         ''' <remarks></remarks>
         Public Shared Function Base64_Decode(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
             Return Encoding.GetString(Convert.FromBase64String(Source))
+        End Function
+        ''' <summary>
+        ''' Base64解密算法（用于URL的改进Base64解码，要解密的字符串可以包含字母A-Z，a-z，数字0-9，符号-_=）
+        ''' </summary>
+        ''' <param name="Source">要解密的字符串</param>
+        ''' <returns>解密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Base64_URL_Decode(ByVal Source As String) As String
+            Return System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(Source.Replace("-", "+").Replace("_", "/")))
+        End Function
+        ''' <summary>
+        ''' Base64解密算法（用于URL的改进Base64解码，要解密的字符串可以包含字母A-Z，a-z，数字0-9，符号-_=）
+        ''' </summary>
+        ''' <param name="Source">要解密的字符串</param>
+        ''' <param name="Encoding">使用的编码格式（默认UTF-8）</param>
+        ''' <returns>解密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Base64_URL_Decode(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
+            Return Encoding.GetString(Convert.FromBase64String(Source.Replace("-", "+").Replace("_", "/")))
         End Function
         ''' <summary>
         ''' MD5加密算法（返回16位小写结果）
@@ -1231,6 +1315,34 @@
     ''' </summary>
     ''' <remarks></remarks>
     Partial Class MyApplication
+
+        '在这里处理UI线程异常
+        '注意：Application_ThreadException方法执行完成后，应用程序仍会继续运行
+        Private Shared Sub Application_ThreadException(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
+            'AddHandler Me.UnhandledException, New Threading.ThreadExceptionEventHandler(AddressOf MyApplication.Application_ThreadException)
+            MessageBox.Show(e.Exception.ToString())
+            'MessageBox.Show(e.ExitApplication)'默认为True
+            e.ExitApplication = False
+        End Sub
+
+        '在这里处理多线程异常
+        '注意：CurrentDomain_UnhandledException方法执行完成后，应用程序就会被终止
+        Private Shared Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs) Handles CurrentDomain.UnhandledException
+            'AddHandler AppDomain.CurrentDomain.UnhandledException, New UnhandledExceptionEventHandler(AddressOf MyApplication.CurrentDomain_UnhandledException)
+            MessageBox.Show(DirectCast(e.ExceptionObject, Exception).ToString())
+        End Sub
+        Friend WithEvents CurrentDomain As System.AppDomain = AppDomain.CurrentDomain
+
+        '测试抛出异常的效果
+        Public Shared Sub TestException()
+            Dim Temp As Threading.Thread = New Threading.Thread(New Threading.ThreadStart(AddressOf TestExceptionThread))
+            Temp.Start()
+            Throw New Exception("窗体线程异常")
+        End Sub
+        Private Shared Sub TestExceptionThread()
+            Throw (New Exception("非窗体线程异常"))
+        End Sub
+
     End Class
 
     ''' <summary>
@@ -2240,8 +2352,5 @@
                 Return False
             End Try
         End Function
-
-
-
     End Class
 End Namespace
