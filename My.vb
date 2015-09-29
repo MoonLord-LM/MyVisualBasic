@@ -368,6 +368,59 @@
     ''' <remarks></remarks>
     Public NotInheritable Class IO
         ''' <summary>
+        ''' 读取文件为字符串
+        ''' </summary>
+        ''' <param name="FilePath">文件路径</param>
+        ''' <returns>字符串（读取失败返回空字符串""）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ReadString(ByVal FilePath As String) As String
+            Dim Reader As System.IO.StreamReader
+            Try
+                Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
+                Dim Temp As String = Reader.ReadToEnd()
+                Reader.Dispose()
+                Return Temp
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将字符串写入文件（覆盖）
+        ''' </summary>
+        ''' <param name="Source">字符串</param>
+        ''' <param name="FilePath">文件路径</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function WriteString(ByVal Source As String, ByVal FilePath As String) As Boolean
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Writer = New System.IO.StreamWriter(FilePath, False, System.Text.Encoding.UTF8)
+                Writer.Write(Source)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 将字符串写入文件（追加）
+        ''' </summary>
+        ''' <param name="Source">字符串</param>
+        ''' <param name="FilePath">文件路径</param>
+        ''' <returns>是否写入成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function AppendString(ByVal Source As String, ByVal FilePath As String) As Boolean
+            Dim Writer As System.IO.StreamWriter
+            Try
+                Writer = New System.IO.StreamWriter(FilePath, True, System.Text.Encoding.UTF8)
+                Writer.Write(Source)
+                Writer.Dispose()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
         ''' 将字符串数组写入文件
         ''' </summary>
         ''' <param name="StringArray">字符串数组</param>
@@ -1310,12 +1363,12 @@
     End Class
 
     '扩展已有的命名空间和类库
+
     ''' <summary>
     ''' 访问应用程序信息和服务
     ''' </summary>
     ''' <remarks></remarks>
     Partial Class MyApplication
-
         '在这里处理UI线程异常
         '注意：Application_ThreadException方法执行完成后，应用程序仍会继续运行
         Private Shared Sub Application_ThreadException(ByVal sender As Object, ByVal e As Microsoft.VisualBasic.ApplicationServices.UnhandledExceptionEventArgs) Handles Me.UnhandledException
@@ -1324,7 +1377,6 @@
             'MessageBox.Show(e.ExitApplication)'默认为True
             e.ExitApplication = False
         End Sub
-
         '在这里处理多线程异常
         '注意：CurrentDomain_UnhandledException方法执行完成后，应用程序就会被终止
         Private Shared Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs) Handles CurrentDomain.UnhandledException
@@ -1332,7 +1384,6 @@
             MessageBox.Show(DirectCast(e.ExceptionObject, Exception).ToString())
         End Sub
         Friend WithEvents CurrentDomain As System.AppDomain = AppDomain.CurrentDomain
-
         '测试抛出异常的效果
         Public Shared Sub TestException()
             Dim Temp As Threading.Thread = New Threading.Thread(New Threading.ThreadStart(AddressOf TestExceptionThread))
@@ -1342,7 +1393,6 @@
         Private Shared Sub TestExceptionThread()
             Throw (New Exception("非窗体线程异常"))
         End Sub
-
     End Class
 
     ''' <summary>
@@ -2353,4 +2403,5 @@
             End Try
         End Function
     End Class
+
 End Namespace

@@ -1,5 +1,4 @@
 ﻿Public Class FormMain
-
     Private Sub FormMain_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
         Dim A As New User
         A.UserName = "ABC" & vbCrLf
@@ -13,17 +12,14 @@
         Dim D As New List(Of User)
         D.Add(C)
         Clipboard.Clear()
-        Clipboard.SetText(My.StringData.ChangeObjectToJson(A))
+        'Clipboard.SetText(My.StringData.ChangeObjectToJson(A))
         'MsgBox(My.StringData.ChangeObjectToJson(A))
-
         'My.MyApplication.TestException()
-        Throw New Exception("窗体线程异常")
-
+        Throw (New Exception(System.Web.HttpUtility.UrlEncodeUnicode(" 《》《》》<><><''''''你妹啊啊啊啊      啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323你妹啊啊啊啊啊2323")))
         'MsgBox(Json.ChangeObjectToString(D))
         'MsgBox(Json.ChangeObjectToString(New User() {C, C}))
         'MsgBox(My.StringData.ChangeObjectToJson(New String() {"123", "456", "789"}))
     End Sub
-
     Public Class User
         Public Property UserName As String = ""
         Public Property Password As String = ""
