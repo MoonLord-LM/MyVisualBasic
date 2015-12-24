@@ -2284,8 +2284,8 @@
             Next
             Return True
         End Function
-        Private Declare Function FindWindow Lib "user32" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
-        Private Declare Function GetWindowRect Lib "user32" Alias "GetWindowRect" (ByVal hwnd As IntPtr, ByRef lpRect As RECT) As IntPtr
+        Private Declare Function FindWindow Lib "user32.dll" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
+        Private Declare Function GetWindowRect Lib "user32.dll" Alias "GetWindowRect" (ByVal hwnd As IntPtr, ByRef lpRect As RECT) As IntPtr
         Private Structure RECT
             Dim Left As Integer
             Dim Top As Integer
@@ -2305,7 +2305,7 @@
             GetWindowRect(hWnd, Rect)
             Return New System.Drawing.Rectangle(Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top)
         End Function
-        Private Declare Function GetForegroundWindow Lib "user32" () As IntPtr
+        Private Declare Function GetForegroundWindow Lib "user32.dll" () As IntPtr
         ''' <summary>
         ''' 获取当前的焦点窗口的大小和位置
         ''' </summary>
@@ -2316,7 +2316,48 @@
             GetWindowRect(GetForegroundWindow(), Rect)
             Return New System.Drawing.Rectangle(Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top)
         End Function
-        Private Declare Function MoveWindow Lib "user32" Alias "MoveWindow" (ByVal hwnd As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal nHeight As Integer, ByVal bRepaint As Boolean) As Boolean
+        Private Declare Function SetForegroundWindow Lib "user32.dll" (ByVal hwnd As IntPtr) As Integer
+        ''' <summary>
+        ''' 根据窗口标题获取窗口，并将其设置为当前的焦点窗口（实测：窗体处于最小化状态时，不会弹出到最前，只会在任务栏出现白色闪烁效果；窗体处于普通状态时，不一定会弹出到最前，可能只在任务栏出现黄色闪烁效果）
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <returns>设置成功返回非0值，失败返回0</returns>
+        ''' <remarks></remarks>
+        Public Function SetForegroundWindow(ByVal WindowTitle As String) As Integer
+            Return SetForegroundWindow(FindWindow(vbNullString, WindowTitle))
+        End Function
+        Private Declare Function ShowWindow Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal nCmdShow As UInt32) As Boolean
+        ''' <summary>
+        ''' 根据窗口标题获取窗口，并将其设置为普通样式（取消最大化、最小化效果）
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <returns>是否设置成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowWindowNormal(ByVal WindowTitle As String) As Boolean
+            Dim nCmdShow As UInt32 = 1
+            Return ShowWindow(FindWindow(vbNullString, WindowTitle), nCmdShow)
+        End Function
+        ''' <summary>
+        ''' 根据窗口标题获取窗口，并将其设置为最小化样式
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <returns>是否设置成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowWindowMinimize(ByVal WindowTitle As String) As Boolean
+            Dim nCmdShow As UInt32 = 2
+            Return ShowWindow(FindWindow(vbNullString, WindowTitle), nCmdShow)
+        End Function
+        ''' <summary>
+        ''' 根据窗口标题获取窗口，并将其设置为最大化样式
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <returns>是否设置成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowWindowMaximize(ByVal WindowTitle As String) As Boolean
+            Dim nCmdShow As UInt32 = 3
+            Return ShowWindow(FindWindow(vbNullString, WindowTitle), nCmdShow)
+        End Function
+        Private Declare Function MoveWindow Lib "user32.dll" Alias "MoveWindow" (ByVal hwnd As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal nHeight As Integer, ByVal bRepaint As Boolean) As Boolean
         ''' <summary>
         ''' 根据窗口标题修改窗口的位置（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意可能会把窗口移动到用户鼠标无法触及的位置）
         ''' </summary>
@@ -2401,6 +2442,22 @@
             Catch ex As Exception
                 Return False
             End Try
+        End Function
+        ''' <summary>
+        ''' 获取上一个Win32 API调用产生的错误代码（实测：出现错误后，错误信息会一直保留，直到被下一个错误信息替换）
+        ''' </summary>
+        ''' <returns>错误代码（默认为0）</returns>
+        ''' <remarks></remarks>
+        Public Function Win32ErrorCode() As Integer
+            Return Runtime.InteropServices.Marshal.GetLastWin32Error
+        End Function
+        ''' <summary>
+        ''' 获取上一个Win32 API调用产生的错误说明（实测：出现错误后，错误信息会一直保留，直到被下一个错误信息替换）
+        ''' </summary>
+        ''' <returns>错误说明（默认为"操作成功完成。"）</returns>
+        ''' <remarks></remarks>
+        Public Function Win32ErrorMessage() As String
+            Return New System.ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error).Message
         End Function
     End Class
 
