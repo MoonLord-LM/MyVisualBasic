@@ -1550,6 +1550,7 @@
         Public Function TaskKill(ByVal TaskName As String) As Boolean
             Try
                 If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
+                TaskName = """" + TaskName + """"
                 Dim p As New Process
                 p.StartInfo.FileName = "cmd.exe"
                 p.StartInfo.UseShellExecute = False
@@ -1580,10 +1581,45 @@
         Public Function ShellKill(ByVal TaskName As String) As Boolean
             Try
                 If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
+                TaskName = """" + TaskName + """"
                 Shell("taskkill /f /t /im " & TaskName, AppWinStyle.Hide)
                 Return True
             Catch ex As Exception
                 Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取屏幕截图（System.Drawing.Bitmap类型）
+        ''' </summary>
+        ''' <returns>成功返回屏幕截图的Bitmap，失败返回新建的0*0像素的Bitmap</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreen() As System.Drawing.Bitmap
+            Try
+                Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
+                Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
+                End Using
+                Return MyBmp
+            Catch ex As Exception
+                Return New Bitmap(0, 0)
+            End Try
+        End Function
+        ''' <summary>
+        ''' 获取指定区域的屏幕截图（System.Drawing.Bitmap类型）
+        ''' </summary>
+        ''' <param name="Position">指定区域</param>
+        ''' <returns>成功返回指定区域的屏幕截图的Bitmap，失败返回新建的Position.Width*Position.Height像素的Bitmap</returns>
+        ''' <remarks></remarks>
+        Public Function SaveScreen(ByVal Position As System.Drawing.Rectangle) As System.Drawing.Bitmap
+            Try
+                Dim MyBmp As New Bitmap(Position.Width, Position.Height)
+                Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
+                    MyGraphics.CopyFromScreen(Position.Left, Position.Top, 0, 0, Position.Size)
+                End Using
+                Return MyBmp
+            Catch ex As Exception
+                Return New Bitmap(Position.Width, Position.Height)
             End Try
         End Function
         ''' <summary>
@@ -1597,7 +1633,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath)
                 Return True
@@ -1616,7 +1652,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Bmp)
                 Return True
@@ -1635,7 +1671,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Png)
                 Return True
@@ -1654,7 +1690,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Jpeg)
                 Return True
@@ -1673,7 +1709,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Gif)
                 Return True
@@ -1692,7 +1728,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Icon)
                 Return True
@@ -1711,7 +1747,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Tiff)
                 Return True
@@ -1730,7 +1766,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Exif)
                 Return True
@@ -1749,7 +1785,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.MemoryBmp)
                 Return True
@@ -1768,7 +1804,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Emf)
                 Return True
@@ -1787,7 +1823,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Wmf)
                 Return True
@@ -1806,7 +1842,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp = MyBmp.GetThumbnailImage(MyRectangle.Width / 2, MyRectangle.Height / 2, Nothing, New System.IntPtr(0))
                 MyBmp.Save(ScreenFilePath)
@@ -1826,7 +1862,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp = MyBmp.GetThumbnailImage(MyRectangle.Width / 2, MyRectangle.Height / 2, Nothing, New System.IntPtr(0))
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Png)
@@ -1846,7 +1882,7 @@
                 Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
                 Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
                 Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                    MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                    MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
                 End Using
                 MyBmp = MyBmp.GetThumbnailImage(MyRectangle.Width / 2, MyRectangle.Height / 2, Nothing, New System.IntPtr(0))
                 MyBmp.Save(ScreenFilePath, System.Drawing.Imaging.ImageFormat.Jpeg)
@@ -1899,6 +1935,7 @@
             End Try
         End Function
         Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
+        Private Declare Function MapVirtualKey Lib "user32" Alias "MapVirtualKeyA" (ByVal wCode As Long, ByVal wMapType As Long) As Long
         ''' <summary>
         ''' 按下单个按键（并保持按下状态直到下次按同一个键，连续调用本函数，可执行组合键）
         ''' </summary>
@@ -1907,7 +1944,7 @@
         ''' <remarks></remarks>
         Public Function PressKey(ByVal Key As Keys) As Boolean
             Try
-                keybd_event(Key, 0, 0, 0)
+                keybd_event(Key, MapVirtualKey(Key, 0), 0, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -1921,7 +1958,7 @@
         ''' <remarks></remarks>
         Public Function PressKey(ByVal KeyChar As Char) As Boolean
             Try
-                keybd_event(Asc(KeyChar), 0, 0, 0)
+                keybd_event(Asc(KeyChar), MapVirtualKey(Asc(KeyChar), 0), 0, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -1937,7 +1974,7 @@
             Try
                 Dim Temp As Char() = KeyString.ToCharArray
                 For Each TempChar As Char In Temp
-                    keybd_event(Asc(TempChar), 0, 0, 0)
+                    keybd_event(Asc(TempChar), MapVirtualKey(Asc(TempChar), 0), 0, 0)
                 Next
                 Return True
             Catch ex As Exception
@@ -1952,7 +1989,7 @@
         ''' <remarks></remarks>
         Public Function ReleaseKey(ByVal Key As Keys) As Boolean
             Try
-                keybd_event(Key, 0, 2, 0)
+                keybd_event(Key, MapVirtualKey(Key, 0), 2, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -1966,7 +2003,7 @@
         ''' <remarks></remarks>
         Public Function ReleaseKey(ByVal KeyChar As Char) As Boolean
             Try
-                keybd_event(Asc(KeyChar), 0, 2, 0)
+                keybd_event(Asc(KeyChar), MapVirtualKey(Asc(KeyChar), 0), 2, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -1982,7 +2019,7 @@
             Try
                 Dim Temp As Char() = KeyString.ToCharArray
                 For Each TempChar As Char In Temp
-                    keybd_event(Asc(TempChar), 0, 2, 0)
+                    keybd_event(Asc(TempChar), MapVirtualKey(Asc(TempChar), 0), 2, 0)
                 Next
                 Return True
             Catch ex As Exception
@@ -2109,7 +2146,8 @@
         ''' <remarks></remarks>
         Public Function MouseLeftDoubleClick() As Boolean
             Try
-                mouse_event(MouseEvent.LeftButtonDown Or MouseEvent.LeftButtonUp Or MouseEvent.LeftButtonDown Or MouseEvent.LeftButtonUp, 0, 0, 0, 0)
+                mouse_event(MouseEvent.LeftButtonDown Or MouseEvent.LeftButtonUp, 0, 0, 0, 0)
+                mouse_event(MouseEvent.LeftButtonDown Or MouseEvent.LeftButtonUp, 0, 0, 0, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -2161,7 +2199,8 @@
         ''' <remarks></remarks>
         Public Function MouseMiddleDoubleClick() As Boolean
             Try
-                mouse_event(MouseEvent.MiddleButtonDown Or MouseEvent.MiddleButtonUp Or MouseEvent.MiddleButtonDown Or MouseEvent.MiddleButtonUp, 0, 0, 0, 0)
+                mouse_event(MouseEvent.MiddleButtonDown Or MouseEvent.MiddleButtonUp, 0, 0, 0, 0)
+                mouse_event(MouseEvent.MiddleButtonDown Or MouseEvent.MiddleButtonUp, 0, 0, 0, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -2213,7 +2252,8 @@
         ''' <remarks></remarks>
         Public Function MouseRightDoubleClick() As Boolean
             Try
-                mouse_event(MouseEvent.RightButtonDown Or MouseEvent.RightButtonUp Or MouseEvent.RightButtonDown Or MouseEvent.RightButtonUp, 0, 0, 0, 0)
+                mouse_event(MouseEvent.RightButtonDown Or MouseEvent.RightButtonUp, 0, 0, 0, 0)
+                mouse_event(MouseEvent.RightButtonDown Or MouseEvent.RightButtonUp, 0, 0, 0, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -2247,7 +2287,7 @@
                 Return False
             End Try
         End Function
-        Private Declare Function GetAsyncKeyState Lib "user32.dll" Alias "GetAsyncKeyState" (ByVal vKey As Long) As Integer
+        Private Declare Function GetAsyncKeyState Lib "user32.dll" Alias "GetAsyncKeyState" (ByVal vKey As Int32) As Int16
         ''' <summary>
         ''' 判断物理键盘设备上的单个键位是否正处于被按下的状态（侦测键盘的硬件中断）
         ''' </summary>
@@ -2316,6 +2356,18 @@
             GetWindowRect(GetForegroundWindow(), Rect)
             Return New System.Drawing.Rectangle(Rect.Left, Rect.Top, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top)
         End Function
+        Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hwnd As IntPtr, ByVal wMsg As Integer, ByVal wParam As Integer, ByVal lParam As System.Text.StringBuilder) As Integer
+        ''' <summary>
+        ''' 获取当前的焦点窗口的窗口标题文字
+        ''' </summary>
+        ''' <returns>窗口标题文字（失败则返回空字符串""）</returns>
+        ''' <remarks></remarks>
+        Public Function FindFocusWindowTitle() As String
+            Dim StringBuilder As New System.Text.StringBuilder(4048)
+            Dim WM_GETTEXT As Integer = 13
+            SendMessage(GetForegroundWindow(), WM_GETTEXT, 4048, StringBuilder)
+            Return StringBuilder.ToString()
+        End Function
         Private Declare Function SetForegroundWindow Lib "user32.dll" (ByVal hwnd As IntPtr) As Integer
         ''' <summary>
         ''' 根据窗口标题获取窗口，并将其设置为当前的焦点窗口（实测：窗体处于最小化状态时，不会弹出到最前，只会在任务栏出现白色闪烁效果；窗体处于普通状态时，不一定会弹出到最前，可能只在任务栏出现黄色闪烁效果）
@@ -2359,21 +2411,53 @@
         End Function
         Private Declare Function MoveWindow Lib "user32.dll" Alias "MoveWindow" (ByVal hwnd As IntPtr, ByVal X As Integer, ByVal Y As Integer, ByVal nWidth As Integer, ByVal nHeight As Integer, ByVal bRepaint As Boolean) As Boolean
         ''' <summary>
-        ''' 根据窗口标题修改窗口的位置（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意可能会把窗口移动到用户鼠标无法触及的位置）
+        ''' 根据窗口标题修改窗口的位置和大小（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意可能会把窗口移动到用户鼠标无法触及的位置）
         ''' </summary>
         ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
-        ''' <param name="X">Left属性</param>
-        ''' <param name="Y">Top属性</param>
+        ''' <param name="Left">屏幕左边距</param>
+        ''' <param name="Top">屏幕上边距</param>
+        ''' <param name="Width">宽度</param>
+        ''' <param name="Height">高度</param>
         ''' <returns>是否修改成功</returns>
         ''' <remarks></remarks>
-        Public Function MoveWindow(ByVal WindowTitle As String, Optional ByVal X As Integer = 0, Optional ByVal Y As Integer = 0) As Boolean
+        Public Function MoveWindow(ByVal WindowTitle As String, ByVal Left As Integer, ByVal Top As Integer, ByVal Width As Integer, ByVal Height As Integer) As Boolean
             Dim hWnd As IntPtr
             Dim Rect As RECT
             hWnd = FindWindow(vbNullString, WindowTitle)
             GetWindowRect(hWnd, Rect)
             If hWnd = 0 Then Return False
-            MoveWindow(hWnd, Rect.Left + X, Rect.Top + Y, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top, True)
-            Return True
+            Return MoveWindow(hWnd, Left, Top, Width, Height, True)
+        End Function
+        ''' <summary>
+        ''' 根据窗口标题修改窗口的位置和大小（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意可能会把窗口移动到用户鼠标无法触及的位置）
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <param name="Position">指定区域</param>
+        ''' <returns></returns>
+        ''' <remarks>是否修改成功</remarks>
+        Public Function MoveWindow(ByVal WindowTitle As String, ByVal Position As System.Drawing.Rectangle) As Boolean
+            Dim hWnd As IntPtr
+            Dim Rect As RECT
+            hWnd = FindWindow(vbNullString, WindowTitle)
+            GetWindowRect(hWnd, Rect)
+            If hWnd = 0 Then Return False
+            Return MoveWindow(hWnd, Position.Left, Position.Top, Position.Width, Position.Height, True)
+        End Function
+        ''' <summary>
+        ''' 根据窗口标题拖动窗口（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意可能会把窗口移动到用户鼠标无法触及的位置）
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <param name="MoveX">向右拖动的距离（为负值则向左拖动）</param>
+        ''' <param name="MoveY">向下拖动的距离（为负值则向上拖动）</param>
+        ''' <returns>是否拖动成功</returns>
+        ''' <remarks></remarks>
+        Public Function DragWindow(ByVal WindowTitle As String, Optional ByVal MoveX As Integer = 0, Optional ByVal MoveY As Integer = 0) As Boolean
+            Dim hWnd As IntPtr
+            Dim Rect As RECT
+            hWnd = FindWindow(vbNullString, WindowTitle)
+            GetWindowRect(hWnd, Rect)
+            If hWnd = 0 Then Return False
+            Return MoveWindow(hWnd, Rect.Left + MoveX, Rect.Top + MoveY, Rect.Right - Rect.Left, Rect.Bottom - Rect.Top, True)
         End Function
         ''' <summary>
         ''' 根据窗口标题修改窗口的大小（当多个标题相同的窗体存在时，默认修改上一个活动的窗体；注意某些程序的窗口大小，实际上不能被修改的太小）
@@ -2383,14 +2467,13 @@
         ''' <param name="Height">高度</param>
         ''' <returns>是否修改成功</returns>
         ''' <remarks></remarks>
-        Public Function ResizeWindow(ByVal WindowTitle As String, Optional ByVal Width As Integer = 0, Optional ByVal Height As Integer = 0) As Boolean
+        Public Function ResizeWindow(ByVal WindowTitle As String, ByVal Width As Integer, ByVal Height As Integer) As Boolean
             Dim hWnd As IntPtr
             Dim Rect As RECT
             hWnd = FindWindow(vbNullString, WindowTitle)
             GetWindowRect(hWnd, Rect)
             If hWnd = 0 Then Return False
-            MoveWindow(hWnd, Rect.Left, Rect.Top, Width, Height, True)
-            Return True
+            Return MoveWindow(hWnd, Rect.Left, Rect.Top, Width, Height, True)
         End Function
         ''' <summary>
         ''' 将鼠标位置移动一段距离（移动距离单位为像素，使用System.Windows.Forms.Cursor）
@@ -2426,7 +2509,7 @@
             Dim MyRectangle As Rectangle = My.Computer.Screen.Bounds
             Dim MyBmp As New Bitmap(MyRectangle.Width, MyRectangle.Height)
             Using MyGraphics As Graphics = Graphics.FromImage(MyBmp)
-                MyGraphics.CopyFromScreen(0, 0, MyRectangle.Left, MyRectangle.Top, MyRectangle.Size)
+                MyGraphics.CopyFromScreen(0, 0, 0, 0, MyRectangle.Size)
             End Using
             Return MyBmp.GetPixel(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y)
         End Function
