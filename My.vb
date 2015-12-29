@@ -1535,11 +1535,41 @@
         Public Function ShellRun(ByVal TaskName As String) As Boolean
             Try
                 If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
-                Shell(TaskName, AppWinStyle.NormalNoFocus)
+                Interaction.Shell(TaskName, AppWinStyle.NormalNoFocus)
                 Return True
             Catch ex As Exception
                 Return False
             End Try
+        End Function
+        ''' <summary>
+        ''' 打开指定的命令行程序（多次调用本函数会打开程序的多个实例，新打开的程序不会夺取鼠标焦点）
+        ''' </summary>
+        ''' <param name="TaskName">完整的命令行语句（例如，应当使用"notepad.exe"而不是"notepad"）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Function Shell(ByVal TaskName As String) As Boolean
+            Try
+                Interaction.Shell(TaskName, AppWinStyle.NormalNoFocus)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 通过进程的名称，获取进程的文件的完整路径（注意，该程序必须在运行中）
+        ''' </summary>
+        ''' <param name="ProcessName">程序名称（例如"notepad"或"notepad.exe"）</param>
+        ''' <returns>成功返回完整的文件路径，失败返回进程名称（例如"notepad.exe"）</returns>
+        ''' <remarks></remarks>
+        Public Function GetProcessFilePath(ByVal ProcessName As String) As String
+            If Not ProcessName.ToLower.EndsWith(".exe") Then
+                ProcessName = ProcessName.Substring(0, ProcessName.Length - 4)
+            End If
+            Dim processesByName As Process() = Process.GetProcessesByName(ProcessName)
+            If (processesByName.Length > 0) Then
+                Return processesByName(0).MainModule.FileName
+            End If
+            Return ProcessName
         End Function
         ''' <summary>
         ''' 关闭指定的程序（程序如果有多个实例，会一并结束，多次调用本函数无特别效果）
@@ -1582,7 +1612,7 @@
             Try
                 If TaskName.ToLower.EndsWith(".exe") = False Then TaskName = TaskName & ".exe"
                 TaskName = """" + TaskName + """"
-                Shell("taskkill /f /t /im " & TaskName, AppWinStyle.Hide)
+                Interaction.Shell("taskkill /f /t /im " & TaskName, AppWinStyle.Hide)
                 Return True
             Catch ex As Exception
                 Return False
@@ -1935,7 +1965,7 @@
             End Try
         End Function
         Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
-        Private Declare Function MapVirtualKey Lib "user32" Alias "MapVirtualKeyA" (ByVal wCode As Long, ByVal wMapType As Long) As Long
+        Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As Long, ByVal wMapType As Long) As Long
         ''' <summary>
         ''' 按下单个按键（并保持按下状态直到下次按同一个键，连续调用本函数，可执行组合键）
         ''' </summary>
@@ -2378,6 +2408,27 @@
         Public Function SetForegroundWindow(ByVal WindowTitle As String) As Integer
             Return SetForegroundWindow(FindWindow(vbNullString, WindowTitle))
         End Function
+        Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hwnd As IntPtr, ByVal wMsg As Integer, ByVal wParam As Integer, ByVal lParam As Integer) As Integer
+        ''' <summary>
+        ''' 根据窗口标题获取窗口，并允许窗口重绘
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <returns>设置成功返回非0值，失败返回0</returns>
+        ''' <remarks></remarks>
+        Public Function SetWindowCanRedraw(ByVal WindowTitle As String) As Integer
+            Dim wMsg As Integer = 11
+            Return SendMessage(FindWindow(vbNullString, WindowTitle), wMsg, 1, 0)
+        End Function
+        ''' <summary>
+        ''' 根据窗口标题获取窗口，并禁止窗口重绘
+        ''' </summary>
+        ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
+        ''' <returns>设置成功返回非0值，失败返回0</returns>
+        ''' <remarks></remarks>
+        Public Function SetWindowCanNotRedraw(ByVal WindowTitle As String) As Integer
+            Dim wMsg As Integer = 11
+            Return SendMessage(FindWindow(vbNullString, WindowTitle), wMsg, 0, 0)
+        End Function
         Private Declare Function ShowWindow Lib "user32.dll" (ByVal hWnd As IntPtr, ByVal nCmdShow As UInt32) As Boolean
         ''' <summary>
         ''' 根据窗口标题获取窗口，并将其设置为普通样式（取消最大化、最小化效果）
@@ -2385,7 +2436,7 @@
         ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
         ''' <returns>是否设置成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function ShowWindowNormal(ByVal WindowTitle As String) As Boolean
+        Public Function ShowWindowNormal(ByVal WindowTitle As String) As Boolean
             Dim nCmdShow As UInt32 = 1
             Return ShowWindow(FindWindow(vbNullString, WindowTitle), nCmdShow)
         End Function
@@ -2395,7 +2446,7 @@
         ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
         ''' <returns>是否设置成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function ShowWindowMinimize(ByVal WindowTitle As String) As Boolean
+        Public Function ShowWindowMinimize(ByVal WindowTitle As String) As Boolean
             Dim nCmdShow As UInt32 = 2
             Return ShowWindow(FindWindow(vbNullString, WindowTitle), nCmdShow)
         End Function
@@ -2405,7 +2456,7 @@
         ''' <param name="WindowTitle">窗口标题（字符串不能有任何差别）</param>
         ''' <returns>是否设置成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function ShowWindowMaximize(ByVal WindowTitle As String) As Boolean
+        Public Function ShowWindowMaximize(ByVal WindowTitle As String) As Boolean
             Dim nCmdShow As UInt32 = 3
             Return ShowWindow(FindWindow(vbNullString, WindowTitle), nCmdShow)
         End Function
