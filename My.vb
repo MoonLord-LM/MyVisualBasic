@@ -1562,7 +1562,7 @@
         ''' <returns>成功返回完整的文件路径，失败返回进程名称（例如"notepad.exe"）</returns>
         ''' <remarks></remarks>
         Public Function GetProcessFilePath(ByVal ProcessName As String) As String
-            If Not ProcessName.ToLower.EndsWith(".exe") Then
+            If ProcessName.ToLower.EndsWith(".exe") Then
                 ProcessName = ProcessName.Substring(0, ProcessName.Length - 4)
             End If
             Dim processesByName As Process() = Process.GetProcessesByName(ProcessName)
