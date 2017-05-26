@@ -4,6 +4,3 @@
 
 bin/
 obj/
-
-*.suo
-*.user
