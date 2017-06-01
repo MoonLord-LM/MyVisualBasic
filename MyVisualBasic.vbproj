@@ -116,12 +116,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="MyVisualBasic\Http.vb" />
-    <Compile Include="MyVisualBasic\IO.vb" />
-    <Compile Include="MyVisualBasic\My.vb" />
-    <Compile Include="MyVisualBasic\Resource.vb" />
-    <Compile Include="MyVisualBasic\Security.vb" />
-    <Compile Include="MyVisualBasic\StringProcessing.vb" />
+    <Compile Include="MyVisualBisic\Http.vb" />
+    <Compile Include="MyVisualBisic\IO.vb" />
+    <Compile Include="MyVisualBisic\My.vb" />
+    <Compile Include="MyVisualBisic\Resource.vb" />
+    <Compile Include="MyVisualBisic\Security.vb" />
+    <Compile Include="MyVisualBisic\StringProcessing.vb" />
     <Compile Include="Program.vb" />
   </ItemGroup>
   <ItemGroup>

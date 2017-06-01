@@ -11,11 +11,11 @@ A function library to extend the My namespace of VB.NET.
 各个.vb文件之间互不依赖，可根据需要选择使用  
   
 ## [说明]
-Security.vb          ———— 编码解码、加密解密相关函数  
-Http.vb              ———— HTTP网络请求相关函数  
-IO.vb                ———— 磁盘文件读写相关函数  
-Resource.vb          ———— 程序资源文件相关函数  
-StringProcessing.vb  ———— 字符串处理相关函数  
+Security.vb—————————————— 编码解码、加密解密相关函数  
+Http.vb———————————————— HTTP网络请求相关函数  
+IO.vb————————————————— 磁盘文件读写相关函数  
+Resource.vb—————————————— 程序资源文件相关函数  
+StringProcessing.vb—————————— 字符串处理相关函数  
   
 ## [参考]
 引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
@@ -28,7 +28,7 @@ StringProcessing.vb  ———— 字符串处理相关函数
 3. VB.NET中，数组元素个数的声明与其它语言不同，Dim Array(2) As String : MsgBox(Array.Length)，输出3  
 4. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
 5. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，然后用自定义的Main函数启动程序（参考Program.vb）  
-6. 从.NET Framework 2.0版开始，将无法通过try-catch块捕获StackOverflowException对象，并且默认情况下将立即终止相应的进程  
+6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程  
   
 ## [示例]
 My.IO.WriteString(My.Security.Binary_Encode("字符串"), "binary.txt")  
