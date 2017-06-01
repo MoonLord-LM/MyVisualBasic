@@ -9,10 +9,10 @@ Imports System.Runtime.InteropServices
 ' 查看程序集特性的值
 
 <Assembly: AssemblyTitle("MyVisualBasic")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("MoonLord")> 
+<Assembly: AssemblyDescription("https://github.com/MoonLord-LM/MyVisualBasic")> 
+<Assembly: AssemblyCompany("www.moonlord.cn")> 
 <Assembly: AssemblyProduct("MyVisualBasic")> 
-<Assembly: AssemblyCopyright("Copyright © MoonLord 2015")> 
+<Assembly: AssemblyCopyright("Copyright © MoonLord 2017")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
