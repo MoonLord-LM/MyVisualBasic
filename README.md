@@ -3,7 +3,7 @@ A function library to extend the My namespace of VB.NET.
   
 ## [简介]
 扩展 VB.NET 中的My命名空间的函数库  
-分类整理了常用函数，对Win32 API，VBScript，Batch等进行了封装  
+对Win32 API，VBScript，Batch等进行了封装，并分类整理了常用的函数功能  
 默认字符编码：UTF-8  
 项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
   
