@@ -45,6 +45,10 @@ A function library to extend the My namespace of VB.NET.
         <td><a href="MyVisualBisic\Screen.vb">Screen.vb</a></td>
 		<td>屏幕截图相关函数</td>
     </tr>
+    <tr>
+        <td><a href="MyVisualBisic\Keyboard.vb">Keyboard.vb</a></td>
+		<td>模拟键盘操作相关函数</td>
+    </tr>
 </table>
   
 ## [参考]
@@ -74,8 +78,8 @@ A function library to extend the My namespace of VB.NET.
 	'获取网页源码，并分离出其中所有的href属性值，返回字符串数组  
     My.StringProcessing.FindAll(My.Http.GetString("http://www.baidu.com"), "href=""", """")  
 
-	'打开和关闭程序，在cmd窗口同步阻塞  
+	'打开和关闭记事本程序，在cmd窗口同步阻塞  
 	My.Task.RunAsync("notepad") : My.Task.Run("cmd") : My.Task.KillAsync("notepad")  
 
-	'获取屏幕截图，保存为png文件，将60%的缩略图保存为jpg文件  
+	'将完整的屏幕截图保存为png文件，并将60%比例的屏幕缩略图保存为jpg文件  
 	My.Screen.Image().Save("100.png") : My.Screen.Thumbnail(0.6).Save("60.jpg", Imaging.ImageFormat.Jpeg)  

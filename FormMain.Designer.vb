@@ -31,11 +31,11 @@ Partial Class FormMain
         'Timer1
         '
         Me.Timer1.Enabled = True
-        Me.Timer1.Interval = 1500
+        Me.Timer1.Interval = 2000
         '
         'Timer2
         '
-        Me.Timer2.Interval = 1500
+        Me.Timer2.Interval = 2000
         '
         'FormMain
         '

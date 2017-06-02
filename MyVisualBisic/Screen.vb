@@ -21,6 +21,7 @@
                 Return New Bitmap(0, 0)
             End Try
         End Function
+
         ''' <summary>
         ''' 获取屏幕截图（指定区域的截图）
         ''' </summary>
@@ -36,6 +37,7 @@
                 Return New Bitmap(0, 0)
             End Try
         End Function
+
         ''' <summary>
         ''' 获取屏幕截图（全屏区域缩略图）
         ''' </summary>
