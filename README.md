@@ -48,10 +48,15 @@ A function library to extend the My namespace of VB.NET.
 6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程  
   
 ## [示例]
-    My.IO.WriteString(My.Security.Binary_Encode("字符串"), "binary.txt")  
-  
-    My.IO.WriteStringArray(My.IO.ListFile(), "list.txt")  
-  
+      
+	'创建快捷方式  
     My.IO.WriteLinkFile("MyVisualBasic.exe", "快捷方式名称.lnk", "参数", "描述")  
-  
+	  
+    '将字符串转换为类似01010101的二进制形式的字符串，并写入到txt文件中  
+    My.IO.WriteString(My.Security.Binary_Encode("字符串"), "binary.txt")  
+      
+	'获取当前目录下所有的文件列表，并保存到txt文件中  
+    My.IO.WriteStringArray(My.IO.ListFile(), "list.txt")  
+      
+	'获取网页源码，并分离出其中所有的href属性值，返回字符串数组  
     My.StringProcessing.FindAll(My.Http.GetString("http://www.baidu.com"), "href=""", """")  
