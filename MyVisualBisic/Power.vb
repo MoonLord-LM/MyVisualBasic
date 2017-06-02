@@ -22,7 +22,6 @@
                 p.StartInfo.RedirectStandardError = True
                 p.StartInfo.CreateNoWindow = True
                 p.Start()
-                p.StandardOutput.ReadToEnd()
                 p.StandardInput.WriteLine("shutdown -a >nul 2>nul")
                 p.StandardInput.WriteLine("shutdown -s -t " & DelaySecond & " >nul 2>nul")
                 p.StandardInput.WriteLine("exit")
@@ -68,7 +67,6 @@
                 p.StartInfo.RedirectStandardError = True
                 p.StartInfo.CreateNoWindow = True
                 p.Start()
-                p.StandardOutput.ReadToEnd()
                 p.StandardInput.WriteLine("shutdown -a >nul 2>nul")
                 p.StandardInput.WriteLine("shutdown -r -t " & DelaySecond & " >nul 2>nul")
                 p.StandardInput.WriteLine("exit")

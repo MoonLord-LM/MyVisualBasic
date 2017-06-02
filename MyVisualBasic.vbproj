@@ -105,6 +105,10 @@
       <DependentUpon>FormMain.vb</DependentUpon>
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="My Project\Resources.Designer.vb">
       <AutoGen>True</AutoGen>
@@ -121,8 +125,10 @@
     <Compile Include="MyVisualBisic\My.vb" />
     <Compile Include="MyVisualBisic\Power.vb" />
     <Compile Include="MyVisualBisic\Resource.vb" />
+    <Compile Include="MyVisualBisic\Screen.vb" />
     <Compile Include="MyVisualBisic\Security.vb" />
     <Compile Include="MyVisualBisic\StringProcessing.vb" />
+    <Compile Include="MyVisualBisic\Task.vb" />
     <Compile Include="Program.vb" />
   </ItemGroup>
   <ItemGroup>
