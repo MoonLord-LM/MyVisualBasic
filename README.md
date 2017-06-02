@@ -15,16 +15,20 @@ A function library to extend the My namespace of VB.NET.
     <tr>
         <td><a href="MyVisualBisic\Security.vb">Security.vb</a></td>
 		<td>编码解码、加密解密相关函数</td>
-
+    </tr>
+    <tr>
         <td><a href="MyVisualBisic\Http.vb">Http.vb</a></td>
 		<td>HTTP网络请求相关函数</td>
-
+    </tr>
+    <tr>
         <td><a href="MyVisualBisic\IO.vb">IO.vb</a></td>
 		<td>磁盘文件读写相关函数</td>
-
+    </tr>
+    <tr>
         <td><a href="MyVisualBisic\Resource.vb">Resource.vb</a></td>
 		<td>程序资源文件相关函数</td>
-
+    </tr>
+    <tr>
         <td><a href="MyVisualBisic\StringProcessing.vb">StringProcessing.vb</a></td>
 		<td>字符串处理相关函数</td>
     </tr>
@@ -50,4 +54,4 @@ A function library to extend the My namespace of VB.NET.
   
     My.IO.WriteLinkFile("MyVisualBasic.exe", "快捷方式名称.lnk", "参数", "描述")  
   
-    My.IO.WriteStringArray(My.StringProcessing.FindAll(My.Http.GetString("http://www.baidu.com"), "href=""", """"), "find.txt")  
+    My.StringProcessing.FindAll(My.Http.GetString("http://www.baidu.com"), "href=""", """")  
