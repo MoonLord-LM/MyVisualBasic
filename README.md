@@ -11,16 +11,29 @@ A function library to extend the My namespace of VB.NET.
 各个.vb文件之间互不依赖，可根据需要选择使用  
   
 ## [说明]
-<a href="MyVisualBisic\Security.vb">Security.vb</a>—————————————— 编码解码、加密解密相关函数  
-<a href="MyVisualBisic\Http.vb">Http.vb</a>———————————————— HTTP网络请求相关函数  
-<a href="MyVisualBisic\IO.vb">IO.vb</a>————————————————— 磁盘文件读写相关函数  
-<a href="MyVisualBisic\Resource.vb">Resource.vb</a>—————————————— 程序资源文件相关函数  
-<a href="MyVisualBisic\StringProcessing.vb">StringProcessing.vb</a>—————————— 字符串处理相关函数  
+<table>
+    <tr>
+        <td><a href="MyVisualBisic\Security.vb">Security.vb</a></td>
+		<td>编码解码、加密解密相关函数</td>
+
+        <td><a href="MyVisualBisic\Http.vb">Http.vb</a></td>
+		<td>HTTP网络请求相关函数</td>
+
+        <td><a href="MyVisualBisic\IO.vb">IO.vb</a></td>
+		<td>磁盘文件读写相关函数</td>
+
+        <td><a href="MyVisualBisic\Resource.vb">Resource.vb</a></td>
+		<td>程序资源文件相关函数</td>
+
+        <td><a href="MyVisualBisic\StringProcessing.vb">StringProcessing.vb</a></td>
+		<td>字符串处理相关函数</td>
+    </tr>
+</table>
   
 ## [参考]
-引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
-空行规则：同一方面的函数放在同一源文件，重载函数不用空行隔开，相关函数隔开一行，无关函数隔开三行  
-注释规则：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
+- 引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
+- 空行规则：同一方面的函数放在同一源文件，重载函数不用空行隔开，相关函数隔开一行，无关函数隔开三行  
+- 注释规则：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
   
 ## [教程]
 1. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
@@ -31,7 +44,10 @@ A function library to extend the My namespace of VB.NET.
 6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程  
   
 ## [示例]
-My.IO.WriteString(My.Security.Binary_Encode("字符串"), "binary.txt")  
-My.IO.WriteStringArray(My.IO.ListFile(), "list.txt")  
-My.IO.WriteLinkFile("MyVisualBasic.exe", "快捷方式名称.lnk", "参数", "描述")  
-My.IO.WriteStringArray(My.StringProcessing.FindAll(My.Http.GetString("http://www.baidu.com"), "href=""", """"), "find.txt")  
+    My.IO.WriteString(My.Security.Binary_Encode("字符串"), "binary.txt")  
+  
+    My.IO.WriteStringArray(My.IO.ListFile(), "list.txt")  
+  
+    My.IO.WriteLinkFile("MyVisualBasic.exe", "快捷方式名称.lnk", "参数", "描述")  
+  
+    My.IO.WriteStringArray(My.StringProcessing.FindAll(My.Http.GetString("http://www.baidu.com"), "href=""", """"), "find.txt")  
