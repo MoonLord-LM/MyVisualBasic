@@ -11,11 +11,11 @@ A function library to extend the My namespace of VB.NET.
 各个.vb文件之间互不依赖，可根据需要选择使用  
   
 ## [说明]
-Security.vb—————————————— 编码解码、加密解密相关函数  
-Http.vb———————————————— HTTP网络请求相关函数  
-IO.vb————————————————— 磁盘文件读写相关函数  
-Resource.vb—————————————— 程序资源文件相关函数  
-StringProcessing.vb—————————— 字符串处理相关函数  
+<a href="MyVisualBisic\Security.vb">Security.vb</a>—————————————— 编码解码、加密解密相关函数  
+<a href="MyVisualBisic\Http.vb">Http.vb</a>———————————————— HTTP网络请求相关函数  
+<a href="MyVisualBisic\IO.vb">IO.vb</a>————————————————— 磁盘文件读写相关函数  
+<a href="MyVisualBisic\Resource.vb">Resource.vb</a>—————————————— 程序资源文件相关函数  
+<a href="MyVisualBisic\StringProcessing.vb">StringProcessing.vb</a>—————————— 字符串处理相关函数  
   
 ## [参考]
 引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
