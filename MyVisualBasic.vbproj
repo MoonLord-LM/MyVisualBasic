@@ -119,6 +119,7 @@
     <Compile Include="MyVisualBisic\Http.vb" />
     <Compile Include="MyVisualBisic\IO.vb" />
     <Compile Include="MyVisualBisic\My.vb" />
+    <Compile Include="MyVisualBisic\Power.vb" />
     <Compile Include="MyVisualBisic\Resource.vb" />
     <Compile Include="MyVisualBisic\Security.vb" />
     <Compile Include="MyVisualBisic\StringProcessing.vb" />

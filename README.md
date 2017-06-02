@@ -8,7 +8,7 @@ A function library to extend the My namespace of VB.NET.
 项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
   
 ## [用法]
-使用本函数库：引入【MyVisualBisic】文件夹中的.vb文件，获得函数扩展  
+引入【MyVisualBisic】文件夹中的.vb文件，获得函数扩展  
 各个.vb文件之间互不依赖，可根据需要选择使用  
   
 ## [说明]
@@ -33,12 +33,16 @@ A function library to extend the My namespace of VB.NET.
         <td><a href="MyVisualBisic\StringProcessing.vb">StringProcessing.vb</a></td>
 		<td>字符串处理相关函数</td>
     </tr>
+    <tr>
+        <td><a href="MyVisualBisic\Power.vb">Power.vb</a></td>
+		<td>电源管理计划相关函数</td>
+    </tr>
 </table>
   
 ## [参考]
 - 引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
-- 空行规则：同一方面的函数放在同一源文件，重载函数不用空行隔开，相关函数隔开一行，无关函数隔开三行  
-- 注释规则：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
+- 空行规则：同一方面的函数放在同一源文件中，重载函数不用空行隔开，相关函数隔开一行，无关函数隔开三行  
+- 注释示例：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
   
 ## [教程]
 1. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
