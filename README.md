@@ -65,7 +65,7 @@ A function library to extend the My namespace of VB.NET.
 6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程  
 7. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
     Bmp（最大）> Tiff > Exif/Icon/MemoryBmp > Png/Emf/Wmf（默认） > Gif > Jpeg（最小）  
-8. VB.NET中，内置的各种SendKeys函数都不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event实现才可以  
+8. VB.NET中，SendKeys函数不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event实现才可以  
    My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
    System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
    My.Keyboard.Click(Keys.PrintScreen) '本函数库实现，有效  
