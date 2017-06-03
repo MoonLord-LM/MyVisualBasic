@@ -63,7 +63,12 @@ A function library to extend the My namespace of VB.NET.
 4. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
 5. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，然后用自定义的Main函数启动程序（参考Program.vb）  
 6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程  
-7. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：Bmp（最大），Tiff，Exif/Icon/MemoryBmp，Png/Emf/Wmf（默认），Gif，Jpeg（最小）
+7. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
+    Bmp（最大），Tiff，Exif/Icon/MemoryBmp，Png/Emf/Wmf（默认），Gif，Jpeg（最小）  
+8. VB.NET中，各种SendKeys的模拟按键方法都不能发送PrintScreen键（全屏截图），而使用底层的keybd_event实现的则可以  
+   My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
+   System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
+   My.Keyboard.Click(Keys.PrintScreen) '本函数库实现，有效  
   
 ## [示例]
 	'创建快捷方式  
