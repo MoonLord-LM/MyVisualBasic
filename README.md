@@ -2,14 +2,14 @@
 A function library to extend the My namespace of VB.NET.  
   
 ## [简介]
-扩展 VB.NET 中的My命名空间的函数库  
+扩展 VB.NET 中的 My 命名空间的函数库  
 对Win32 API，VBScript，Batch等进行了封装，并分类整理了常用的函数功能  
 默认字符编码：UTF-8  
 项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
   
 ## [用法]
 引入【MyVisualBisic】文件夹中的.vb文件，获得函数扩展  
-各个.vb文件之间互不依赖，可根据需要选择使用  
+各个.vb文件之间互不依赖，可根据需要选择使用，推荐直接引入整个文件夹  
   
 ## [说明]
 <table>
@@ -61,7 +61,7 @@ A function library to extend the My namespace of VB.NET.
 2. VB.NET中，数组与ArrayList互相转换：(New ArrayList(New String() {})).ToArray(String.Empty.GetType())  
 3. VB.NET中，数组元素个数的声明与其它语言不同，Dim Array(2) As String : MsgBox(Array.Length)，输出3  
 4. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
-5. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，然后用自定义的Main函数启动程序（参考本函数库中的Program.vb）  
+5. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，将“启动对象”设置为自定义的Main函数（参考本函数库中的Program.vb文件）  
 6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程，而 OutOfMemoryException 则可以捕获并处理  
 7. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
     Bmp（最大）> Tiff > Exif/Icon/MemoryBmp > Png/Emf/Wmf（默认） > Gif > Jpeg（最小）  
