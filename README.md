@@ -65,10 +65,15 @@ A function library to extend the My namespace of VB.NET.
 6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程  
 7. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
     Bmp（最大）> Tiff > Exif/Icon/MemoryBmp > Png/Emf/Wmf（默认） > Gif > Jpeg（最小）  
-8. VB.NET中，SendKeys函数不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event实现才可以  
+8. VB.NET中，SendKeys函数不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event函数实现才可以：  
    My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
    System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
-   My.Keyboard.Click(Keys.PrintScreen) '本函数库实现，有效  
+   My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
+9. VB.NET中，底层的keybd_event函数，也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
+   My.Keyboard.Click(New Keys() {Keys.LWin, Keys.D}) 'Win+D 显示桌面，有效  
+   My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定用户，无效  
+   My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape}) 'Ctrl+Shift+Esc 打开任务管理器，有效  
+   My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.Delete}) 'Ctrl+Alt+Delete 跳转系统界面，无效  
   
 ## [示例]
 	'创建快捷方式  
@@ -89,8 +94,10 @@ A function library to extend the My namespace of VB.NET.
 	'将完整的屏幕截图保存为png文件，并将60%比例的屏幕缩略图保存为jpg文件  
 	My.Screen.Image().Save("100.png") : My.Screen.Thumbnail(0.6).Save("60.jpg", Imaging.ImageFormat.Jpeg)  
 
-	'模拟键盘敲击，发送 Ctrl + Shift + ESC 组合键，打开任务管理器  
-	My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape})  
+	'模拟键盘敲击，发送组合键：切换输入法Ctrl+Shift，关闭当前窗口Alt+F4，QQ屏幕截图Ctrl+Alt+A  
+	My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey})  
+    My.Keyboard.Click(New Keys() {Keys.Menu, Keys.F4})  
+    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.A})  
 
 	'模拟键盘敲击，输入一段字符串，输入每个字符的时间间隔为50毫秒  
 	My.Keyboard.Input("1!2@3#4$5%6^7&8*9(0)-_=+Aa", 50)  
