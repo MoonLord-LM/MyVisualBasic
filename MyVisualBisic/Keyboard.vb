@@ -54,6 +54,25 @@
                 Return False
             End Try
         End Function
+        ''' <summary>
+        ''' 点击多个键位，完成组合键（包括按下Press+释放Release过程）
+        ''' </summary>
+        ''' <param name="Keys">键位数组（Windows.Forms.Keys）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Click(ByVal Keys As Keys()) As Boolean
+            Try
+                For Each Key As Keys In Keys
+                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_DOWN, 0)
+                Next
+                For Each Key As Keys In Keys
+                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_UP, 0)
+                Next
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
 
 
 
@@ -131,20 +150,29 @@
 
 
         ''' <summary>
-        ''' 点击多个键位（包括按下Press+释放Release过程）
+        ''' 点击多个键位，输入一段字符串（包括按下Press+释放Release过程）
         ''' </summary>
-        ''' <param name="KeyString">键位（只允许字母、数字、空格、换行组成的字符串）</param>
-        ''' <returns>是否执行成功</returns>
+        ''' <param name="KeyString">键位字符串（只允许字母、数字、空格、换行、常用英文特殊符号组成的字符串）</param>
+        ''' <param name="MillisecondsInterval">输入每个字符的时间间隔（单位毫秒，默认值为0，无时间间隔）</param>
+        ''' <returns>是否执行成功</returns> 
         ''' <remarks></remarks>
-        Public Shared Function Click(ByVal KeyString As String) As Boolean
-            '大写字母、数字、空格、换行，其Windows.Forms.Keys值，和ASCII值一致
+        Public Shared Function Input(ByVal KeyString As String, Optional ByVal MillisecondsInterval As Integer = 0) As Boolean
             Dim AscString As String = "QWERTYUIOP" & "ASDFGHJKL" & "ZXCVBNM" & "1234567890" & " " & vbCrLf
             Dim LowerString As String = "qwertyuiop" & "asdfghjkl" & "zxcvbnm"
-            Dim SpecialString As String() = New String() {}
-            Dim SpecialKeys As Keys() = New Keys() {}
+            Dim OemString As String = ";=,-./`[\]'"
+            Dim ShiftOemString As String = ":+<_>?~{|}"""
+            Dim OemKeys As Keys() = New Keys() {Keys.Oem1, Keys.Oemplus, Keys.Oemcomma, Keys.OemMinus, Keys.OemPeriod, Keys.Oem2, Keys.Oem3, Keys.Oem4, Keys.Oem5, Keys.Oem6, Keys.Oem7}
+            Dim ShiftNumString As String = "!@#$%^&*()"
+            Dim NumKeys As Keys() = New Keys() {Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8, Keys.D9, Keys.D0}
             Try
-                For Each Key As Char In KeyString.ToCharArray()
+                Dim KeyArray As Char() = KeyString.ToCharArray()
+                For N = 0 To KeyArray.Length - 1
+                    Dim Key As Char = KeyArray(N)
+                    If N > 0 And MillisecondsInterval <> 0 Then
+                        System.Threading.Thread.Sleep(MillisecondsInterval)
+                    End If
                     If AscString.Contains(Key) Then
+                        '大写字母、数字、空格（虚拟键码VK值，与字符ASCII值相同）
                         If Not My.Computer.Keyboard.CapsLock = True Then
                             keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_DOWN, 0)
                             keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_UP, 0)
@@ -152,6 +180,7 @@
                         keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_DOWN, 0)
                         keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_UP, 0)
                     ElseIf LowerString.Contains(Key) Then
+                        '小写字母
                         If Not My.Computer.Keyboard.CapsLock = False Then
                             keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_DOWN, 0)
                             keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_UP, 0)
@@ -159,9 +188,53 @@
                         Key = Key.ToString.ToUpper()
                         keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_DOWN, 0)
                         keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_UP, 0)
-                    Else
-
+                    ElseIf OemString.Contains(Key) Then
+                        'OEM键特殊符号
+                        Dim I As Integer = OemString.IndexOf(Key)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_DOWN, 0)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_UP, 0)
+                    ElseIf ShiftOemString.Contains(Key) Then
+                        'Shift+OEM键特殊符号
+                        Dim I As Integer = ShiftOemString.IndexOf(Key)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_DOWN, 0)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_DOWN, 0)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_UP, 0)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_UP, 0)
+                    ElseIf ShiftNumString.Contains(Key) Then
+                        'Shift+数字键特殊符号
+                        Dim I As Integer = ShiftNumString.IndexOf(Key)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_DOWN, 0)
+                        keybd_event(NumKeys(I), MapVirtualKey(NumKeys(I), 0), KEY_DOWN, 0)
+                        keybd_event(NumKeys(I), MapVirtualKey(NumKeys(I), 0), KEY_UP, 0)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_UP, 0)
                     End If
+                Next
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+
+
+        ''' <summary>
+        ''' 连续复制粘贴字符，输入一段字符串（使用Ctrl+V组合键）
+        ''' </summary>
+        ''' <param name="Source">要输入的字符串</param>
+        ''' <param name="MillisecondsInterval">输入每个字符的时间间隔（单位毫秒，默认值为0，无时间间隔）</param>
+        ''' <returns>是否执行成功</returns> 
+        ''' <remarks></remarks>
+        Public Shared Function Paste(ByVal Source As String, Optional ByVal MillisecondsInterval As Integer = 0) As Boolean
+            Try
+                For I = 0 To Source.Length - 1
+                    If I > 0 And MillisecondsInterval <> 0 Then
+                        System.Threading.Thread.Sleep(MillisecondsInterval)
+                    End If
+                    System.Windows.Forms.Clipboard.SetText(Source(I))
+                    keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_DOWN, 0)
+                    keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_DOWN, 0)
+                    keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_UP, 0)
+                    keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_UP, 0)
                 Next
                 Return True
             Catch ex As Exception

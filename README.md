@@ -83,3 +83,12 @@ A function library to extend the My namespace of VB.NET.
 
 	'将完整的屏幕截图保存为png文件，并将60%比例的屏幕缩略图保存为jpg文件  
 	My.Screen.Image().Save("100.png") : My.Screen.Thumbnail(0.6).Save("60.jpg", Imaging.ImageFormat.Jpeg)  
+
+	'模拟键盘敲击，发送 Ctrl + Shift + ESC 组合键，打开任务管理器  
+	My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape})  
+
+	'模拟键盘敲击，输入一段字符串，输入每个字符的时间间隔为50毫秒  
+	My.Keyboard.Input("1!2@3#4$5%6^7&8*9(0)-_=+Aa", 50)  
+
+	'模拟连续复制粘贴字符，输入一段字符串，输入每个字符的时间间隔为100毫秒  
+	My.Keyboard.Paste("这是一段中文字符。", 100)  
