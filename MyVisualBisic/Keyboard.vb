@@ -226,9 +226,17 @@
         ''' <remarks></remarks>
         Public Shared Function Paste(ByVal Source As String, Optional ByVal MillisecondsInterval As Integer = 0) As Boolean
             Try
+                Dim UpperString As String = "QWERTYUIOP" & "ASDFGHJKL" & "ZXCVBNM"
                 For I = 0 To Source.Length - 1
                     If I > 0 And MillisecondsInterval <> 0 Then
                         System.Threading.Thread.Sleep(MillisecondsInterval)
+                    End If
+                    If UpperString.Contains(Source(I)) Then
+                        '大写字母
+                        If Not My.Computer.Keyboard.CapsLock = True Then
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_DOWN, 0)
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_UP, 0)
+                        End If
                     End If
                     System.Windows.Forms.Clipboard.SetText(Source(I))
                     keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_DOWN, 0)

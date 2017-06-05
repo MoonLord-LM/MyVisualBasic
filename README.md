@@ -57,23 +57,24 @@ A function library to extend the My namespace of VB.NET.
 - 注释示例：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
   
 ## [教程]
-1. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
-2. VB.NET中，数组与ArrayList互相转换：(New ArrayList(New String() {})).ToArray(String.Empty.GetType())  
-3. VB.NET中，数组元素个数的声明与其它语言不同，Dim Array(2) As String : MsgBox(Array.Length)，输出3  
-4. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
-5. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，将“启动对象”设置为自定义的Main函数（参考本函数库中的Program.vb文件）  
-6. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程，而 OutOfMemoryException 则可以捕获并处理  
-7. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
+01. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
+02. VB.NET中，数组与ArrayList互相转换：(New ArrayList(New String() {})).ToArray(String.Empty.GetType())  
+03. VB.NET中，数组元素个数的声明与其它语言不同，Dim Array(2) As String : MsgBox(Array.Length)，输出3  
+04. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
+05. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，将“启动对象”设置为自定义的Main函数（参考本函数库中的Program.vb文件）  
+06. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程，而 OutOfMemoryException 则可以捕获并处理  
+07. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
     Bmp（最大）> Tiff > Exif/Icon/MemoryBmp > Png/Emf/Wmf（默认） > Gif > Jpeg（最小）  
-8. VB.NET中，SendKeys函数不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event函数实现才可以：  
-   My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
-   System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
-   My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
-9. 在Windows中，底层的keybd_event函数（出于安全考虑），也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
-   My.Keyboard.Click(New Keys() {Keys.LWin, Keys.D}) 'Win+D 显示桌面，有效  
-   My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定电脑，无效  
-   My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape}) 'Ctrl+Shift+Esc 打开任务管理器，有效  
-   My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.Delete}) 'Ctrl+Alt+Delete 跳转系统界面，无效  
+08. VB.NET中，SendKeys函数不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event函数实现才可以：  
+    My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
+    System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
+    My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
+09. 在Windows中，底层的keybd_event函数（出于安全考虑），也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
+    My.Keyboard.Click(New Keys() {Keys.LWin, Keys.D}) 'Win+D 显示桌面，有效  
+    My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定电脑，无效  
+    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape}) 'Ctrl+Shift+Esc 打开任务管理器，有效  
+    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.Delete}) 'Ctrl+Alt+Delete 跳转系统界面，无效 
+10. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针
   
 ## [示例]
 	'创建快捷方式  
