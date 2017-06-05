@@ -112,15 +112,15 @@ A function library to extend the My namespace of VB.NET.
 	'模拟连续复制粘贴字符，输入一段字符串，输入每个字符的时间间隔为100毫秒  
 	My.Keyboard.PasteDelay("这是一段中文字符。", 100)  
 
-	'模拟用户操作，打开“画图”程序，粘贴截图，并将文件保存到桌面，关闭“画图”程序
-    Dim Screenshot As Bitmap = My.Screen.Image()
-    Dim SavePath As String = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
-    My.Task.RunAsync("mspaint.exe")
-    My.Time.Wait(0.5)
-    My.Keyboard.Paste(Screenshot)
-    My.Keyboard.Click(Keys.ControlKey, Keys.S)
-    My.Time.Wait(0.5)
-    My.Keyboard.Paste(SavePath & "\截图" & My.Time.Stamp() & ".png")
-    My.Keyboard.Click(Keys.Enter)
-    My.Time.Wait(0.5)
-    My.Task.KillAsync("mspaint.exe")
+	'模拟用户操作，打开“画图”程序，粘贴截图，并将文件保存到桌面，关闭“画图”程序  
+    Dim Screenshot As Bitmap = My.Screen.Image()  
+    Dim SavePath As String = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)  
+    My.Task.RunAsync("mspaint.exe")  
+    My.Time.Wait(0.5)  
+    My.Keyboard.Paste(Screenshot)  
+    My.Keyboard.Click(Keys.ControlKey, Keys.S)  
+    My.Time.Wait(0.5)  
+    My.Keyboard.Paste(SavePath & "\截图" & My.Time.Stamp() & ".png")  
+    My.Keyboard.Click(Keys.Enter)  
+    My.Time.Wait(0.5)  
+    My.Task.KillAsync("mspaint.exe")  
