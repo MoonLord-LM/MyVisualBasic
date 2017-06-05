@@ -69,7 +69,7 @@ A function library to extend the My namespace of VB.NET.
     My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
     System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
     My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
-09. 在Windows中，底层的keybd_event函数（出于安全考虑），也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
+09. 在Windows中，底层的keybd_event函数，也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
     My.Keyboard.Click(New Keys() {Keys.LWin, Keys.D}) 'Win+D 显示桌面，有效  
     My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定电脑，无效  
     My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape}) 'Ctrl+Shift+Esc 打开任务管理器，有效  
