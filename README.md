@@ -73,8 +73,10 @@ A function library to extend the My namespace of VB.NET.
     My.Keyboard.Click(New Keys() {Keys.LWin, Keys.D}) 'Win+D 显示桌面，有效  
     My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定电脑，无效  
     My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape}) 'Ctrl+Shift+Esc 打开任务管理器，有效  
-    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.Delete}) 'Ctrl+Alt+Delete 跳转系统界面，无效 
-10. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针
+    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.Delete}) 'Ctrl+Alt+Delete 跳转系统界面，无效  
+10. 无法模拟“Win+L”的问题，本函数库提供了一个替代方案，调用“user32.dll”中的“LockWorkStation”：  
+    My.Power.Lock() '锁定电脑，有效  
+11. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针  
   
 ## [示例]
 	'创建快捷方式  
