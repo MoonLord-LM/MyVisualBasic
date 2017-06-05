@@ -70,10 +70,10 @@ A function library to extend the My namespace of VB.NET.
     System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
     My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
 09. 在Windows中，底层的keybd_event函数，也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
-    My.Keyboard.Click(New Keys() {Keys.LWin, Keys.D}) 'Win+D 显示桌面，有效  
-    My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定电脑，无效  
-    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape}) 'Ctrl+Shift+Esc 打开任务管理器，有效  
-    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.Delete}) 'Ctrl+Alt+Delete 跳转系统界面，无效  
+    My.Keyboard.Click(Keys.LWin, Keys.D) 'Win+D 显示桌面，有效  
+    My.Keyboard.Click(Keys.LWin, Keys.L) 'Win+L 锁定电脑，无效  
+    My.Keyboard.Click(Keys.ControlKey, Keys.ShiftKey, Keys.Escape) 'Ctrl+Shift+Esc 打开任务管理器，有效  
+    My.Keyboard.Click(Keys.ControlKey, Keys.Menu, Keys.Delete) 'Ctrl+Alt+Delete 跳转系统界面，无效  
 10. 无法模拟“Win+L”的问题，本函数库提供了一个替代方案，调用“user32.dll”中的“LockWorkStation”：  
     My.Power.Lock() '锁定电脑，有效  
 11. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针  
@@ -98,12 +98,12 @@ A function library to extend the My namespace of VB.NET.
 	My.Screen.Image().Save("100.png") : My.Screen.Thumbnail(0.6).Save("60.jpg", Imaging.ImageFormat.Jpeg)  
 
 	'模拟键盘敲击，发送组合键：切换输入法Ctrl+Shift，关闭当前窗口Alt+F4，QQ屏幕截图Ctrl+Alt+A  
-	My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey})  
-    My.Keyboard.Click(New Keys() {Keys.Menu, Keys.F4})  
-    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.A})  
+	My.Keyboard.Click(Keys.ControlKey, Keys.ShiftKey)  
+    My.Keyboard.Click(Keys.Menu, Keys.F4)  
+    My.Keyboard.Click(Keys.ControlKey, Keys.Menu, Keys.A)  
 
 	'模拟键盘敲击，输入一段字符串，输入每个字符的时间间隔为50毫秒  
 	My.Keyboard.Input("1!2@3#4$5%6^7&8*9(0)-_=+Aa", 50)  
 
 	'模拟连续复制粘贴字符，输入一段字符串，输入每个字符的时间间隔为100毫秒  
-	My.Keyboard.Paste("这是一段中文字符。", 100)  
+	My.Keyboard.PasteDelay("这是一段中文字符。", 100)  

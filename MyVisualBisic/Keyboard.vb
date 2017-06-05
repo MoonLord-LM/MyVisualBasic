@@ -39,6 +39,7 @@
                 Return False
             End Try
         End Function
+
         ''' <summary>
         ''' 点击单个键位（包括按下+释放过程）
         ''' </summary>
@@ -66,6 +67,37 @@
                     keybd_event(Key, MapVirtualKey(Key, 0), KEY_DOWN, 0)
                 Next
                 For Each Key As Keys In Keys
+                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_UP, 0)
+                Next
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 点击多个键位，完成组合键（包括按下+释放过程）
+        ''' </summary>
+        ''' <param name="Keys1">键位1（Windows.Forms.Keys）</param>
+        ''' <param name="Keys2">键位2（Windows.Forms.Keys）</param>
+        ''' <param name="Keys3">键位3（Windows.Forms.Keys）</param>
+        ''' <param name="Keys4">键位4（Windows.Forms.Keys）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Click(Keys1 As Keys, ByVal Keys2 As Keys, Optional ByVal Keys3 As Keys = Nothing, Optional ByVal Keys4 As Keys = Nothing) As Boolean
+            Try
+                Dim Temp As New List(Of Keys)
+                Temp.Add(Keys1)
+                Temp.Add(Keys2)
+                If Keys3 <> Nothing Then
+                    Temp.Add(Keys3)
+                End If
+                If Keys4 <> Nothing Then
+                    Temp.Add(Keys4)
+                End If
+                For Each Key As Keys In Temp
+                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_DOWN, 0)
+                Next
+                For Each Key As Keys In Temp
                     keybd_event(Key, MapVirtualKey(Key, 0), KEY_UP, 0)
                 Next
                 Return True
@@ -150,9 +182,9 @@
 
 
         ''' <summary>
-        ''' 点击多个键位，输入一段字符串（包括按下+释放过程）
+        ''' 点击多个键位，输入一段字符串（包括按下+释放过程，限定字符串内容）
         ''' </summary>
-        ''' <param name="KeyString">键位字符串（只允许字母、数字、空格、换行、常用英文特殊符号组成的字符串）</param>
+        ''' <param name="KeyString">键位字符串（只支持输入字母、数字、空格、换行、键盘上有的英文特殊符号，其它字符会被忽略）</param>
         ''' <param name="MillisecondsInterval">输入每个字符的时间间隔（单位毫秒，默认值为0，无时间间隔）</param>
         ''' <returns>是否执行成功</returns> 
         ''' <remarks></remarks>
@@ -215,16 +247,14 @@
             End Try
         End Function
 
-
-
         ''' <summary>
-        ''' 连续复制粘贴字符，输入一段字符串（使用Ctrl+V组合键）
+        ''' 连续复制粘贴字符，输入一段字符串（使用Ctrl+V组合键，速度太快时可能出错）
         ''' </summary>
         ''' <param name="Source">要输入的字符串</param>
-        ''' <param name="MillisecondsInterval">输入每个字符的时间间隔（单位毫秒，默认值为0，无时间间隔）</param>
-        ''' <returns>是否执行成功</returns> 
+        ''' <param name="MillisecondsInterval">输入每个字符的时间间隔（单位毫秒，默认值为100，实测，在值较小、系统卡顿时，可能会发生字符混乱，建议设置为20以上）</param>
+        ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function Paste(ByVal Source As String, Optional ByVal MillisecondsInterval As Integer = 0) As Boolean
+        Public Shared Function PasteDelay(ByVal Source As String, Optional ByVal MillisecondsInterval As Integer = 100) As Boolean
             Try
                 Dim UpperString As String = "QWERTYUIOP" & "ASDFGHJKL" & "ZXCVBNM"
                 For I = 0 To Source.Length - 1
@@ -244,6 +274,45 @@
                     keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_UP, 0)
                     keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_UP, 0)
                 Next
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+
+
+        ''' <summary>
+        ''' 复制粘贴，输入一段字符串（使用Ctrl+V组合键）
+        ''' </summary>
+        ''' <param name="Source">要输入的字符串</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Paste(ByVal Source As String) As Boolean
+            Try
+                System.Windows.Forms.Clipboard.SetText(Source)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_DOWN, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_DOWN, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_UP, 0)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_UP, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 复制粘贴，输入一个图片（使用Ctrl+V组合键）
+        ''' </summary>
+        ''' <param name="Source">要输入的图片</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Paste(ByVal Source As Bitmap) As Boolean
+            Try
+                System.Windows.Forms.Clipboard.SetImage(Source)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_DOWN, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_DOWN, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_UP, 0)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_UP, 0)
                 Return True
             Catch ex As Exception
                 Return False
