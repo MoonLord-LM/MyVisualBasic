@@ -12,7 +12,7 @@
         Private Shared ReadOnly KEY_UP As Long = 2
 
         ''' <summary>
-        ''' 按下单个键位（保持按下状态，要注意，按下Press+释放Release才是一次完整的按键过程）
+        ''' 按下单个键位（保持按下状态，要注意，按下+释放才是一次完整的按键过程）
         ''' </summary>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
         ''' <returns>是否执行成功</returns>
@@ -26,7 +26,7 @@
             End Try
         End Function
         ''' <summary>
-        ''' 释放单个键位（取消按下状态，要注意，按下Press+释放Release才是一次完整的按键过程）
+        ''' 释放单个键位（取消按下状态，要注意，按下+释放才是一次完整的按键过程）
         ''' </summary>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
         ''' <returns>是否执行成功</returns>
@@ -40,7 +40,7 @@
             End Try
         End Function
         ''' <summary>
-        ''' 点击单个键位（包括按下Press+释放Release过程）
+        ''' 点击单个键位（包括按下+释放过程）
         ''' </summary>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
         ''' <returns>是否执行成功</returns>
@@ -55,7 +55,7 @@
             End Try
         End Function
         ''' <summary>
-        ''' 点击多个键位，完成组合键（包括按下Press+释放Release过程）
+        ''' 点击多个键位，完成组合键（包括按下+释放过程）
         ''' </summary>
         ''' <param name="Keys">键位数组（Windows.Forms.Keys）</param>
         ''' <returns>是否执行成功</returns>
@@ -150,7 +150,7 @@
 
 
         ''' <summary>
-        ''' 点击多个键位，输入一段字符串（包括按下Press+释放Release过程）
+        ''' 点击多个键位，输入一段字符串（包括按下+释放过程）
         ''' </summary>
         ''' <param name="KeyString">键位字符串（只允许字母、数字、空格、换行、常用英文特殊符号组成的字符串）</param>
         ''' <param name="MillisecondsInterval">输入每个字符的时间间隔（单位毫秒，默认值为0，无时间间隔）</param>
