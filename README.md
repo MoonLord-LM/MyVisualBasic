@@ -71,7 +71,7 @@ A function library to extend the My namespace of VB.NET.
    My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
 9. VB.NET中，底层的keybd_event函数，也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
    My.Keyboard.Click(New Keys() {Keys.LWin, Keys.D}) 'Win+D 显示桌面，有效  
-   My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定用户，无效  
+   My.Keyboard.Click(New Keys() {Keys.LWin, Keys.L}) 'Win+L 锁定电脑，无效  
    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.ShiftKey, Keys.Escape}) 'Ctrl+Shift+Esc 打开任务管理器，有效  
    My.Keyboard.Click(New Keys() {Keys.ControlKey, Keys.Menu, Keys.Delete}) 'Ctrl+Alt+Delete 跳转系统界面，无效  
   
