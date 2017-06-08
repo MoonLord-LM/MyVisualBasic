@@ -129,7 +129,7 @@ A function library to extend the My namespace of VB.NET.
     My.Time.Wait(0.5)  
     My.Task.KillAsync("mspaint.exe")  
 
-	'模拟用户操作，移动鼠标到桌面右下角（显示桌面），点击2下，并将鼠标移回初始位置  
+	'模拟用户操作，移动鼠标到桌面右下角（显示桌面），单击2下，并将鼠标移回初始位置  
     Dim Position As Point = My.Mouse.Position()  
     My.Mouse.MoveToPercent(1, 1)  
     My.Mouse.LeftClick()  
