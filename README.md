@@ -53,6 +53,10 @@ A function library to extend the My namespace of VB.NET.
         <td><a href="MyVisualBisic\Time.vb">Time.vb</a></td>
 		<td>时间管理、转换相关函数</td>
     </tr>
+    <tr>
+        <td><a href="MyVisualBisic\Mouse.vb">Mouse.vb</a></td>
+		<td>模拟鼠标操作相关函数</td>
+    </tr>
 </table>
   
 ## [参考]
@@ -124,3 +128,11 @@ A function library to extend the My namespace of VB.NET.
     My.Keyboard.Click(Keys.Enter)  
     My.Time.Wait(0.5)  
     My.Task.KillAsync("mspaint.exe")  
+
+	'模拟用户操作，移动鼠标到桌面右下角（显示桌面），点击2下，并将鼠标移回初始位置  
+    Dim Position As Point = My.Mouse.Position()  
+    My.Mouse.MoveToPercent(1, 1)  
+    My.Mouse.LeftClick()  
+    My.Time.Wait(1)  
+    My.Mouse.LeftClick()  
+    My.Mouse.MoveToPosition(Position)  

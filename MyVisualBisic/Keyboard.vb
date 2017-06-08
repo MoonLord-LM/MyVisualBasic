@@ -8,8 +8,11 @@
 
         Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
         Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As Long, ByVal wMapType As Long) As Long
-        Private Shared ReadOnly KEY_DOWN As Long = 0
-        Private Shared ReadOnly KEY_UP As Long = 2
+        <Flags()> _
+        Private Enum KeyEvent As Long
+            Down = 0
+            Up = 2
+        End Enum
 
         ''' <summary>
         ''' 按下单个键位（保持按下状态，要注意，按下+释放才是一次完整的按键过程）
@@ -19,7 +22,7 @@
         ''' <remarks></remarks>
         Public Shared Function Down(ByVal Key As Keys) As Boolean
             Try
-                keybd_event(Key, MapVirtualKey(Key, 0), KEY_DOWN, 0)
+                keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Down, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -33,7 +36,7 @@
         ''' <remarks></remarks>
         Public Shared Function Up(ByVal Key As Keys) As Boolean
             Try
-                keybd_event(Key, MapVirtualKey(Key, 0), KEY_UP, 0)
+                keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Up, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -48,8 +51,8 @@
         ''' <remarks></remarks>
         Public Shared Function Click(ByVal Key As Keys) As Boolean
             Try
-                keybd_event(Key, MapVirtualKey(Key, 0), KEY_DOWN, 0)
-                keybd_event(Key, MapVirtualKey(Key, 0), KEY_UP, 0)
+                keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Down, 0)
+                keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Up, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -64,10 +67,10 @@
         Public Shared Function Click(ByVal Keys As Keys()) As Boolean
             Try
                 For Each Key As Keys In Keys
-                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_DOWN, 0)
+                    keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Down, 0)
                 Next
                 For Each Key As Keys In Keys
-                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_UP, 0)
+                    keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Up, 0)
                 Next
                 Return True
             Catch ex As Exception
@@ -95,10 +98,10 @@
                     Temp.Add(Keys4)
                 End If
                 For Each Key As Keys In Temp
-                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_DOWN, 0)
+                    keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Down, 0)
                 Next
                 For Each Key As Keys In Temp
-                    keybd_event(Key, MapVirtualKey(Key, 0), KEY_UP, 0)
+                    keybd_event(Key, MapVirtualKey(Key, 0), KeyEvent.Up, 0)
                 Next
                 Return True
             Catch ex As Exception
@@ -136,8 +139,8 @@
         Public Shared Function SetCapsLock(ByVal State As Boolean) As Boolean
             Try
                 If Not My.Computer.Keyboard.CapsLock = State Then
-                    keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_DOWN, 0)
-                    keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_UP, 0)
+                    keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Down, 0)
+                    keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Up, 0)
                 End If
                 Return True
             Catch ex As Exception
@@ -153,8 +156,8 @@
         Public Shared Function SetScrollLock(ByVal State As Boolean) As Boolean
             Try
                 If Not My.Computer.Keyboard.ScrollLock = State Then
-                    keybd_event(Keys.Scroll, MapVirtualKey(Keys.Scroll, 0), KEY_DOWN, 0)
-                    keybd_event(Keys.Scroll, MapVirtualKey(Keys.Scroll, 0), KEY_UP, 0)
+                    keybd_event(Keys.Scroll, MapVirtualKey(Keys.Scroll, 0), KeyEvent.Down, 0)
+                    keybd_event(Keys.Scroll, MapVirtualKey(Keys.Scroll, 0), KeyEvent.Up, 0)
                 End If
                 Return True
             Catch ex As Exception
@@ -170,8 +173,8 @@
         Public Shared Function SetNumLock(ByVal State As Boolean) As Boolean
             Try
                 If Not My.Computer.Keyboard.NumLock = State Then
-                    keybd_event(Keys.NumLock, MapVirtualKey(Keys.NumLock, 0), KEY_DOWN, 0)
-                    keybd_event(Keys.NumLock, MapVirtualKey(Keys.NumLock, 0), KEY_UP, 0)
+                    keybd_event(Keys.NumLock, MapVirtualKey(Keys.NumLock, 0), KeyEvent.Down, 0)
+                    keybd_event(Keys.NumLock, MapVirtualKey(Keys.NumLock, 0), KeyEvent.Up, 0)
                 End If
                 Return True
             Catch ex As Exception
@@ -206,39 +209,39 @@
                     If AscString.Contains(Key) Then
                         '大写字母、数字、空格（虚拟键码VK值，与字符ASCII值相同）
                         If Not My.Computer.Keyboard.CapsLock = True Then
-                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_DOWN, 0)
-                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_UP, 0)
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Down, 0)
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Up, 0)
                         End If
-                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_DOWN, 0)
-                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_UP, 0)
+                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KeyEvent.Down, 0)
+                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KeyEvent.Up, 0)
                     ElseIf LowerString.Contains(Key) Then
                         '小写字母
                         If Not My.Computer.Keyboard.CapsLock = False Then
-                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_DOWN, 0)
-                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_UP, 0)
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Down, 0)
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Up, 0)
                         End If
                         Key = Key.ToString.ToUpper()
-                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_DOWN, 0)
-                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KEY_UP, 0)
+                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KeyEvent.Down, 0)
+                        keybd_event(Asc(Key), MapVirtualKey(Asc(Key), 0), KeyEvent.Up, 0)
                     ElseIf OemString.Contains(Key) Then
                         'OEM键特殊符号
                         Dim I As Integer = OemString.IndexOf(Key)
-                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_DOWN, 0)
-                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_UP, 0)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KeyEvent.Down, 0)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KeyEvent.Up, 0)
                     ElseIf ShiftOemString.Contains(Key) Then
                         'Shift+OEM键特殊符号
                         Dim I As Integer = ShiftOemString.IndexOf(Key)
-                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_DOWN, 0)
-                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_DOWN, 0)
-                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KEY_UP, 0)
-                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_UP, 0)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Down, 0)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KeyEvent.Down, 0)
+                        keybd_event(OemKeys(I), MapVirtualKey(OemKeys(I), 0), KeyEvent.Up, 0)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Up, 0)
                     ElseIf ShiftNumString.Contains(Key) Then
                         'Shift+数字键特殊符号
                         Dim I As Integer = ShiftNumString.IndexOf(Key)
-                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_DOWN, 0)
-                        keybd_event(NumKeys(I), MapVirtualKey(NumKeys(I), 0), KEY_DOWN, 0)
-                        keybd_event(NumKeys(I), MapVirtualKey(NumKeys(I), 0), KEY_UP, 0)
-                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KEY_UP, 0)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Down, 0)
+                        keybd_event(NumKeys(I), MapVirtualKey(NumKeys(I), 0), KeyEvent.Down, 0)
+                        keybd_event(NumKeys(I), MapVirtualKey(NumKeys(I), 0), KeyEvent.Up, 0)
+                        keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Up, 0)
                     End If
                 Next
                 Return True
@@ -264,15 +267,15 @@
                     If UpperString.Contains(Source(I)) Then
                         '大写字母
                         If Not My.Computer.Keyboard.CapsLock = True Then
-                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_DOWN, 0)
-                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KEY_UP, 0)
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Down, 0)
+                            keybd_event(Keys.CapsLock, MapVirtualKey(Keys.CapsLock, 0), KeyEvent.Up, 0)
                         End If
                     End If
                     System.Windows.Forms.Clipboard.SetText(Source(I))
-                    keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_DOWN, 0)
-                    keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_DOWN, 0)
-                    keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_UP, 0)
-                    keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_UP, 0)
+                    keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Down, 0)
+                    keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KeyEvent.Down, 0)
+                    keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KeyEvent.Up, 0)
+                    keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Up, 0)
                 Next
                 Return True
             Catch ex As Exception
@@ -291,10 +294,10 @@
         Public Shared Function Paste(ByVal Source As String) As Boolean
             Try
                 System.Windows.Forms.Clipboard.SetText(Source)
-                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_DOWN, 0)
-                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_DOWN, 0)
-                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_UP, 0)
-                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_UP, 0)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Down, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KeyEvent.Down, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KeyEvent.Up, 0)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Up, 0)
                 Return True
             Catch ex As Exception
                 Return False
@@ -309,10 +312,10 @@
         Public Shared Function Paste(ByVal Source As Bitmap) As Boolean
             Try
                 System.Windows.Forms.Clipboard.SetImage(Source)
-                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_DOWN, 0)
-                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_DOWN, 0)
-                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KEY_UP, 0)
-                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KEY_UP, 0)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Down, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KeyEvent.Down, 0)
+                keybd_event(Keys.V, MapVirtualKey(Keys.V, 0), KeyEvent.Up, 0)
+                keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Up, 0)
                 Return True
             Catch ex As Exception
                 Return False
