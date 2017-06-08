@@ -5,8 +5,7 @@
     ''' </summary>
     ''' <remarks></remarks>
     Partial Public NotInheritable Class Keyboard
-
-        Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
+        Private Declare Sub keybd_event Lib "user32.dll" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
         Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As Long, ByVal wMapType As Long) As Long
         <Flags()> _
         Private Enum KeyEvent As Long
@@ -111,7 +110,7 @@
 
 
 
-        Private Declare Function GetAsyncKeyState Lib "user32.dll" Alias "GetAsyncKeyState" (ByVal vKey As Int32) As Int16
+        Private Declare Function GetAsyncKeyState Lib "user32.dll" (ByVal vKey As Int32) As Int16
         Private Shared ReadOnly STATE_DOWN_1 As Int16 = -32767
         Private Shared ReadOnly STATE_DOWN_2 As Int16 = -32768
 
