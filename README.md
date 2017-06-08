@@ -89,6 +89,7 @@ A function library to extend the My namespace of VB.NET.
 10. 无法模拟“Win+L”的问题，本函数库提供了一个替代方案，调用“user32.dll”中的“LockWorkStation”：  
     My.Power.Lock() '锁定电脑，有效  
 11. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针  
+12. VB.NET中，调用.dll文件时，Alias后的函数名才是.dll中真正起作用的函数的名称，Alias不存在时，才会寻找同名函数
   
 ## [示例]
 	'创建快捷方式  
