@@ -6,7 +6,7 @@
     ''' <remarks></remarks>
     Partial Public NotInheritable Class Mouse
 
-        Private Declare Function mouse_event Lib "user32.dll" (ByVal dwFlags As Int32, ByVal dX As Int32, ByVal dY As Int32, ByVal dwData As Int32, ByVal dwExtraInfo As Int32) As Boolean
+        Private Declare Function mouse_event Lib "user32.dll" Alias "mouse_event" (ByVal dwFlags As Int32, ByVal dX As Int32, ByVal dY As Int32, ByVal dwData As Int32, ByVal dwExtraInfo As Int32) As Boolean
         <Flags()> _
         Private Enum MouseEvent As Int32
             Move = 1
