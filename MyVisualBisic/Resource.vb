@@ -4,7 +4,7 @@
     ''' 程序资源文件相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Resource
+    Partial Public NotInheritable Class Resource
 
         ''' <summary>
         ''' 读取程序嵌入的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）

@@ -4,7 +4,7 @@
     ''' 磁盘文件读写相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class IO
+    Partial Public NotInheritable Class IO
 
         ''' <summary>
         ''' 读取文件为Byte数组

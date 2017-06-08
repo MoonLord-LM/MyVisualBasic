@@ -132,6 +132,7 @@
     <Compile Include="MyVisualBisic\StringProcessing.vb" />
     <Compile Include="MyVisualBisic\Task.vb" />
     <Compile Include="MyVisualBisic\Time.vb" />
+    <Compile Include="MyVisualBisic\Window.vb" />
     <Compile Include="Program.vb" />
   </ItemGroup>
   <ItemGroup>

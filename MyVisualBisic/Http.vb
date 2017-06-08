@@ -4,7 +4,7 @@
     ''' HTTP网络请求相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Http
+    Partial Public NotInheritable Class Http
 
         ''' <summary>
         ''' 获取字符串

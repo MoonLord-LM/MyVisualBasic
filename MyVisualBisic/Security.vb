@@ -4,7 +4,7 @@
     ''' 编码解码、加密解密相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Security
+    Partial Public NotInheritable Class Security
 
         ''' <summary>
         ''' URL编码

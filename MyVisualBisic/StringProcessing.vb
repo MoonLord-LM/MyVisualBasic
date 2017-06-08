@@ -4,7 +4,7 @@
     ''' HTTP网络请求相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class StringProcessing
+    Partial Public NotInheritable Class StringProcessing
 
         ''' <summary>
         ''' 搜索字符串（搜寻第一个开始字符串，再向后搜寻第一个结束字符串，取出中间的部分）

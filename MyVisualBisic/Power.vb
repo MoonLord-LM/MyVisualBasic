@@ -4,7 +4,7 @@
     ''' 电源管理计划相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Power
+    Partial Public NotInheritable Class Power
 
         ''' <summary>
         ''' 设定关机计划（同步阻塞，注意会覆盖之前设定的关机/重启计划）

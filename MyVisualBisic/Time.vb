@@ -4,7 +4,7 @@
     ''' 时间管理、转换相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Time
+    Partial Public NotInheritable Class Time
 
         ''' <summary>
         ''' 将当前线程挂起指定的时间（System.Threading.Thread.Sleep）

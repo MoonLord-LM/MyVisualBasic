@@ -4,7 +4,7 @@
     ''' 进程管理相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Task
+    Partial Public NotInheritable Class Task
 
         ''' <summary>
         ''' 运行程序（同步阻塞，TaskName程序会获得鼠标焦点，直到TaskName程序结束才继续向下执行）

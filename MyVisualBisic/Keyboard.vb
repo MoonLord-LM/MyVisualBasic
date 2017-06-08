@@ -4,7 +4,7 @@
     ''' 模拟键盘操作相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Keyboard
+    Partial Public NotInheritable Class Keyboard
 
         Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
         Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As Long, ByVal wMapType As Long) As Long

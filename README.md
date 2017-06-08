@@ -57,6 +57,10 @@ A function library to extend the My namespace of VB.NET.
         <td><a href="MyVisualBisic\Mouse.vb">Mouse.vb</a></td>
 		<td>模拟鼠标操作相关函数</td>
     </tr>
+    <tr>
+        <td><a href="MyVisualBisic\Window.vb">Window.vb</a></td>
+		<td>窗口管理、控制相关函数</td>
+    </tr>
 </table>
   
 ## [参考]

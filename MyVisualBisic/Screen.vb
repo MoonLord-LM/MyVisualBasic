@@ -4,7 +4,7 @@
     ''' 进程管理相关函数
     ''' </summary>
     ''' <remarks></remarks>
-    Public NotInheritable Class Screen
+    Partial Public NotInheritable Class Screen
 
         ''' <summary>
         ''' 获取屏幕截图（全屏区域的截图）
