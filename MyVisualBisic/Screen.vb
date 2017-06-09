@@ -1,7 +1,7 @@
 ﻿Namespace My
     
     ''' <summary>
-    ''' 进程管理相关函数
+    ''' 屏幕截图相关函数
     ''' </summary>
     ''' <remarks></remarks>
     Partial Public NotInheritable Class Screen
