@@ -120,7 +120,7 @@
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
         ''' <returns>是否处于按下状态</returns>
         ''' <remarks></remarks>
-        Public Shared Function Check(ByVal Key As Keys) As Boolean
+        Public Shared Function CheckDown(ByVal Key As Keys) As Boolean
             Dim Temp As Int16 = GetAsyncKeyState(Key)
             If Temp = STATE_DOWN_1 Or Temp = STATE_DOWN_2 Then
                 Return True

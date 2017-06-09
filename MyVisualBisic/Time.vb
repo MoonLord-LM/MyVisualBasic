@@ -12,7 +12,7 @@
         ''' <param name="Second">等待时间（单位秒，必须为非负值）</param>
         ''' <remarks></remarks>
         Public Shared Sub Wait(ByVal Second As Double)
-            If Second < 0 Then
+            If Second <= 0 Then
                 Return
             End If
             System.Threading.Thread.Sleep(Second * 1000)
