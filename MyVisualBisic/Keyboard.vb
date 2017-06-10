@@ -5,10 +5,10 @@
     ''' </summary>
     ''' <remarks></remarks>
     Partial Public NotInheritable Class Keyboard
-        Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Long, ByVal dwExtraInfo As Long)
-        Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As Long, ByVal wMapType As Long) As Long
+        Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Int32, ByVal dwExtraInfo As UInt32)
+        Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As UInt32, ByVal wMapType As UInt32) As UInt32
         <Flags()> _
-        Private Enum KeyEvent As Long
+        Private Enum KeyEvent As Int32
             Down = 0
             Up = 2
         End Enum

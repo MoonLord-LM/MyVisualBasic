@@ -108,7 +108,7 @@ A function library to extend the My namespace of VB.NET.
 	My.Task.RunAsync("notepad") : My.Task.Run("cmd") : My.Task.KillAsync("notepad")  
 
 	'将完整的屏幕截图保存为png文件，并将60%比例的屏幕缩略图保存为jpg文件  
-	My.Screen.Image().Save("100.png") : My.Screen.Thumbnail(0.6).Save("60.jpg", Imaging.ImageFormat.Jpeg)  
+	My.Screen.Image().Save("100.png") : My.Screen.ImageThumbnail(0.6).Save("60.jpg", Imaging.ImageFormat.Jpeg)  
 
 	'模拟键盘敲击，发送组合键：切换输入法Ctrl+Shift，关闭当前窗口Alt+F4，QQ屏幕截图Ctrl+Alt+A  
 	My.Keyboard.Click(Keys.ControlKey, Keys.ShiftKey)  

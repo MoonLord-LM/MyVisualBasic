@@ -25,7 +25,7 @@
         ''' </summary>
         ''' <returns>UNIX时间戳整数</returns>
         ''' <remarks></remarks>
-        Public Shared Function Stamp() As Long
+        Public Shared Function Stamp() As Int32
             Return (Now.ToUniversalTime() - New DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalSeconds()
         End Function
 
