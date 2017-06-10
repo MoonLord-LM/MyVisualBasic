@@ -90,6 +90,12 @@ A function library to extend the My namespace of VB.NET.
     My.Power.Lock() '锁定电脑，有效  
 11. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针  
 12. VB.NET中，调用.dll文件时，Alias后的函数名才是.dll中真正起作用的函数的名称，Alias不存在时，才会寻找同名函数  
+13. VB.NET中，频繁修改窗体内容（如修改背景图片），会导致内存泄露和卡顿闪烁的问题，优化方案：  
+	If Not BackgroundImage Is Nothing Then BackgroundImage.Dispose() '设置新的背景图片之前，判断其是否为空，销毁旧的图片  
+    SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '首先在缓冲区中绘制，而不是直接绘制到屏幕上，这样可以减少闪烁  
+	补充方案：
+    System.GC.Collect() '在适当的时机和代码位置，强制进行即时垃圾回收  
+    SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
   
 ## [示例]
 	'创建快捷方式  

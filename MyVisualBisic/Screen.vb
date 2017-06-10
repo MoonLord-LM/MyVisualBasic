@@ -15,7 +15,9 @@
             Try
                 Dim ScreenArea As Rectangle = My.Computer.Screen.Bounds
                 Dim Temp As New Bitmap(ScreenArea.Width, ScreenArea.Height)
-                Graphics.FromImage(Temp).CopyFromScreen(0, 0, 0, 0, ScreenArea.Size)
+                Dim Graphics As Graphics = Graphics.FromImage(Temp)
+                Graphics.CopyFromScreen(0, 0, 0, 0, ScreenArea.Size)
+                Graphics.Dispose()
                 Return Temp
             Catch ex As Exception
                 Return New Bitmap(1, 1)
@@ -31,7 +33,9 @@
         Public Shared Function Image(ByVal Area As Rectangle) As Bitmap
             Try
                 Dim Temp As New Bitmap(Area.Width, Area.Height)
-                Graphics.FromImage(Temp).CopyFromScreen(Area.Left, Area.Top, 0, 0, Area.Size)
+                Dim Graphics As Graphics = Graphics.FromImage(Temp)
+                Graphics.CopyFromScreen(0, 0, 0, 0, Area.Size)
+                Graphics.Dispose()
                 Return Temp
             Catch ex As Exception
                 Return New Bitmap(1, 1)
@@ -46,13 +50,18 @@
         ''' <remarks></remarks>
         Public Shared Function ImageThumbnail(ByVal Scale As Double) As Bitmap
             If Scale <= 0 Or Scale > 1 Then
-                Return New Bitmap(0, 0)
+                Return New Bitmap(1, 1)
             End If
             Try
+                Dim Thumbnail As Bitmap
                 Dim ScreenArea As Rectangle = My.Computer.Screen.Bounds
                 Dim Temp As New Bitmap(ScreenArea.Width, ScreenArea.Height)
-                Graphics.FromImage(Temp).CopyFromScreen(0, 0, 0, 0, ScreenArea.Size)
-                Return Temp.GetThumbnailImage(ScreenArea.Width * Scale, ScreenArea.Height * Scale, Nothing, New System.IntPtr(0))
+                Dim Graphics As Graphics = Graphics.FromImage(Temp)
+                Graphics.CopyFromScreen(0, 0, 0, 0, ScreenArea.Size)
+                Graphics.Dispose()
+                Thumbnail = Temp.GetThumbnailImage(ScreenArea.Width * Scale, ScreenArea.Height * Scale, Nothing, New System.IntPtr(0))
+                Temp.Dispose()
+                Return Thumbnail
             Catch ex As Exception
                 Return New Bitmap(1, 1)
             End Try
@@ -67,12 +76,17 @@
         ''' <remarks></remarks>
         Public Shared Function ImageThumbnail(ByVal Area As Rectangle, ByVal Scale As Double) As Bitmap
             If Scale <= 0 Or Scale > 1 Then
-                Return New Bitmap(0, 0)
+                Return New Bitmap(1, 1)
             End If
             Try
+                Dim Thumbnail As Bitmap
                 Dim Temp As New Bitmap(Area.Width, Area.Height)
-                Graphics.FromImage(Temp).CopyFromScreen(0, 0, 0, 0, Area.Size)
-                Return Temp.GetThumbnailImage(Area.Width * Scale, Area.Height * Scale, Nothing, New System.IntPtr(0))
+                Dim Graphics As Graphics = Graphics.FromImage(Temp)
+                Graphics.CopyFromScreen(0, 0, 0, 0, Area.Size)
+                Graphics.Dispose()
+                Thumbnail = Temp.GetThumbnailImage(Area.Width * Scale, Area.Height * Scale, Nothing, New System.IntPtr(0))
+                Temp.Dispose()
+                Return Thumbnail
             Catch ex As Exception
                 Return New Bitmap(1, 1)
             End Try
