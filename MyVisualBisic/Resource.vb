@@ -30,14 +30,14 @@
         ''' 读取程序嵌入的图片类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
         ''' </summary>
         ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
-        ''' <returns>结果图片（失败返回空图片）</returns>
+        ''' <returns>结果图片（失败返回1*1个像素，#00000000透明色的图片）</returns>
         ''' <remarks></remarks>
         Public Shared Function ReadPicture(ByVal ResourceName As String) As Bitmap
             Try
                 Dim MyAssembly As System.Reflection.Assembly = System.Reflection.Assembly.GetExecutingAssembly()
                 Return New Bitmap(MyAssembly.GetManifestResourceStream(MyAssembly.GetName().Name & "." & ResourceName))
             Catch ex As Exception
-                Return New Bitmap(0, 0)
+                Return New Bitmap(1, 1)
             End Try
         End Function
 
