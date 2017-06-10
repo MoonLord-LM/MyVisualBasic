@@ -92,8 +92,8 @@ A function library to extend the My namespace of VB.NET.
 12. VB.NET中，调用.dll文件时，Alias后的函数名才是.dll中真正起作用的函数的名称，Alias不存在时，才会寻找同名函数  
 13. VB.NET中，频繁修改窗体内容（如修改背景图片），会导致内存泄露和卡顿闪烁的问题，解决方案：  
 	If Not BackgroundImage Is Nothing Then BackgroundImage.Dispose() '在修改背景图片之前，销毁旧的背景图片  
-    System.GC.Collect() '在适当的时机和代码位置，强制进行即时垃圾回收  
-    SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '先在缓冲区中绘制，然后直接绘制到屏幕上，以减少闪烁  
+    System.GC.Collect() '在适当的时机和代码位置，强制进行即时垃圾回收（会增加 CPU 负荷）  
+    SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '先在缓冲区中绘制，然后再绘制到屏幕上，以减少闪烁  
     SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
 
 ## [示例]
