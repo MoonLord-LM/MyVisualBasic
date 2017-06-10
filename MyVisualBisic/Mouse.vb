@@ -93,6 +93,22 @@
             Return Windows.Forms.Control.MousePosition
         End Function
         ''' <summary>
+        ''' 获取鼠标位置颜色，像素点Color值
+        ''' </summary>
+        ''' <returns>结果颜色值（System.Drawing.Color）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function PositionColor() As Color
+            Dim ScreenArea As Rectangle = My.Computer.Screen.Bounds
+            Dim Temp As New Bitmap(ScreenArea.Width, ScreenArea.Height)
+            Dim Graphics As Graphics = Graphics.FromImage(Temp)
+            Dim Result As Color
+            Graphics.CopyFromScreen(0, 0, 0, 0, ScreenArea.Size)
+            Graphics.Dispose()
+            Result = Temp.GetPixel(Windows.Forms.Cursor.Position.X, Windows.Forms.Cursor.Position.Y)
+            Temp.Dispose()
+            Return Result
+        End Function
+        ''' <summary>
         ''' 移动鼠标位置，到指定的像素点坐标
         ''' </summary>
         ''' <param name="Position">坐标（原点为屏幕左上角，X向右为正方向，Y向下为正方向）</param>
