@@ -62,6 +62,7 @@
         Private Declare Function GetWindowPlacement Lib "user32.dll" Alias "GetWindowPlacement" (ByVal hWnd As IntPtr, ByRef lpwndpl As Placement) As Boolean
         Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As Int32, ByVal lParam As System.Text.StringBuilder) As Int32
         Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As Int32, Optional ByVal lParam As Object = Nothing) As Int32
+        Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, Optional ByVal wParam As Object = Nothing, Optional ByVal lParam As Object = Nothing) As Int32
         Private Structure Rect
             Dim Left As Int32
             Dim Top As Int32
@@ -461,16 +462,24 @@
         End Function
 
         Private Declare Function PostMessage Lib "user32.dll" Alias "PostMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, Optional ByVal wParam As Object = Nothing, Optional ByVal lParam As Object = Nothing) As Boolean
-        Private Declare Function DestroyWindow Lib "user32.dll" Alias "DestroyWindow" (ByVal hWnd As IntPtr) As Boolean
 
         ''' <summary>
-        ''' 销毁窗口（实测：可关闭计算器、记事本、QQ、GitHub等）
+        ''' 关闭窗口（同步阻塞，等待程序处理和用户确认，例如弹出确认关闭的对话框）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function Close(ByVal hWnd As IntPtr) As Boolean
-            Return PostMessage(hWnd, WindowsMessage.Close)
+            Return SendMessage(hWnd, WindowsMessage.Close) = 0 And Runtime.InteropServices.Marshal.GetLastWin32Error() <> 1400 '无效的窗口句柄
+        End Function
+        ''' <summary>
+        ''' 关闭窗口（异步执行，等待程序处理和用户确认，例如弹出确认关闭的对话框）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function CloseAsync(ByVal hWnd As IntPtr) As Boolean
+            Return PostMessage(hWnd, WindowsMessage.Close) And Runtime.InteropServices.Marshal.GetLastWin32Error() <> 1400 '无效的窗口句柄
         End Function
 
         ''' <summary>
