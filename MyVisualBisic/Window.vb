@@ -477,11 +477,11 @@
         End Function
 
         ''' <summary>
-        ''' 切换桌面（效果类似于在Win7系统，鼠标点击屏幕右下角的“显示桌面”）
+        ''' 显示桌面（效果类似于在Win7系统，用鼠标点击一次屏幕右下角的“显示桌面”）
         ''' </summary>
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function ToggleDesktop() As Boolean
+        Public Shared Function ShowDesktop() As Boolean
             Try
                 CreateObject("Shell.Application").ToggleDesktop()
                 Return True
