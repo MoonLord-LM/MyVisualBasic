@@ -78,6 +78,9 @@
         End Structure
         <Flags()> _
         Private Enum WindowsMessage As UInt32
+            Destory = 2
+            Close = 8
+            Quit = 10
             SetRedraw = 11
             SetText = 12
             GetText = 13
@@ -457,16 +460,20 @@
             End Try
         End Function
 
+        Private Declare Function PostMessage Lib "user32.dll" Alias "PostMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, Optional ByVal wParam As Object = Nothing, Optional ByVal lParam As Object = Nothing) As Boolean
         Private Declare Function DestroyWindow Lib "user32.dll" Alias "DestroyWindow" (ByVal hWnd As IntPtr) As Boolean
 
         ''' <summary>
-        ''' 销毁窗口（无法跨线程关闭窗口，会出现“拒绝访问”错误而无效果）
+        ''' 销毁窗口（可能会出现“5拒绝访问”错误而无效果，实测：可关闭计算器、记事本、GitHub等）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function Destory(ByVal hWnd As IntPtr) As Boolean
-            Return DestroyWindow(hWnd)
+        Public Shared Function Close(ByVal hWnd As IntPtr) As Boolean
+            PostMessage(hWnd, WindowsMessage.Close)
+            Dim Result As Boolean = DestroyWindow(hWnd)
+            PostMessage(hWnd, WindowsMessage.Destory)
+            Return Result
         End Function
 
     End Class
