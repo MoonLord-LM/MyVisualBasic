@@ -506,7 +506,6 @@
             End Try
         End Function
 
-
         Private Declare Function FlashWindow Lib "user32.dll" Alias "FlashWindow" (ByVal hWnd As IntPtr, ByVal bInvert As Boolean) As Boolean
 
         ''' <summary>
