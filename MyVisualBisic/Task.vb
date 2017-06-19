@@ -115,8 +115,8 @@
         ''' <returns>结果字符串数组（失败返回空String数组）</returns>
         ''' <remarks></remarks>
         Public Shared Function ListName() As String()
-            Dim TaskList As List(Of String) = New List(Of String)
             Dim Processes As Process() = Process.GetProcesses()
+            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             For Each P In Processes
                 TaskList.Add(P.ProcessName)
             Next
@@ -128,8 +128,8 @@
         ''' <returns>结果字符串数组（失败返回空String数组）</returns>
         ''' <remarks></remarks>
         Public Shared Function ListTitle() As String()
-            Dim TaskList As List(Of String) = New List(Of String)
             Dim Processes As Process() = Process.GetProcesses()
+            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             For Each P In Processes
                 If P.MainWindowTitle <> "" Then
                     TaskList.Add(P.MainWindowTitle)
@@ -143,8 +143,8 @@
         ''' <returns>结果字符串数组（失败返回空String数组）</returns>
         ''' <remarks></remarks>
         Public Shared Function ListFile() As String()
-            Dim TaskList As List(Of String) = New List(Of String)
             Dim Processes As Process() = Process.GetProcesses()
+            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             For Each P In Processes
                 Try
                     TaskList.Add(P.MainModule.FileName)

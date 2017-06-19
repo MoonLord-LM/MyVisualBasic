@@ -26,6 +26,16 @@
         Public Shared Function FindByTitle(ByVal Title As String) As IntPtr
             Return FindWindow(Nothing, Title)
         End Function
+        Public Shared Function FindByTitle2(ByVal Title As String) As IntPtr
+            Dim Processes As Process() = Process.GetProcesses()
+            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
+            For Each P In Processes
+                If P.MainWindowTitle = Title Then
+                    Return P.Handle
+                End If
+            Next
+            Return New IntPtr(0)
+        End Function
 
         Private Declare Function IsIconic Lib "user32.dll" Alias "IsIconic" (ByVal hWnd As IntPtr) As Boolean
         Private Declare Function IsZoomed Lib "user32.dll" Alias "IsZoomed" (ByVal hWnd As IntPtr) As Boolean
@@ -495,6 +505,69 @@
                 Return False
             End Try
         End Function
+
+
+        Private Declare Function FlashWindow Lib "user32.dll" Alias "FlashWindow" (ByVal hWnd As IntPtr, ByVal bInvert As Boolean) As Boolean
+
+        ''' <summary>
+        ''' 闪烁窗口（同步阻塞，包括窗体和任务栏按钮的闪烁效果）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Times">闪烁的次数（默认1次）</param>
+        ''' <param name="IntervalMillisecond">闪烁的时间间隔（默认1秒）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Flash(ByVal hWnd As IntPtr, Optional ByVal Times As UInt32 = 1, Optional ByVal IntervalMillisecond As UInt32 = 1000) As Boolean
+            If IntervalMillisecond <= 0 Then
+                Times = 1
+            End If
+            If Times <= 0 Then
+                Return False
+            End If
+            For I = 0 To Times - 1
+                FlashWindow(hWnd, True)
+                FlashWindow(hWnd, False)
+                System.Threading.Thread.Sleep(1000)
+            Next
+            Return True
+        End Function
+        ''' <summary>
+        ''' 闪烁窗口（异步执行，包括窗体和任务栏按钮的闪烁效果）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Times">闪烁的次数（默认1次）</param>
+        ''' <param name="IntervalMillisecond">闪烁的时间间隔（默认1秒）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FlashAsync(ByVal hWnd As IntPtr, Optional ByVal Times As UInt32 = 1, Optional ByVal IntervalMillisecond As UInt32 = 1000) As Boolean
+            If IntervalMillisecond <= 0 Then
+                Times = 1
+            End If
+            If Times <= 0 Then
+                Return False
+            End If
+            Dim Temp As New FlashAsyncTask(hWnd, Times, IntervalMillisecond)
+            Return True
+        End Function
+        Private Class FlashAsyncTask
+            Private hWnd As IntPtr
+            Private Times As UInt32
+            Private IntervalMillisecond As UInt32
+            Private Thread As New Threading.Thread(New Threading.ThreadStart(AddressOf Run))
+            Public Sub New(ByVal TaskhWnd As IntPtr, Optional ByVal TaskTimes As UInt32 = 1, Optional ByVal TaskIntervalMillisecond As UInt32 = 1000)
+                hWnd = TaskhWnd
+                Times = TaskTimes
+                IntervalMillisecond = TaskIntervalMillisecond
+                Thread.Start()
+            End Sub
+            Private Sub Run()
+                For I = 0 To Times - 1
+                    FlashWindow(hWnd, True)
+                    FlashWindow(hWnd, False)
+                    System.Threading.Thread.Sleep(1000)
+                Next
+            End Sub
+        End Class
 
     End Class
 

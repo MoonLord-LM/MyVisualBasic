@@ -95,6 +95,7 @@ A function library to extend the My namespace of VB.NET.
     System.GC.Collect() '在适当的时机和代码位置，强制进行即时垃圾回收（会增加 CPU 负荷）  
     SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '先在缓冲区中绘制，然后再绘制到屏幕上，以减少闪烁  
     SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
+14. VB.NET中，使用“SyncLock Me”和“End SyncLock”代码块，来实现类似其它语言中的“synchronized(this)”同步锁
 
 ## [示例]
 	'创建快捷方式  
@@ -130,19 +131,19 @@ A function library to extend the My namespace of VB.NET.
     Dim Screenshot As Bitmap = My.Screen.Image()  
     Dim SavePath As String = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)  
     My.Task.RunAsync("mspaint.exe")  
-    My.Time.Wait(0.5)  
+    My.Time.Wait(500)  
     My.Keyboard.Paste(Screenshot)  
     My.Keyboard.Click(Keys.ControlKey, Keys.S)  
-    My.Time.Wait(0.5)  
+    My.Time.Wait(500)  
     My.Keyboard.Paste(SavePath & "\截图" & My.Time.Stamp() & ".png")  
     My.Keyboard.Click(Keys.Enter)  
-    My.Time.Wait(0.5)  
+    My.Time.Wait(500)  
     My.Task.KillAsync("mspaint.exe")  
 
 	'模拟用户操作，移动鼠标到桌面右下角（显示桌面），单击2下，并将鼠标移回初始位置  
     Dim Position As Point = My.Mouse.Position()  
     My.Mouse.MoveToPercent(1, 1)  
     My.Mouse.LeftClick()  
-    My.Time.Wait(1)  
+    My.Time.Wait(1000)  
     My.Mouse.LeftClick()  
     My.Mouse.MoveToPosition(Position)  

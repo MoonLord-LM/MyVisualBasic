@@ -9,13 +9,13 @@
         ''' <summary>
         ''' 将当前线程挂起指定的时间（System.Threading.Thread.Sleep）
         ''' </summary>
-        ''' <param name="Second">等待时间（单位秒，必须为非负值）</param>
+        ''' <param name="Millisecond">等待时间（单位毫秒，必须为非负值）</param>
         ''' <remarks></remarks>
-        Public Shared Sub Wait(ByVal Second As Double)
-            If Second <= 0 Then
+        Public Shared Sub Wait(ByVal Millisecond As UInt32)
+            If Millisecond <= 0 Then
                 Return
             End If
-            System.Threading.Thread.Sleep(Second * 1000)
+            System.Threading.Thread.Sleep(Millisecond)
         End Sub
 
 
@@ -25,7 +25,7 @@
         ''' </summary>
         ''' <returns>UNIX时间戳整数</returns>
         ''' <remarks></remarks>
-        Public Shared Function Stamp() As Int32
+        Public Shared Function Stamp() As UInt32
             Return (Now.ToUniversalTime() - New DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalSeconds()
         End Function
 
