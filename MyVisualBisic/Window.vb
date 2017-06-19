@@ -26,12 +26,23 @@
         Public Shared Function FindByTitle(ByVal Title As String) As IntPtr
             Return FindWindow(Nothing, Title)
         End Function
-        Public Shared Function FindByTitle2(ByVal Title As String) As IntPtr
+        ''' <summary>
+        ''' 搜索窗口标题，获取窗口句柄（优先搜索字符串完全相同的，然后搜索包含有指定字符串的）
+        ''' </summary>
+        ''' <param name="Title">窗口标题（字符串不必完全相同）</param>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchByTitle(ByVal Title As String) As IntPtr
             Dim Processes As Process() = Process.GetProcesses()
             Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             For Each P In Processes
                 If P.MainWindowTitle = Title Then
-                    Return P.Handle
+                    Return P.MainWindowHandle
+                End If
+            Next
+            For Each P In Processes
+                If P.MainWindowTitle.Contains(Title) Then
+                    Return P.MainWindowHandle
                 End If
             Next
             Return New IntPtr(0)
@@ -567,6 +578,8 @@
                 Next
             End Sub
         End Class
+
+        Public Declare Function FindWindowEx Lib "user32.dll" Alias "FindWindowExA" (ByVal hWndParent As IntPtr, ByVal hWndChildAfter As IntPtr, ByVal lpszClass As String, ByVal lpszWindow As String) As IntPtr
 
     End Class
 
