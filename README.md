@@ -95,7 +95,8 @@ A function library to extend the My namespace of VB.NET.
     System.GC.Collect() '在适当的时机和代码位置，强制进行即时垃圾回收（会增加 CPU 负荷）  
     SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '先在缓冲区中绘制，然后再绘制到屏幕上，以减少闪烁  
     SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
-14. VB.NET中，使用“SyncLock Me”和“End SyncLock”代码块，来实现类似其它语言中的“synchronized(this)”同步锁
+14. VB.NET中，使用“SyncLock Me”和“End SyncLock”代码块，来实现类似其它语言中的“synchronized(this)”同步锁  
+15. VB.NET中，使用“Nothing”、“New IntPtr(0)”，来实现类似其它语言中的“null”空指针  
 
 ## [示例]
 	'创建快捷方式  
