@@ -34,7 +34,7 @@
             Try
                 Dim Temp As New Bitmap(Area.Width, Area.Height)
                 Dim Graphics As Graphics = Graphics.FromImage(Temp)
-                Graphics.CopyFromScreen(0, 0, 0, 0, Area.Size)
+                Graphics.CopyFromScreen(Area.Left, Area.Top, 0, 0, Area.Size)
                 Graphics.Dispose()
                 Return Temp
             Catch ex As Exception
@@ -82,7 +82,7 @@
                 Dim Thumbnail As Bitmap
                 Dim Temp As New Bitmap(Area.Width, Area.Height)
                 Dim Graphics As Graphics = Graphics.FromImage(Temp)
-                Graphics.CopyFromScreen(0, 0, 0, 0, Area.Size)
+                Graphics.CopyFromScreen(Area.Left, Area.Top, 0, 0, Area.Size)
                 Graphics.Dispose()
                 Thumbnail = Temp.GetThumbnailImage(Area.Width * Scale, Area.Height * Scale, Nothing, New System.IntPtr(0))
                 Temp.Dispose()
