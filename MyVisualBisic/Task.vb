@@ -149,7 +149,7 @@
                 Try
                     TaskList.Add(P.MainModule.FileName)
                 Catch ex As Exception
-                    'MsgBox(P.ProcessName & ex.ToString)
+                    'MsgBox(P.ProcessName & ex.ToString())
                 End Try
             Next
             Return TaskList.ToArray()

@@ -74,9 +74,13 @@
                 FilePath = System.IO.Directory.GetCurrentDirectory + "\" + FilePath
             End If
             For Each P In Processes
-                If P.MainModule.FileName.ToLower() = FilePath.ToLower() Then
-                    Return P.MainWindowHandle
-                End If
+                Try
+                    If P.MainModule.FileName.ToLower() = FilePath.ToLower() Then
+                        Return P.MainWindowHandle
+                    End If
+                Catch ex As Exception
+                    'MsgBox(P.ProcessName & ex.ToString())
+                End Try
             Next
             Return New IntPtr(0)
         End Function
@@ -469,6 +473,7 @@
 
         Private Declare Function GetWindowThreadProcessId Lib "user32.dll" Alias "GetWindowThreadProcessId" (ByVal hWnd As IntPtr, ByRef lpdwProcessId As Int32) As Int32
         Private Declare Function AttachThreadInput Lib "user32.dll" Alias "AttachThreadInput" (ByVal idAttach As Int32, ByVal idAttachTo As Int32, ByVal fAttach As Boolean) As Boolean
+        Private Declare Function EnableWindow Lib "user32.dll" Alias "EnableWindow" (ByVal hWnd As IntPtr, ByVal bEnable As Boolean) As Boolean
 
         ''' <summary>
         ''' 使窗口获得系统焦点（隐藏的窗口会显示出来，最小化/最大化的窗口会还原，禁止重绘的窗口会允许重绘）
@@ -504,6 +509,16 @@
             Else
                 Return SendMessage(hWnd, WindowsMessage.SetRedraw, 0)
             End If
+        End Function
+        ''' <summary>
+        ''' 设置窗口是否允许接受键鼠输入（禁止接收用户输入时，用鼠标点击窗口区域，不会点击到后面的窗口，但会有鼠标无法正常点击的警告声）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Enable">是否允许接受输入</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SetEnable(ByVal hWnd As IntPtr, Optional ByVal Enable As Boolean = True) As Boolean
+            Return EnableWindow(hWnd, Enable)
         End Function
 
         Private Declare Function RedrawWindow Lib "user32.dll" Alias "RedrawWindow" (ByVal hWnd As IntPtr, lprcUpdate As Rect, ByVal hrgnUpdate As IntPtr, ByVal fuRedraw As UInt32) As Boolean
@@ -674,7 +689,7 @@
         End Function
 
         ''' <summary>
-        ''' 获取所有屏幕上的底层窗口的句柄列表
+        ''' 获取所有屏幕上的顶层窗口的句柄列表
         ''' </summary>
         ''' <returns>结果IntPtr数组（失败返回空IntPtr数组）</returns>
         ''' <remarks></remarks>
