@@ -7,8 +7,10 @@
     Partial Public NotInheritable Class Window
 
         Private Declare Function FindWindow Lib "user32.dll" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
+        Private Declare Function FindWindowEx Lib "user32.dll" Alias "FindWindowExA" (ByVal hWndParent As IntPtr, ByVal hWndChildAfter As IntPtr, ByVal lpszClass As String, ByVal lpszWindow As String) As IntPtr
         Private Declare Function GetForegroundWindow Lib "user32.dll" Alias "GetForegroundWindow" () As IntPtr
         Private Declare Function GetParent Lib "user32.dll" Alias "GetParent" (ByVal hWnd As IntPtr) As IntPtr
+        Private Declare Function WindowFromPoint Lib "user32.dll" Alias "WindowFromPoint" (ByVal Point As Point) As IntPtr
 
         ''' <summary>
         ''' 获取系统焦点窗口的窗口句柄
@@ -26,6 +28,23 @@
         ''' <remarks></remarks>
         Public Shared Function FindParent(ByVal hWnd As IntPtr) As IntPtr
             Return GetParent(hWnd)
+        End Function
+        ''' <summary>
+        ''' 获取鼠标位置的窗口句柄
+        ''' </summary>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindByMouse() As IntPtr
+            Return WindowFromPoint(Windows.Forms.Control.MousePosition)
+        End Function
+        ''' <summary>
+        ''' 获取指定位置的窗口句柄
+        ''' </summary>
+        ''' <param name="Position">指定位置（Point）</param>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindByPoint(ByVal Position As Point) As IntPtr
+            Return WindowFromPoint(Position)
         End Function
         ''' <summary>
         ''' 根据窗口标题，获取窗口句柄（当有多个标题相同的窗体存在时，默认获取上一个活动的窗体）
@@ -104,6 +123,36 @@
                 End If
             Next
             Return New IntPtr(0)
+        End Function
+
+        Private Declare Function EnumWindows Lib "user32.dll" Alias "EnumWindows" (ByVal lpEnumFunc As EnumWindowsProc, ByVal lParam As Object) As Boolean
+        Private Declare Function EnumChildWindows Lib "user32.dll" Alias "EnumChildWindows" (ByVal hWndParent As IntPtr, ByVal lpEnumFunc As EnumWindowsProc, ByVal lParam As Object) As Boolean
+        Private Delegate Function EnumWindowsProc(ByVal hWnd As IntPtr, ByVal lParam As Object) As Boolean
+        Private Shared Function EnumWindows(ByVal hWnd As IntPtr, ByVal lParam As List(Of IntPtr)) As Boolean
+            lParam.Add(hWnd)
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' 获取所有屏幕上的顶层窗口的句柄列表
+        ''' </summary>
+        ''' <returns>结果IntPtr数组（失败返回空IntPtr数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function List() As IntPtr()
+            Dim TempList As List(Of IntPtr) = New List(Of IntPtr)()
+            EnumWindows(AddressOf EnumWindows, TempList)
+            Return TempList.ToArray()
+        End Function
+        ''' <summary>
+        ''' 获取指定窗口的子窗口的句柄列表
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果IntPtr数组（失败返回空IntPtr数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ListChildren(ByVal hWnd As IntPtr) As IntPtr()
+            Dim TempList As List(Of IntPtr) = New List(Of IntPtr)()
+            EnumChildWindows(hWnd, AddressOf EnumWindows, TempList)
+            Return TempList.ToArray()
         End Function
 
         Private Declare Function IsIconic Lib "user32.dll" Alias "IsIconic" (ByVal hWnd As IntPtr) As Boolean
@@ -604,20 +653,6 @@
             Return PostMessage(hWnd, WindowsMessage.Close) And Runtime.InteropServices.Marshal.GetLastWin32Error() <> 1400 '无效的窗口句柄
         End Function
 
-        ''' <summary>
-        ''' 显示或隐藏桌面（效果类似于在Win7系统，用鼠标点击一次屏幕右下角的“显示桌面”）
-        ''' </summary>
-        ''' <returns>是否执行成功</returns>
-        ''' <remarks></remarks>
-        Public Shared Function ToggleDesktop() As Boolean
-            Try
-                CreateObject("Shell.Application").ToggleDesktop()
-                Return True
-            Catch ex As Exception
-                Return False
-            End Try
-        End Function
-
         Private Declare Function FlashWindow Lib "user32.dll" Alias "FlashWindow" (ByVal hWnd As IntPtr, ByVal bInvert As Boolean) As Boolean
 
         ''' <summary>
@@ -680,37 +715,19 @@
             End Sub
         End Class
 
-        Private Declare Function EnumWindows Lib "user32.dll" Alias "EnumWindows" (ByVal lpEnumFunc As EnumWindowsProc, ByVal lParam As Object) As Boolean
-        Private Declare Function EnumChildWindows Lib "user32.dll" Alias "EnumChildWindows" (ByVal hWndParent As IntPtr, ByVal lpEnumFunc As EnumWindowsProc, ByVal lParam As Object) As Boolean
-        Private Delegate Function EnumWindowsProc(ByVal hWnd As IntPtr, ByVal lParam As Object) As Boolean
-        Private Shared Function EnumWindows(ByVal hWnd As IntPtr, ByVal lParam As List(Of IntPtr)) As Boolean
-            lParam.Add(hWnd)
-            Return True
-        End Function
-
         ''' <summary>
-        ''' 获取所有屏幕上的顶层窗口的句柄列表
+        ''' 显示或隐藏桌面（效果类似于在Win7系统，用鼠标点击一次屏幕右下角的“显示桌面”）
         ''' </summary>
-        ''' <returns>结果IntPtr数组（失败返回空IntPtr数组）</returns>
+        ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function List() As IntPtr()
-            Dim TempList As List(Of IntPtr) = New List(Of IntPtr)()
-            EnumWindows(AddressOf EnumWindows, TempList)
-            Return TempList.ToArray()
+        Public Shared Function ToggleDesktop() As Boolean
+            Try
+                CreateObject("Shell.Application").ToggleDesktop()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
         End Function
-        ''' <summary>
-        ''' 获取指定窗口的子窗口的句柄列表
-        ''' </summary>
-        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
-        ''' <returns>结果IntPtr数组（失败返回空IntPtr数组）</returns>
-        ''' <remarks></remarks>
-        Public Shared Function ListChildren(ByVal hWnd As IntPtr) As IntPtr()
-            Dim TempList As List(Of IntPtr) = New List(Of IntPtr)()
-            EnumChildWindows(hWnd, AddressOf EnumWindows, TempList)
-            Return TempList.ToArray()
-        End Function
-
-        Public Declare Function FindWindowEx Lib "user32.dll" Alias "FindWindowExA" (ByVal hWndParent As IntPtr, ByVal hWndChildAfter As IntPtr, ByVal lpszClass As String, ByVal lpszWindow As String) As IntPtr
 
     End Class
 
