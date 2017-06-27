@@ -728,6 +728,90 @@
             End Try
         End Function
 
+        ''' <summary>
+        ''' 显示或隐藏窗口的3D切换效果（需要Windows Vista及更高版本的系统）
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Toggle3DSwitcher() As Boolean
+            Try
+                CreateObject("Shell.Application").WindowSwitcher()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' 显示关闭计算机界面
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowShutDown() As Boolean
+            Try
+                CreateObject("Shell.Application").ShutdownWindows()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' 显示文件搜索界面
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowSearchFile() As Boolean
+            Try
+                CreateObject("Shell.Application").FindFiles()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' 显示时间与日期界面
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowSetTime() As Boolean
+            Try
+                CreateObject("Shell.Application").SetTime()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' 显示任务栏属性界面
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowTrayProperties() As Boolean
+            Try
+                CreateObject("Shell.Application").TrayProperties()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
+        ''' <summary>
+        ''' 显示运行界面
+        ''' </summary>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ShowFileRun() As Boolean
+            Try
+                CreateObject("Shell.Application").FileRun()
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+
     End Class
 
 End Namespace
