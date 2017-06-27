@@ -11,6 +11,7 @@
         Private Declare Function GetForegroundWindow Lib "user32.dll" Alias "GetForegroundWindow" () As IntPtr
         Private Declare Function GetParent Lib "user32.dll" Alias "GetParent" (ByVal hWnd As IntPtr) As IntPtr
         Private Declare Function WindowFromPoint Lib "user32.dll" Alias "WindowFromPoint" (ByVal Point As Point) As IntPtr
+        Private Declare Function ChildWindowFromPoint Lib "user32.dll" Alias "ChildWindowFromPoint" (ByVal hWnd As IntPtr, ByVal xPoint As Int32, ByVal yPoint As Int32) As IntPtr
 
         ''' <summary>
         ''' 获取系统焦点窗口的窗口句柄
@@ -30,6 +31,15 @@
             Return GetParent(hWnd)
         End Function
         ''' <summary>
+        ''' 获取指定位置的子窗口的窗口句柄
+        ''' </summary>
+        ''' <param name="hWnd">相对于屏幕的位置（Point）</param>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindChildByPoint(ByVal hWnd As IntPtr, ByVal Position As Point) As IntPtr
+            Return ChildWindowFromPoint(hWnd, Position.X, Position.Y)
+        End Function
+        ''' <summary>
         ''' 获取鼠标位置的窗口句柄
         ''' </summary>
         ''' <returns>结果窗口句柄（IntPtr）</returns>
@@ -40,7 +50,7 @@
         ''' <summary>
         ''' 获取指定位置的窗口句柄
         ''' </summary>
-        ''' <param name="Position">指定位置（Point）</param>
+        ''' <param name="Position">相对于屏幕的位置（Point）</param>
         ''' <returns>结果窗口句柄（IntPtr）</returns>
         ''' <remarks></remarks>
         Public Shared Function FindByPoint(ByVal Position As Point) As IntPtr
