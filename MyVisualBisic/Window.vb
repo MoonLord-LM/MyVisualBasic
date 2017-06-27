@@ -8,6 +8,7 @@
 
         Private Declare Function FindWindow Lib "user32.dll" Alias "FindWindowA" (ByVal lpClassName As String, ByVal lpWindowName As String) As IntPtr
         Private Declare Function GetForegroundWindow Lib "user32.dll" Alias "GetForegroundWindow" () As IntPtr
+        Private Declare Function GetParent Lib "user32.dll" Alias "GetParent" (ByVal hWnd As IntPtr) As IntPtr
 
         ''' <summary>
         ''' 获取系统焦点窗口的窗口句柄
@@ -18,6 +19,15 @@
             Return GetForegroundWindow()
         End Function
         ''' <summary>
+        ''' 获取父窗口的窗口句柄
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindParent(ByVal hWnd As IntPtr) As IntPtr
+            Return GetParent(hWnd)
+        End Function
+        ''' <summary>
         ''' 根据窗口标题，获取窗口句柄（当有多个标题相同的窗体存在时，默认获取上一个活动的窗体）
         ''' </summary>
         ''' <param name="Title">窗口标题（字符串必须完全相同）</param>
@@ -25,6 +35,50 @@
         ''' <remarks></remarks>
         Public Shared Function FindByTitle(ByVal Title As String) As IntPtr
             Return FindWindow(Nothing, Title)
+        End Function
+        ''' <summary>
+        ''' 根据窗口类名，获取窗口句柄（当有多个类名相同的窗体存在时，默认获取上一个活动的窗体）
+        ''' </summary>
+        ''' <param name="ClassName">窗口类名（字符串必须完全相同）</param>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindByClassName(ByVal ClassName As String) As IntPtr
+            Return FindWindow(ClassName, Nothing)
+        End Function
+        ''' <summary>
+        ''' 根据进程名称，获取窗口句柄
+        ''' </summary>
+        ''' <param name="TaskName">进程名称（不含".exe"后缀）</param>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindByTaskName(ByVal TaskName As String) As IntPtr
+            Dim Processes As Process() = Process.GetProcesses()
+            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
+            For Each P In Processes
+                If P.ProcessName = TaskName Then
+                    Return P.MainWindowHandle
+                End If
+            Next
+            Return New IntPtr(0)
+        End Function
+        ''' <summary>
+        ''' 根据进程文件路径，获取窗口句柄
+        ''' </summary>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>结果窗口句柄（IntPtr）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindByFilePath(ByVal FilePath As String) As IntPtr
+            Dim Processes As Process() = Process.GetProcesses()
+            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
+            If FilePath.Contains(":") = False Then
+                FilePath = System.IO.Directory.GetCurrentDirectory + "\" + FilePath
+            End If
+            For Each P In Processes
+                If P.MainModule.FileName.ToLower() = FilePath.ToLower() Then
+                    Return P.MainWindowHandle
+                End If
+            Next
+            Return New IntPtr(0)
         End Function
         ''' <summary>
         ''' 搜索窗口标题，获取窗口句柄（优先搜索字符串完全相同的，然后搜索包含有指定字符串的）
@@ -50,6 +104,8 @@
 
         Private Declare Function IsIconic Lib "user32.dll" Alias "IsIconic" (ByVal hWnd As IntPtr) As Boolean
         Private Declare Function IsZoomed Lib "user32.dll" Alias "IsZoomed" (ByVal hWnd As IntPtr) As Boolean
+        Private Declare Function IsWindowVisible Lib "user32.dll" Alias "IsWindowVisible" (ByVal hWnd As IntPtr) As Boolean
+        Private Declare Function IsWindowEnabled Lib "user32.dll" Alias "IsWindowEnabled" (ByVal hWnd As IntPtr) As Boolean
 
         ''' <summary>
         ''' 判断窗口是否获得了系统焦点
@@ -78,9 +134,28 @@
         Public Shared Function CheckMaximized(ByVal hWnd As IntPtr) As Boolean
             Return IsZoomed(hWnd)
         End Function
+        ''' <summary>
+        ''' 判断窗口是否处于可见状态
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否可见</returns>
+        ''' <remarks></remarks>
+        Public Shared Function CheckVisible(ByVal hWnd As IntPtr) As Boolean
+            Return IsWindowVisible(hWnd)
+        End Function
+        ''' <summary>
+        ''' 判断窗口是否处于允许接受键鼠输入的状态
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否接受输入</returns>
+        ''' <remarks></remarks>
+        Public Shared Function CheckEnabled(ByVal hWnd As IntPtr) As Boolean
+            Return IsWindowEnabled(hWnd)
+        End Function
 
         Private Declare Function GetWindowRect Lib "user32.dll" Alias "GetWindowRect" (ByVal hWnd As IntPtr, ByRef lpRect As Rect) As Boolean
         Private Declare Function GetWindowPlacement Lib "user32.dll" Alias "GetWindowPlacement" (ByVal hWnd As IntPtr, ByRef lpwndpl As Placement) As Boolean
+        Private Declare Function GetClassName Lib "user32.dll" Alias "GetClassNameA" (ByVal hWnd As IntPtr, ByVal lpClassName As System.Text.StringBuilder, ByVal nMaxCount As UInt32) As UInt32
         Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As Int32, ByVal lParam As System.Text.StringBuilder) As Int32
         Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As Int32, Optional ByVal lParam As Object = Nothing) As Int32
         Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, Optional ByVal wParam As Object = Nothing, Optional ByVal lParam As Object = Nothing) As Int32
@@ -167,10 +242,21 @@
         ''' <returns>结果字符串（失败返回空字符串）</returns>
         ''' <remarks></remarks>
         Public Shared Function GetTitle(ByVal hWnd As IntPtr) As String
-            Dim Length As Int32
-            Length = SendMessage(hWnd, WindowsMessage.GetTextLength, 0) + 1
+            Dim Length As Int32 = SendMessage(hWnd, WindowsMessage.GetTextLength, 0) + 1
             Dim StringBuilder As New System.Text.StringBuilder(Length)
             SendMessage(hWnd, WindowsMessage.GetText, Length, StringBuilder)
+            Return StringBuilder.ToString()
+        End Function
+        ''' <summary>
+        ''' 获取窗口类名（结果字符串最大长度限制为1024）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果字符串（失败返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetClassName(ByVal hWnd As IntPtr) As String
+            Dim Length As Int32 = 1024 + 1
+            Dim StringBuilder As New System.Text.StringBuilder(Length)
+            GetClassName(hWnd, StringBuilder, Length)
             Return StringBuilder.ToString()
         End Function
 
@@ -578,6 +664,36 @@
                 Next
             End Sub
         End Class
+
+        Private Declare Function EnumWindows Lib "user32.dll" Alias "EnumWindows" (ByVal lpEnumFunc As EnumWindowsProc, ByVal lParam As Object) As Boolean
+        Private Declare Function EnumChildWindows Lib "user32.dll" Alias "EnumChildWindows" (ByVal hWndParent As IntPtr, ByVal lpEnumFunc As EnumWindowsProc, ByVal lParam As Object) As Boolean
+        Private Delegate Function EnumWindowsProc(ByVal hWnd As IntPtr, ByVal lParam As Object) As Boolean
+        Private Shared Function EnumWindows(ByVal hWnd As IntPtr, ByVal lParam As List(Of IntPtr)) As Boolean
+            lParam.Add(hWnd)
+            Return True
+        End Function
+
+        ''' <summary>
+        ''' 获取所有屏幕上的底层窗口的句柄列表
+        ''' </summary>
+        ''' <returns>结果IntPtr数组（失败返回空IntPtr数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function List() As IntPtr()
+            Dim TempList As List(Of IntPtr) = New List(Of IntPtr)()
+            EnumWindows(AddressOf EnumWindows, TempList)
+            Return TempList.ToArray()
+        End Function
+        ''' <summary>
+        ''' 获取指定窗口的子窗口的句柄列表
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果IntPtr数组（失败返回空IntPtr数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ListChildren(ByVal hWnd As IntPtr) As IntPtr()
+            Dim TempList As List(Of IntPtr) = New List(Of IntPtr)()
+            EnumChildWindows(hWnd, AddressOf EnumWindows, TempList)
+            Return TempList.ToArray()
+        End Function
 
         Public Declare Function FindWindowEx Lib "user32.dll" Alias "FindWindowExA" (ByVal hWndParent As IntPtr, ByVal hWndChildAfter As IntPtr, ByVal lpszClass As String, ByVal lpszWindow As String) As IntPtr
 
