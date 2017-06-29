@@ -120,19 +120,19 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="MyVisualBisic\Http.vb" />
-    <Compile Include="MyVisualBisic\IO.vb" />
-    <Compile Include="MyVisualBisic\Keyboard.vb" />
-    <Compile Include="MyVisualBisic\Mouse.vb" />
-    <Compile Include="MyVisualBisic\My.vb" />
-    <Compile Include="MyVisualBisic\Power.vb" />
-    <Compile Include="MyVisualBisic\Resource.vb" />
-    <Compile Include="MyVisualBisic\Screen.vb" />
-    <Compile Include="MyVisualBisic\Security.vb" />
-    <Compile Include="MyVisualBisic\StringProcessing.vb" />
-    <Compile Include="MyVisualBisic\Task.vb" />
-    <Compile Include="MyVisualBisic\Time.vb" />
-    <Compile Include="MyVisualBisic\Window.vb" />
+    <Compile Include="MyVisualBasic\Http.vb" />
+    <Compile Include="MyVisualBasic\IO.vb" />
+    <Compile Include="MyVisualBasic\Keyboard.vb" />
+    <Compile Include="MyVisualBasic\Mouse.vb" />
+    <Compile Include="MyVisualBasic\My.vb" />
+    <Compile Include="MyVisualBasic\Power.vb" />
+    <Compile Include="MyVisualBasic\Resource.vb" />
+    <Compile Include="MyVisualBasic\Screen.vb" />
+    <Compile Include="MyVisualBasic\Security.vb" />
+    <Compile Include="MyVisualBasic\StringProcessing.vb" />
+    <Compile Include="MyVisualBasic\Task.vb" />
+    <Compile Include="MyVisualBasic\Time.vb" />
+    <Compile Include="MyVisualBasic\Window.vb" />
     <Compile Include="Program.vb" />
   </ItemGroup>
   <ItemGroup>

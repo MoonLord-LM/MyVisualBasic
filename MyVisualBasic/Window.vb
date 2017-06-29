@@ -569,6 +569,55 @@
             Return EnableWindow(hWnd, Enable)
         End Function
 
+        Private Declare Function GetWindowLong Lib "user32.dll" Alias "GetWindowLongA" (ByVal hWnd As IntPtr, ByVal nIndex As Int32) As Int32
+        Private Declare Function SetWindowLong Lib "user32.dll" Alias "SetWindowLongA" (ByVal hWnd As IntPtr, ByVal nIndex As Int32, ByVal dwNewLong As Int32) As Int32
+        Private Declare Function SetLayeredWindowAttributes Lib "user32.dll" Alias "SetLayeredWindowAttributes" (ByVal hWnd As IntPtr, ByVal crKey As IntPtr, ByVal bAlpha As Byte, ByVal dwFlags As Int32) As Boolean
+        Private Declare Function GetLayeredWindowAttributes Lib "user32.dll" Alias "GetLayeredWindowAttributes" (ByVal hWnd As IntPtr, ByVal crKey As IntPtr, ByRef bAlpha As Byte, ByVal dwFlags As Int32) As Boolean
+        <Flags()> _
+        Private Enum WindowStyleEx As Int32
+            Layered = 524288
+        End Enum
+        <Flags()> _
+        Private Enum WindowLong As Int32
+            ExStyle = -20
+        End Enum
+        <Flags()> _
+        Private Enum LayeredWindowAttribute As Int32
+            ColorKey = 1
+            Alpha = 2
+        End Enum
+
+        ''' <summary>
+        ''' 设置窗体的不透明度级别
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Opacity">不透明程度（介于0到1之间，0为完全透明，1为完全不透明）</param>
+        ''' <returns></returns>
+        ''' <remarks>是否执行成功</remarks>
+        Public Shared Function SetOpacity(ByVal hWnd As IntPtr, Optional ByVal Opacity As Double = 1) As Boolean
+            If Opacity < 0 Then
+                Opacity = 0
+            End If
+            If Opacity > 1 Then
+                Opacity = 1
+            End If
+            Dim Temp As Int32 = GetWindowLong(hWnd, WindowLong.ExStyle)
+            Temp = Temp Or WindowStyleEx.Layered
+            SetWindowLong(hWnd, WindowLong.ExStyle, Temp)
+            Return SetLayeredWindowAttributes(hWnd, 0, Opacity * 255, LayeredWindowAttribute.Alpha)
+        End Function
+        ''' <summary>
+        ''' 获取窗体的不透明度级别
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns></returns>
+        ''' <remarks>不透明程度（介于0到1之间，0为完全透明，1为完全不透明）</remarks>
+        Public Shared Function GetOpacity(ByVal hWnd As IntPtr) As Double
+            Dim Temp As Byte
+            GetLayeredWindowAttributes(hWnd, 0, Temp, LayeredWindowAttribute.Alpha)
+            Return Temp / 255
+        End Function
+
         Private Declare Function RedrawWindow Lib "user32.dll" Alias "RedrawWindow" (ByVal hWnd As IntPtr, lprcUpdate As Rect, ByVal hrgnUpdate As IntPtr, ByVal fuRedraw As UInt32) As Boolean
         <Flags()> _
         Private Enum Redraw As UInt32
