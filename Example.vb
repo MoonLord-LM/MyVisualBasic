@@ -49,7 +49,7 @@
                     End If
                 Next
                 Tested.Add(Testing)
-                TestedGB = Tested.Count * BlockSize / 1024 / 1024 / 1024
+                TestedGB = Tested.Count * BlockSizeMB / 1024
             End While
         End Sub
 
