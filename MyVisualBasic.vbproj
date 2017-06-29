@@ -98,6 +98,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Example.vb" />
     <Compile Include="FormMain.vb">
       <SubType>Form</SubType>
     </Compile>
