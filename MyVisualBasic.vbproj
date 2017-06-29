@@ -125,7 +125,6 @@
     <Compile Include="MyVisualBasic\IO.vb" />
     <Compile Include="MyVisualBasic\Keyboard.vb" />
     <Compile Include="MyVisualBasic\Mouse.vb" />
-    <Compile Include="MyVisualBasic\My.vb" />
     <Compile Include="MyVisualBasic\Power.vb" />
     <Compile Include="MyVisualBasic\Resource.vb" />
     <Compile Include="MyVisualBasic\Screen.vb" />
