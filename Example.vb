@@ -53,6 +53,17 @@
             End While
         End Sub
 
+        ''' <summary>
+        ''' 获取上一次调用Win32 API产生的错误信息（实测：错误信息会一直保留，直到下一次调用Win32 API）
+        ''' </summary>
+        ''' <returns>错误信息（默认为"0 操作成功完成。"）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Win32Error() As String
+            Dim ErrorCode As Int32 = Runtime.InteropServices.Marshal.GetLastWin32Error()
+            Dim ErrorMessage As String = New System.ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error()).Message
+            Return ErrorCode & " " & ErrorMessage
+        End Function
+
     End Class
 
 End Namespace
