@@ -8,57 +8,57 @@ A function library to extend the My namespace of VB.NET.
 项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
   
 ## [用法]
-引入【MyVisualBisic】文件夹中的.vb文件，获得函数扩展  
+引入【MyVisualBasic】文件夹中的.vb文件，获得函数扩展  
 各个.vb文件之间互不依赖，可根据需要选择使用，推荐直接引入整个文件夹  
   
 ## [说明]
 <table>
     <tr>
-        <td><a href="MyVisualBisic\Security.vb">Security.vb</a></td>
+        <td><a href="MyVisualBasic\Security.vb">Security.vb</a></td>
 		<td>编码解码、加密解密相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Http.vb">Http.vb</a></td>
+        <td><a href="MyVisualBasic\Http.vb">Http.vb</a></td>
 		<td>HTTP网络请求相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\IO.vb">IO.vb</a></td>
+        <td><a href="MyVisualBasic\IO.vb">IO.vb</a></td>
 		<td>磁盘文件读写相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Resource.vb">Resource.vb</a></td>
+        <td><a href="MyVisualBasic\Resource.vb">Resource.vb</a></td>
 		<td>程序资源文件相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\StringProcessing.vb">StringProcessing.vb</a></td>
+        <td><a href="MyVisualBasic\StringProcessing.vb">StringProcessing.vb</a></td>
 		<td>字符串处理相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Power.vb">Power.vb</a></td>
+        <td><a href="MyVisualBasic\Power.vb">Power.vb</a></td>
 		<td>电源管理计划相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Task.vb">Task.vb</a></td>
+        <td><a href="MyVisualBasic\Task.vb">Task.vb</a></td>
 		<td>进程管理相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Screen.vb">Screen.vb</a></td>
+        <td><a href="MyVisualBasic\Screen.vb">Screen.vb</a></td>
 		<td>屏幕截图相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Keyboard.vb">Keyboard.vb</a></td>
+        <td><a href="MyVisualBasic\Keyboard.vb">Keyboard.vb</a></td>
 		<td>模拟键盘操作相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Time.vb">Time.vb</a></td>
+        <td><a href="MyVisualBasic\Time.vb">Time.vb</a></td>
 		<td>时间管理、转换相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Mouse.vb">Mouse.vb</a></td>
+        <td><a href="MyVisualBasic\Mouse.vb">Mouse.vb</a></td>
 		<td>模拟鼠标操作相关函数</td>
     </tr>
     <tr>
-        <td><a href="MyVisualBisic\Window.vb">Window.vb</a></td>
+        <td><a href="MyVisualBasic\Window.vb">Window.vb</a></td>
 		<td>窗口管理、控制相关函数</td>
     </tr>
 </table>
