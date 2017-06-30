@@ -66,6 +66,55 @@
             Return ErrorCode & " " & ErrorMessage
         End Function
 
+        ''' <summary>
+        ''' 在鼠标位置附近，创建一个无边框窗口，实时显示全屏的截图
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Shared Sub CaptureScreen()
+            Dim CaptureForm As New CaptureForm()
+            CaptureForm.Show()
+        End Sub
+        <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
+        Private Class CaptureForm
+            Inherits System.Windows.Forms.Form
+            <System.Diagnostics.DebuggerNonUserCode()> _
+            Protected Overrides Sub Dispose(ByVal disposing As Boolean)
+                Try
+                    If disposing AndAlso components IsNot Nothing Then
+                        components.Dispose()
+                    End If
+                Finally
+                    MyBase.Dispose(disposing)
+                End Try
+            End Sub
+            Private components As System.ComponentModel.IContainer
+            <System.Diagnostics.DebuggerStepThrough()> _
+            Private Sub InitializeComponent()
+                Me.components = New System.ComponentModel.Container()
+                Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
+                Me.SuspendLayout()
+                Me.Timer1.Enabled = True
+                Me.Timer1.Interval = 16
+                Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None
+                Me.ResumeLayout(False)
+            End Sub
+            Friend WithEvents Timer1 As System.Windows.Forms.Timer
+            Private Sub FormMain_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
+                Me.TopMost = True
+                Me.FormBorderStyle = Windows.Forms.FormBorderStyle.None
+                Me.SetStyle(ControlStyles.OptimizedDoubleBuffer, True)
+                Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
+            End Sub
+            Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
+                Timer1.Enabled = False
+                If Not BackgroundImage Is Nothing Then BackgroundImage.Dispose()
+                Me.BackgroundImage = My.Screen.ImageThumbnail(0.5)
+                Me.Size = Me.BackgroundImage.Size
+                Me.Location = My.Mouse.Position() + New Point(10, 10)
+                Timer1.Enabled = True
+            End Sub
+        End Class
+
     End Class
 
 End Namespace
