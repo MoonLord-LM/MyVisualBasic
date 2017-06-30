@@ -22,7 +22,10 @@
                 Try
                     ReDim Preserve Testing(BlockSize / 4 - 1)
                 Catch ex As System.OutOfMemoryException
-                    Throw New OutOfMemoryException("【内存检测通过】：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB）。")
+                    Dim Result = New OutOfMemoryException("【内存检测通过】：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB）。")
+                    Tested.Clear()
+                    System.GC.Collect()
+                    Throw Result
                 End Try
                 For I = 0 To Testing.Length - 1
                     If Testing(I) <> 0 Then
