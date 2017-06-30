@@ -97,6 +97,7 @@ A function library to extend the My namespace of VB.NET.
     SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
 14. VB.NET中，使用“SyncLock Me”和“End SyncLock”代码块，来实现类似其它语言中的“synchronized(this)”同步锁  
 15. VB.NET中，使用“Nothing”、“New IntPtr(0)”，来实现类似其它语言中的“null”空指针  
+16. VB.NET中，使用“&HFFFFFFFFUI”的形式，尾缀UI，来表示16进制的无符号整数，即UInt32.MaxValue  
 
 ## [示例]
 	'创建快捷方式  
