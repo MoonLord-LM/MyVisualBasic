@@ -253,7 +253,7 @@
         End Enum
 
         ''' <summary>
-        ''' 向窗口发送单个按键
+        ''' 向窗口发送按键消息
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
@@ -274,7 +274,7 @@
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送单个按键（Alt组合键）
+        ''' 向窗口发送按键消息（Alt组合键）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
@@ -301,7 +301,7 @@
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送单个按键（Ctrl组合键，实测：需要阻塞1毫秒时间，否则会比正常情况多发送一个WM_CHAR消息）
+        ''' 向窗口发送按键消息（Ctrl组合键，实测：需要阻塞1毫秒时间，否则会比正常情况多发送一个WM_CHAR消息）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
@@ -331,7 +331,7 @@
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送单个按键（Shift组合键，实测：WM_CHAR消息中的KeyCode可能与实际不同）
+        ''' 向窗口发送按键消息（Shift组合键，实测：WM_CHAR消息中的KeyCode可能与实际不同）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
