@@ -234,7 +234,129 @@
             GetText = 13
             GetTextLength = 14
             Close = 16
+            KeyDown = 256
+            KeyUp = 257
+            KeyChar = 258
+            SystemKeyDown = 260
+            SystemKeyUp = 261
+            SystemKeyChar = 262
+            SystemCommand = 274
         End Enum
+
+        Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As UInt32, ByVal wMapType As UInt32) As UInt32
+        Private Declare Function PostMessage Lib "user32.dll" Alias "PostMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As UInt32, ByVal lParam As UInt32) As Boolean
+        Private Declare Sub keybd_event Lib "user32.dll" Alias "keybd_event" (ByVal bVk As Byte, ByVal bScan As Byte, ByVal dwFlags As Int32, ByVal dwExtraInfo As UInt32)
+        <Flags()> _
+        Private Enum KeyEvent As Int32
+            Down = 0
+            Up = 2
+        End Enum
+
+        ''' <summary>
+        ''' 向窗口发送单个按键
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Key">键位（Windows.Forms.Keys）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SendKey(ByVal hWnd As IntPtr, ByVal Key As Keys) As Boolean
+            Dim KeyCode As UInt32 = Key
+            Dim ScanCode As UInt32 = MapVirtualKey(KeyCode, 0)
+            Dim LParam As UInt32 = 1 Or ScanCode << &H10UI
+            Dim ExtendedKeys As New List(Of Keys)(New Keys() {Keys.RShiftKey, Keys.RControlKey, Keys.RMenu})
+            If ExtendedKeys.Contains(Key) Then
+                LParam = LParam Or &H1000000UI
+            End If
+            Dim Result As Boolean = True
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, KeyCode, LParam)
+            LParam = LParam Or &HC0000000UI
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, KeyCode, LParam)
+            Return Result
+        End Function
+        ''' <summary>
+        ''' 向窗口发送单个按键（Alt组合键）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Key">键位（Windows.Forms.Keys）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SendAltKey(ByVal hWnd As IntPtr, ByVal Key As Keys) As Boolean
+            Dim AltKeyCode As UInt32 = Keys.Menu
+            Dim AltScanCode As UInt32 = MapVirtualKey(AltKeyCode, 0)
+            Dim AltLParam As UInt32 = 1 Or AltScanCode << &H10UI
+            Dim KeyCode As UInt32 = Key
+            Dim ScanCode As UInt32 = MapVirtualKey(KeyCode, 0)
+            Dim LParam As UInt32 = 1 Or ScanCode << &H10UI
+            Dim ExtendedKeys As New List(Of Keys)(New Keys() {Keys.RShiftKey, Keys.RControlKey, Keys.RMenu})
+            If ExtendedKeys.Contains(Key) Then
+                LParam = LParam Or &H1000000UI
+            End If
+            Dim Result As Boolean = True
+            LParam = LParam Or &H20000000UI
+            Result = Result And PostMessage(hWnd, WindowsMessage.SystemKeyDown, AltKeyCode, AltLParam Or &H20000000UI)
+            Result = Result And PostMessage(hWnd, WindowsMessage.SystemKeyDown, KeyCode, LParam)
+            LParam = LParam Or &HC0000000UI
+            Result = Result And PostMessage(hWnd, WindowsMessage.SystemKeyUp, KeyCode, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, AltKeyCode, AltLParam Or &HC0000000UI)
+            Return Result
+        End Function
+        ''' <summary>
+        ''' 向窗口发送单个按键（Ctrl组合键，实测：需要阻塞1毫秒时间，否则会比正常情况多发送一个WM_CHAR消息）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Key">键位（Windows.Forms.Keys）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SendCtrlKey(ByVal hWnd As IntPtr, ByVal Key As Keys) As Boolean
+            Dim CtrlKeyCode As UInt32 = Keys.ControlKey
+            Dim CtrlScanCode As UInt32 = MapVirtualKey(CtrlKeyCode, 0)
+            Dim CtrlLParam As UInt32 = 1 Or CtrlScanCode << &H10UI
+            Dim KeyCode As UInt32 = Key
+            Dim ScanCode As UInt32 = MapVirtualKey(KeyCode, 0)
+            Dim LParam As UInt32 = 1 Or ScanCode << &H10UI
+            Dim ExtendedKeys As New List(Of Keys)(New Keys() {Keys.RShiftKey, Keys.RControlKey, Keys.RMenu})
+            If ExtendedKeys.Contains(Key) Then
+                LParam = LParam Or &H1000000UI
+            End If
+            Dim Result As Boolean = True
+            keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Down, 0)
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, CtrlKeyCode, CtrlLParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, KeyCode, LParam)
+            LParam = LParam Or &HC0000000UI
+            CtrlLParam = CtrlLParam Or &HC0000000UI
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, KeyCode, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, CtrlKeyCode, CtrlLParam)
+            System.Threading.Thread.Sleep(1)
+            keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Up, 0)
+            Return Result
+        End Function
+        ''' <summary>
+        ''' 向窗口发送单个按键（Shift组合键，实测：WM_CHAR消息中的KeyCode可能与实际不同）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="Key">键位（Windows.Forms.Keys）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SendShiftKey(ByVal hWnd As IntPtr, ByVal Key As Keys) As Boolean
+            Dim ShiftKeyCode As UInt32 = Keys.ShiftKey
+            Dim ShiftScanCode As UInt32 = MapVirtualKey(ShiftKeyCode, 0)
+            Dim ShiftLParam As UInt32 = 1 Or ShiftScanCode << &H10UI
+            Dim KeyCode As UInt32 = Key
+            Dim ScanCode As UInt32 = MapVirtualKey(KeyCode, 0)
+            Dim LParam As UInt32 = 1 Or ScanCode << &H10UI
+            Dim ExtendedKeys As New List(Of Keys)(New Keys() {Keys.RShiftKey, Keys.RControlKey, Keys.RMenu})
+            If ExtendedKeys.Contains(Key) Then
+                LParam = LParam Or &H1000000UI
+            End If
+            Dim Result As Boolean = True
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, ShiftKeyCode, ShiftLParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, KeyCode, LParam)
+            LParam = LParam Or &HC0000000UI
+            ShiftLParam = ShiftLParam Or &HC0000000UI
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, KeyCode, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, ShiftKeyCode, ShiftLParam)
+            Return Result
+        End Function
 
         ''' <summary>
         ''' 获取窗口区域（大小和位置，即使窗口处于隐藏、最小化、最大化状态也能获取到）
