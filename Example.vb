@@ -29,7 +29,7 @@
                 End Try
                 For I = 0 To Testing.Length - 1
                     If Testing(I) <> 0 Then
-                        Throw New Exception("发现内存错误【初始0值异常】：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB），错误位置 " & Int(I * 4 / 1024 / 1024) & " MB。")
+                        Throw New Exception("【发现内存错误】初始0值异常：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB），错误位置 " & Int(I * 4 / 1024 / 1024) & " MB。")
                     End If
                 Next
                 '重置1
@@ -38,7 +38,7 @@
                 Next
                 For I = 0 To Testing.Length - 1
                     If Testing(I) <> UInt32.MaxValue Then
-                        Throw New Exception("发现内存错误【重置1值异常】：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB），错误位置 " & Int(I * 4 / 1024 / 1024) & " MB。")
+                        Throw New Exception("【发现内存错误】重置1值异常：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB），错误位置 " & Int(I * 4 / 1024 / 1024) & " MB。")
                     End If
                 Next
                 '重置0
@@ -47,7 +47,7 @@
                 Next
                 For I = 0 To Testing.Length - 1
                     If Testing(I) <> 0 Then
-                        Throw New Exception("发现内存错误【重置0值异常】：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB），错误位置 " & Int(I * 4 / 1024 / 1024) & " MB。")
+                        Throw New Exception("【发现内存错误】重置0值异常：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB），错误位置 " & Int(I * 4 / 1024 / 1024) & " MB。")
                     End If
                 Next
                 Tested.Add(Testing)
