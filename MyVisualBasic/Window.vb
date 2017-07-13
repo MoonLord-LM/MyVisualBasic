@@ -274,7 +274,7 @@
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送按键消息（Alt组合键）
+        ''' 向窗口发送按键消息（Alt组合键，实测：可发送Alt+F4组合键）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
@@ -301,16 +301,13 @@
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送按键消息（Ctrl组合键，实测：需要阻塞1毫秒时间，否则会比正常情况多发送一个WM_CHAR消息）
+        ''' 向窗口发送按键消息（Ctrl组合键，实测：可发送Ctrl+S组合键）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function SendCtrlKey(ByVal hWnd As IntPtr, ByVal Key As Keys) As Boolean
-            Dim CtrlKeyCode As UInt32 = Keys.ControlKey
-            Dim CtrlScanCode As UInt32 = MapVirtualKey(CtrlKeyCode, 0)
-            Dim CtrlLParam As UInt32 = 1 Or CtrlScanCode << &H10UI
             Dim KeyCode As UInt32 = Key
             Dim ScanCode As UInt32 = MapVirtualKey(KeyCode, 0)
             Dim LParam As UInt32 = 1 Or ScanCode << &H10UI
@@ -320,27 +317,22 @@
             End If
             Dim Result As Boolean = True
             keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Down, 0)
-            Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, CtrlKeyCode, CtrlLParam)
+            System.Threading.Thread.Sleep(10)
             Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, KeyCode, LParam)
             LParam = LParam Or &HC0000000UI
-            CtrlLParam = CtrlLParam Or &HC0000000UI
-            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, KeyCode, LParam)
-            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, CtrlKeyCode, CtrlLParam)
-            System.Threading.Thread.Sleep(1)
+            Result = Result And PostMessage(hWnd, WindowsMessage.SystemKeyUp, KeyCode, LParam)
+            System.Threading.Thread.Sleep(10)
             keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Up, 0)
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送按键消息（Shift组合键，实测：WM_CHAR消息中的KeyCode可能与实际不同）
+        ''' 向窗口发送按键消息（Shift组合键，实测：可发送Shift+1组合键）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function SendShiftKey(ByVal hWnd As IntPtr, ByVal Key As Keys) As Boolean
-            Dim ShiftKeyCode As UInt32 = Keys.ShiftKey
-            Dim ShiftScanCode As UInt32 = MapVirtualKey(ShiftKeyCode, 0)
-            Dim ShiftLParam As UInt32 = 1 Or ShiftScanCode << &H10UI
             Dim KeyCode As UInt32 = Key
             Dim ScanCode As UInt32 = MapVirtualKey(KeyCode, 0)
             Dim LParam As UInt32 = 1 Or ScanCode << &H10UI
@@ -349,12 +341,13 @@
                 LParam = LParam Or &H1000000UI
             End If
             Dim Result As Boolean = True
-            Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, ShiftKeyCode, ShiftLParam)
+            keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Down, 0)
+            System.Threading.Thread.Sleep(10)
             Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, KeyCode, LParam)
             LParam = LParam Or &HC0000000UI
-            ShiftLParam = ShiftLParam Or &HC0000000UI
-            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, KeyCode, LParam)
-            Result = Result And PostMessage(hWnd, WindowsMessage.KeyUp, ShiftKeyCode, ShiftLParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.SystemKeyUp, KeyCode, LParam)
+            System.Threading.Thread.Sleep(10)
+            keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Up, 0)
             Return Result
         End Function
 
