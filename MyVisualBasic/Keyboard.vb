@@ -111,8 +111,11 @@
 
 
         Private Declare Function GetAsyncKeyState Lib "user32.dll" Alias "GetAsyncKeyState" (ByVal vKey As Int32) As Int16
-        Private Shared ReadOnly STATE_DOWN_1 As Int16 = -32767
-        Private Shared ReadOnly STATE_DOWN_2 As Int16 = -32768
+        <Flags()> _
+        Private Enum KeyState As Int16
+            Down1 = -32767
+            Down2 = -32768
+        End Enum
 
         ''' <summary>
         ''' 判断单个键位是否处于按下状态
@@ -122,7 +125,7 @@
         ''' <remarks></remarks>
         Public Shared Function CheckDown(ByVal Key As Keys) As Boolean
             Dim Temp As Int16 = GetAsyncKeyState(Key)
-            If Temp = STATE_DOWN_1 Or Temp = STATE_DOWN_2 Then
+            If Temp = KeyState.Down1 Or Temp = KeyState.Down2 Then
                 Return True
             Else
                 Return False
