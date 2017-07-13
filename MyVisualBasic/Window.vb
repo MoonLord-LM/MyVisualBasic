@@ -253,7 +253,7 @@
         End Enum
 
         ''' <summary>
-        ''' 向窗口发送按键消息
+        ''' 向窗口发送按键消息（按键可能不被正常处理）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
