@@ -93,7 +93,7 @@
             Return Windows.Forms.Control.MousePosition
         End Function
         ''' <summary>
-        ''' 获取鼠标位置颜色，像素点Color值
+        ''' 获取鼠标位置的显示颜色，像素点Color值
         ''' </summary>
         ''' <returns>结果颜色值（System.Drawing.Color）</returns>
         ''' <remarks></remarks>
