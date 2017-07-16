@@ -648,8 +648,8 @@
             Dim ForegroundThreadId As Int32
             Dim HandleThreadId As Int32
             Dim Result As Int32
-            GetWindowThreadProcessId(GetForegroundWindow(), ForegroundThreadId)
-            GetWindowThreadProcessId(hWnd, HandleThreadId)
+            ForegroundThreadId = GetWindowThreadProcessId(GetForegroundWindow(), Nothing)
+            HandleThreadId = GetWindowThreadProcessId(hWnd, Nothing)
             AttachThreadInput(HandleThreadId, ForegroundThreadId, True)
             ShowWindow(hWnd, ShowState.ShowNormal)
             SetWindowPos(hWnd, WindowPos.TopMost, 0, 0, 0, 0, SetPos.NoMove Or SetPos.NoSize)
