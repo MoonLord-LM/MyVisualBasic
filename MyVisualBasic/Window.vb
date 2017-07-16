@@ -976,6 +976,81 @@
             End Try
         End Function
 
+        Private Declare Function SuspendThread Lib "kernel32.dll" Alias "SuspendThread" (ByVal hThread As IntPtr) As Int32
+        Private Declare Function ResumeThread Lib "kernel32.dll" Alias "ResumeThread" (ByVal hThread As IntPtr) As Int32
+        Private Declare Function OpenThread Lib "kernel32.dll" Alias "OpenThread" (ByVal dwDesiredAccess As UInt32, ByVal bInheritHandle As Boolean, ByVal dwThreadId As UInt32) As IntPtr
+        <Flags()> _
+        Private Enum ThreadAccess As UInt32
+            Standard = &HF0000UI
+            Synchronize = &H100000UI
+            All = &H1F0FFFUI
+        End Enum
+
+        ''' <summary>
+        ''' 挂起窗口线程（Suspend Count加1）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ThreadSuspend(ByVal hWnd As IntPtr) As Boolean
+            Dim ThreadId As Int32 = GetWindowThreadProcessId(hWnd, Nothing)
+            Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
+            Dim Result As Int32 = SuspendThread(ThreadhWnd)
+            Return Result <> -1
+        End Function
+        ''' <summary>
+        ''' 恢复窗口线程（Suspend Count减1）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ThreadResume(ByVal hWnd As IntPtr) As Boolean
+            Dim ThreadId As Int32 = GetWindowThreadProcessId(hWnd, Nothing)
+            Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
+            Dim Result As Int32 = ResumeThread(ThreadhWnd)
+            Return Result <> -1
+        End Function
+
+        ''' <summary>
+        ''' 限制窗口的CPU占用（通过不断挂起和恢复线程）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <param name="SleepMillisecond">挂起等待的持续时间（默认50毫秒，最少1毫秒）</param>
+        ''' <param name="IntervalMillisecond">挂起恢复的间隔时间（默认50毫秒，最少1毫秒）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ThreadLimit(ByVal hWnd As IntPtr, Optional ByVal SleepMillisecond As UInt32 = 50, Optional ByVal IntervalMillisecond As UInt32 = 50) As Boolean
+            If SleepMillisecond <= 0 Then
+                SleepMillisecond = 1
+            End If
+            If IntervalMillisecond <= 0 Then
+                IntervalMillisecond = 1
+            End If
+            Dim ThreadId As Int32 = GetWindowThreadProcessId(hWnd, Nothing)
+            Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
+            Dim Temp As New ThreadLimitTask(ThreadhWnd, SleepMillisecond, IntervalMillisecond)
+            Return True
+        End Function
+        Private Class ThreadLimitTask
+            Private ThreadhWnd As IntPtr
+            Private SleepMillisecond As UInt32
+            Private IntervalMillisecond As UInt32
+            Private Thread As New Threading.Thread(New Threading.ThreadStart(AddressOf Run))
+            Public Sub New(ByVal TaskhWnd As IntPtr, ByVal TaskSleepMillisecond As UInt32, ByVal TaskIntervalMillisecond As UInt32)
+                ThreadhWnd = TaskhWnd
+                SleepMillisecond = TaskSleepMillisecond
+                IntervalMillisecond = TaskIntervalMillisecond
+                Thread.Start()
+            End Sub
+            Private Sub Run()
+                While Thread.IsAlive
+                    SuspendThread(ThreadhWnd)
+                    System.Threading.Thread.Sleep(SleepMillisecond)
+                    ResumeThread(ThreadhWnd)
+                    System.Threading.Thread.Sleep(IntervalMillisecond)
+                End While
+            End Sub
+        End Class
     End Class
 
 End Namespace
