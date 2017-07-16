@@ -976,6 +976,8 @@
             End Try
         End Function
 
+
+
         Private Declare Function SuspendThread Lib "kernel32.dll" Alias "SuspendThread" (ByVal hThread As IntPtr) As Int32
         Private Declare Function ResumeThread Lib "kernel32.dll" Alias "ResumeThread" (ByVal hThread As IntPtr) As Int32
         Private Declare Function OpenThread Lib "kernel32.dll" Alias "OpenThread" (ByVal dwDesiredAccess As UInt32, ByVal bInheritHandle As Boolean, ByVal dwThreadId As UInt32) As IntPtr
@@ -1051,6 +1053,28 @@
                 End While
             End Sub
         End Class
+
+        ''' <summary>
+        ''' 获取窗口线程ID
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果线程ID</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetThreadId(ByVal hWnd As IntPtr) As Int32
+            Return GetWindowThreadProcessId(hWnd, Nothing)
+        End Function
+        ''' <summary>
+        ''' 获取窗口进程ID
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果进程ID</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetProcessId(ByVal hWnd As IntPtr) As Int32
+            Dim ProcessId As Int32
+            GetWindowThreadProcessId(hWnd, ProcessId)
+            Return ProcessId
+        End Function
+
     End Class
 
 End Namespace
