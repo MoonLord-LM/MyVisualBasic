@@ -116,6 +116,7 @@
         End Class
 
         ''' <summary>
+        ''' 获取一个窗体的所有的可见子窗体句柄，保存信息并截图
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <remarks></remarks>
