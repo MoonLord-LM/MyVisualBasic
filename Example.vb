@@ -115,6 +115,34 @@
             End Sub
         End Class
 
+        ''' <summary>
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <remarks></remarks>
+        Public Shared Sub AnalysisChildren(ByVal hWnd As IntPtr)
+            My.Window.SetFocus(hWnd)
+            Dim SavePath As String = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
+            Dim WindowsName As String = My.Window.GetTitle(hWnd)
+            SavePath = SavePath & "\" & WindowsName & My.Time.Stamp()
+            System.IO.Directory.CreateDirectory(SavePath)
+            My.IO.WriteString("", SavePath & "\Name_ClassName_Left_Top_Width_Height_Child_Father" & ".txt")
+            Dim Children As New List(Of IntPtr)(My.Window.ListChildren(hWnd))
+            Dim I As Int32 = 0
+            While (I < Children.Count)
+                Dim Child As IntPtr = Children(I)
+                Dim Rectangle As Rectangle = My.Window.GetRectangle(Child)
+                If Rectangle.Width > 0 And Rectangle.Height > 0 Then
+                    Dim Name As String = My.Window.GetTitle(Child)
+                    Dim ClassName As String = My.Window.GetClassName(Child)
+                    Dim Father As IntPtr = My.Window.FindParent(Child)
+                    Dim Image As Image = My.Screen.Image(Rectangle)
+                    Image.Save(SavePath & "\" & Name & "_" & ClassName & "_" & Rectangle.Left & "_" & Rectangle.Top & "_" & Rectangle.Width & "_" & Rectangle.Height & "_" & Child.ToString() & "_" & Father.ToString() & ".png")
+                    Image.Dispose()
+                End If
+                I = I + 1
+            End While
+        End Sub
+
     End Class
 
 End Namespace

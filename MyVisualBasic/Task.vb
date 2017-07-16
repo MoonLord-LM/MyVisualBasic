@@ -25,7 +25,7 @@
                 p.StartInfo.RedirectStandardError = True
                 p.StartInfo.CreateNoWindow = True
                 p.Start()
-                p.StandardInput.WriteLine("start " & """" & TaskName & """" & " >nul 2>nul")
+                p.StandardInput.WriteLine("start """""""" " & """" & TaskName & """" & " >nul 2>nul")
                 p.StandardInput.WriteLine("exit")
                 p.StandardOutput.ReadToEnd()
                 p.StandardOutput.Close()
@@ -39,7 +39,7 @@
         ''' 运行程序（异步执行，多次调用本函数会打开多个TaskName程序）
         ''' </summary>
         ''' <param name="TaskName">程序名称（例如"notepad"或"notepad.exe"）</param>
-        ''' <param name="MouseFocus">TaskName程序是否获得鼠标焦点（程序运行后也可能会强制抢占焦点）</param>
+        ''' <param name="MouseFocus">TaskName程序是否获得鼠标焦点（程序运行后，有些可能会遮挡焦点窗体，如“记事本”、“画图”，有些甚至会强制抢占焦点，如“计算器”）</param>
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function RunAsync(ByVal TaskName As String, Optional ByVal MouseFocus As Boolean = True) As Boolean
