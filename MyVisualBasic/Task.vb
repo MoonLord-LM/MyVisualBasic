@@ -142,7 +142,7 @@
         ''' </summary>
         ''' <returns>结果字符串数组（失败返回空String数组）</returns>
         ''' <remarks></remarks>
-        Public Shared Function ListFile() As String()
+        Public Shared Function ListFilePath() As String()
             Dim Processes As Process() = Process.GetProcesses()
             Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             For Each P In Processes
