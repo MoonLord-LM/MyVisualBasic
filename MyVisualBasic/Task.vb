@@ -236,7 +236,7 @@
         Public Shared Function ThreadSuspend(ByVal Process As Process) As Boolean
             Dim Threads As ProcessThreadCollection = Process.Threads
             Dim Result As Boolean = True
-            For I = 0 To Threads.Count
+            For I = 0 To Threads.Count - 1
                 Dim ThreadId As Int32 = Threads(I).Id
                 Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
                 Result = Result And SuspendThread(ThreadhWnd) <> -1
@@ -252,7 +252,7 @@
         Public Shared Function ThreadResume(ByVal Process As Process) As Boolean
             Dim Threads As ProcessThreadCollection = Process.Threads
             Dim Result As Boolean = True
-            For I = 0 To Threads.Count
+            For I = 0 To Threads.Count - 1
                 Dim ThreadId As Int32 = Threads(I).Id
                 Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
                 Result = Result And ResumeThread(ThreadhWnd) <> -1
@@ -292,7 +292,7 @@
             Private Sub Run()
                 While Thread.IsAlive
                     Dim Threads As ProcessThreadCollection = Process.Threads
-                    For I = 0 To Threads.Count
+                    For I = 0 To Threads.Count - 1
                         Dim ThreadId As Int32 = Threads(I).Id
                         Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
                         SuspendThread(ThreadhWnd)
@@ -301,7 +301,7 @@
                         System.Threading.Thread.Sleep(SleepMillisecond)
                     Catch ex As Exception
                     End Try
-                    For I = 0 To Threads.Count
+                    For I = 0 To Threads.Count - 1
                         Dim ThreadId As Int32 = Threads(I).Id
                         Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
                         ResumeThread(ThreadhWnd)
