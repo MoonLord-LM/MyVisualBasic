@@ -1040,6 +1040,26 @@
             Dim Result As Int32 = ResumeThread(ThreadhWnd)
             Return Result <> -1
         End Function
+        ''' <summary>
+        ''' 强制恢复窗口线程（Suspend Count减到0）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ThreadFree(ByVal hWnd As IntPtr) As Boolean
+            If hWnd = 0 OrElse IsWindow(hWnd) = False Then
+                Return False
+            End If
+            Dim ThreadId As Int32 = GetWindowThreadProcessId(hWnd, Nothing)
+            Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
+            Dim Temp As Int32 = ResumeThread(ThreadhWnd)
+            Dim Result As Boolean = Temp <> -1
+            While Temp > 0
+                Temp = ResumeThread(ThreadhWnd)
+                Result = Result And Temp <> -1
+            End While
+            Return Result
+        End Function
 
         ''' <summary>
         ''' 限制窗口的CPU占用（通过不断挂起和恢复线程）
