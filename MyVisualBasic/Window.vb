@@ -71,9 +71,8 @@
         ''' <remarks></remarks>
         Public Shared Function FindByTaskName(ByVal TaskName As String) As IntPtr
             Dim Processes As Process() = Process.GetProcesses()
-            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             For Each P In Processes
-                If P.ProcessName = TaskName Then
+                If P.ProcessName.ToLower() = TaskName.ToLower() Then
                     Return P.MainWindowHandle
                 End If
             Next
@@ -87,7 +86,6 @@
         ''' <remarks></remarks>
         Public Shared Function FindByFilePath(ByVal FilePath As String) As IntPtr
             Dim Processes As Process() = Process.GetProcesses()
-            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             If FilePath.Contains(":") = False Then
                 FilePath = System.IO.Directory.GetCurrentDirectory + "\" + FilePath
             End If
@@ -110,14 +108,13 @@
         ''' <remarks></remarks>
         Public Shared Function SearchByTitle(ByVal Title As String) As IntPtr
             Dim Processes As Process() = Process.GetProcesses()
-            Dim TaskList As List(Of String) = New List(Of String)(Processes.Length)
             For Each P In Processes
-                If P.MainWindowTitle = Title Then
+                If P.MainWindowTitle.ToLower() = Title.ToLower() Then
                     Return P.MainWindowHandle
                 End If
             Next
             For Each P In Processes
-                If P.MainWindowTitle.Contains(Title) Then
+                If P.MainWindowTitle.ToLower().Contains(Title.ToLower()) Then
                     Return P.MainWindowHandle
                 End If
             Next
@@ -317,11 +314,17 @@
             End If
             Dim Result As Boolean = True
             keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Down, 0)
-            System.Threading.Thread.Sleep(10)
+            Try
+                System.Threading.Thread.Sleep(10)
+            Catch ex As Exception
+            End Try
             Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, KeyCode, LParam)
             LParam = LParam Or &HC0000000UI
             Result = Result And PostMessage(hWnd, WindowsMessage.SystemKeyUp, KeyCode, LParam)
-            System.Threading.Thread.Sleep(10)
+            Try
+                System.Threading.Thread.Sleep(10)
+            Catch ex As Exception
+            End Try
             keybd_event(Keys.ControlKey, MapVirtualKey(Keys.ControlKey, 0), KeyEvent.Up, 0)
             Return Result
         End Function
@@ -342,11 +345,17 @@
             End If
             Dim Result As Boolean = True
             keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Down, 0)
-            System.Threading.Thread.Sleep(10)
+            Try
+                System.Threading.Thread.Sleep(10)
+            Catch ex As Exception
+            End Try
             Result = Result And PostMessage(hWnd, WindowsMessage.KeyDown, KeyCode, LParam)
             LParam = LParam Or &HC0000000UI
             Result = Result And PostMessage(hWnd, WindowsMessage.SystemKeyUp, KeyCode, LParam)
-            System.Threading.Thread.Sleep(10)
+            Try
+                System.Threading.Thread.Sleep(10)
+            Catch ex As Exception
+            End Try
             keybd_event(Keys.ShiftKey, MapVirtualKey(Keys.ShiftKey, 0), KeyEvent.Up, 0)
             Return Result
         End Function
@@ -836,7 +845,10 @@
             For I = 0 To Times - 1
                 FlashWindow(hWnd, True)
                 FlashWindow(hWnd, False)
-                System.Threading.Thread.Sleep(1000)
+                Try
+                    System.Threading.Thread.Sleep(1000)
+                Catch ex As Exception
+                End Try
             Next
             Return True
         End Function
@@ -873,7 +885,10 @@
                 For I = 0 To Times - 1
                     FlashWindow(hWnd, True)
                     FlashWindow(hWnd, False)
-                    System.Threading.Thread.Sleep(1000)
+                    Try
+                        System.Threading.Thread.Sleep(1000)
+                    Catch ex As Exception
+                    End Try
                 Next
             End Sub
         End Class
@@ -1047,9 +1062,15 @@
             Private Sub Run()
                 While Thread.IsAlive
                     SuspendThread(ThreadhWnd)
-                    System.Threading.Thread.Sleep(SleepMillisecond)
+                    Try
+                        System.Threading.Thread.Sleep(SleepMillisecond)
+                    Catch ex As Exception
+                    End Try
                     ResumeThread(ThreadhWnd)
-                    System.Threading.Thread.Sleep(IntervalMillisecond)
+                    Try
+                        System.Threading.Thread.Sleep(IntervalMillisecond)
+                    Catch ex As Exception
+                    End Try
                 End While
             End Sub
         End Class
@@ -1073,6 +1094,17 @@
             Dim ProcessId As Int32
             GetWindowThreadProcessId(hWnd, ProcessId)
             Return ProcessId
+        End Function
+        ''' <summary>
+        ''' 获取窗口进程
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果进程（Process）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetProcess(ByVal hWnd As IntPtr) As Process
+            Dim ProcessId As Int32
+            GetWindowThreadProcessId(hWnd, ProcessId)
+            Return System.Diagnostics.Process.GetProcessById(ProcessId)
         End Function
 
     End Class

@@ -155,6 +155,66 @@
             Return TaskList.ToArray()
         End Function
 
+
+
+        ''' <summary>
+        ''' 根据进程名称，获取进程
+        ''' </summary>
+        ''' <param name="TaskName">进程名称（不含".exe"后缀）</param>
+        ''' <returns>结果进程（Process）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindByName(ByVal TaskName As String) As Process
+            Dim Processes As Process() = Process.GetProcesses()
+            For Each P In Processes
+                If P.ProcessName.ToLower() = TaskName.ToLower() Then
+                    Return P
+                End If
+            Next
+            Return Nothing
+        End Function
+        ''' <summary>
+        ''' 根据进程文件路径，获取进程
+        ''' </summary>
+        ''' <param name="FilePath">文件路径（可以是相对路径）</param>
+        ''' <returns>结果进程（Process）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindByFilePath(ByVal FilePath As String) As Process
+            Dim Processes As Process() = Process.GetProcesses()
+            If FilePath.Contains(":") = False Then
+                FilePath = System.IO.Directory.GetCurrentDirectory + "\" + FilePath
+            End If
+            For Each P In Processes
+                Try
+                    If P.MainModule.FileName.ToLower() = FilePath.ToLower() Then
+                        Return P
+                    End If
+                Catch ex As Exception
+                    'MsgBox(P.ProcessName & ex.ToString())
+                End Try
+            Next
+            Return Nothing
+        End Function
+        ''' <summary>
+        ''' 搜索窗口标题，获取进程（优先搜索字符串完全相同的，然后搜索包含有指定字符串的）
+        ''' </summary>
+        ''' <param name="Title">窗口标题（字符串不必完全相同）</param>
+        ''' <returns>结果进程（Process）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SearchByTitle(ByVal Title As String) As Process
+            Dim Processes As Process() = Process.GetProcesses()
+            For Each P In Processes
+                If P.MainWindowTitle.ToLower() = Title.ToLower() Then
+                    Return P
+                End If
+            Next
+            For Each P In Processes
+                If P.MainWindowTitle.ToLower().Contains(Title.ToLower()) Then
+                    Return P
+                End If
+            Next
+            Return Nothing
+        End Function
+
     End Class
 
 End Namespace

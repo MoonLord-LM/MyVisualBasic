@@ -15,7 +15,10 @@
             If Millisecond <= 0 Then
                 Return
             End If
-            System.Threading.Thread.Sleep(Millisecond)
+            Try
+                System.Threading.Thread.Sleep(Millisecond)
+            Catch ex As Exception
+            End Try
         End Sub
 
 

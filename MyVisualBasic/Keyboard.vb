@@ -206,7 +206,10 @@
                 For N = 0 To KeyArray.Length - 1
                     Dim Key As Char = KeyArray(N)
                     If N > 0 And MillisecondsInterval <> 0 Then
-                        System.Threading.Thread.Sleep(MillisecondsInterval)
+                        Try
+                            System.Threading.Thread.Sleep(MillisecondsInterval)
+                        Catch ex As Exception
+                        End Try
                     End If
                     If AscString.Contains(Key) Then
                         '大写字母、数字、空格（虚拟键码VK值，与字符ASCII值相同）
@@ -264,7 +267,10 @@
                 Dim UpperString As String = "QWERTYUIOP" & "ASDFGHJKL" & "ZXCVBNM"
                 For I = 0 To Source.Length - 1
                     If I > 0 And MillisecondsInterval <> 0 Then
-                        System.Threading.Thread.Sleep(MillisecondsInterval)
+                        Try
+                            System.Threading.Thread.Sleep(MillisecondsInterval)
+                        Catch ex As Exception
+                        End Try
                     End If
                     If UpperString.Contains(Source(I)) Then
                         '大写字母
