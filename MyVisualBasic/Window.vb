@@ -151,6 +151,7 @@
             Return TempList.ToArray()
         End Function
 
+        Private Declare Function IsWindow Lib "user32.dll" Alias "IsWindow" (ByVal hWnd As IntPtr) As Boolean
         Private Declare Function IsIconic Lib "user32.dll" Alias "IsIconic" (ByVal hWnd As IntPtr) As Boolean
         Private Declare Function IsZoomed Lib "user32.dll" Alias "IsZoomed" (ByVal hWnd As IntPtr) As Boolean
         Private Declare Function IsWindowVisible Lib "user32.dll" Alias "IsWindowVisible" (ByVal hWnd As IntPtr) As Boolean
@@ -861,6 +862,9 @@
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function FlashAsync(ByVal hWnd As IntPtr, Optional ByVal Times As UInt32 = 1, Optional ByVal IntervalMillisecond As UInt32 = 1000) As Boolean
+            If hWnd = 0 OrElse IsWindow(hWnd) = False Then
+                Return False
+            End If
             If IntervalMillisecond <= 0 Then
                 Times = 1
             End If
@@ -883,6 +887,9 @@
             End Sub
             Private Sub Run()
                 For I = 0 To Times - 1
+                    If IsWindow(hWnd) = False Then
+                        Thread.Abort()
+                    End If
                     FlashWindow(hWnd, True)
                     FlashWindow(hWnd, False)
                     Try
@@ -1010,6 +1017,9 @@
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function ThreadSuspend(ByVal hWnd As IntPtr) As Boolean
+            If hWnd = 0 OrElse IsWindow(hWnd) = False Then
+                Return False
+            End If
             Dim ThreadId As Int32 = GetWindowThreadProcessId(hWnd, Nothing)
             Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
             Dim Result As Int32 = SuspendThread(ThreadhWnd)
@@ -1022,6 +1032,9 @@
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function ThreadResume(ByVal hWnd As IntPtr) As Boolean
+            If hWnd = 0 OrElse IsWindow(hWnd) = False Then
+                Return False
+            End If
             Dim ThreadId As Int32 = GetWindowThreadProcessId(hWnd, Nothing)
             Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
             Dim Result As Int32 = ResumeThread(ThreadhWnd)
@@ -1037,30 +1050,37 @@
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function ThreadLimit(ByVal hWnd As IntPtr, Optional ByVal SleepMillisecond As UInt32 = 50, Optional ByVal IntervalMillisecond As UInt32 = 50) As Boolean
+            If hWnd = 0 OrElse IsWindow(hWnd) = False Then
+                Return False
+            End If
             If SleepMillisecond <= 0 Then
                 SleepMillisecond = 1
             End If
             If IntervalMillisecond <= 0 Then
                 IntervalMillisecond = 1
             End If
-            Dim ThreadId As Int32 = GetWindowThreadProcessId(hWnd, Nothing)
-            Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
-            Dim Temp As New ThreadLimitTask(ThreadhWnd, SleepMillisecond, IntervalMillisecond)
+            Dim Temp As New ThreadLimitTask(hWnd, SleepMillisecond, IntervalMillisecond)
             Return True
         End Function
         Private Class ThreadLimitTask
+            Private WindowhWnd As IntPtr
             Private ThreadhWnd As IntPtr
             Private SleepMillisecond As UInt32
             Private IntervalMillisecond As UInt32
             Private Thread As New Threading.Thread(New Threading.ThreadStart(AddressOf Run))
             Public Sub New(ByVal TaskhWnd As IntPtr, ByVal TaskSleepMillisecond As UInt32, ByVal TaskIntervalMillisecond As UInt32)
-                ThreadhWnd = TaskhWnd
+                WindowhWnd = TaskhWnd
                 SleepMillisecond = TaskSleepMillisecond
                 IntervalMillisecond = TaskIntervalMillisecond
+                Dim ThreadId As Int32 = GetWindowThreadProcessId(WindowhWnd, Nothing)
+                ThreadhWnd = OpenThread(ThreadAccess.All, False, ThreadId)
                 Thread.Start()
             End Sub
             Private Sub Run()
                 While Thread.IsAlive
+                    If IsWindow(WindowhWnd) = False Then
+                        Thread.Abort()
+                    End If
                     SuspendThread(ThreadhWnd)
                     Try
                         System.Threading.Thread.Sleep(SleepMillisecond)
@@ -1104,7 +1124,10 @@
         Public Shared Function GetProcess(ByVal hWnd As IntPtr) As Process
             Dim ProcessId As Int32
             GetWindowThreadProcessId(hWnd, ProcessId)
-            Return System.Diagnostics.Process.GetProcessById(ProcessId)
+            If ProcessId <> 0 Then
+                Return System.Diagnostics.Process.GetProcessById(ProcessId)
+            End If
+            Return Nothing
         End Function
 
     End Class

@@ -234,6 +234,9 @@
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function ThreadSuspend(ByVal Process As Process) As Boolean
+            If Process Is Nothing OrElse Process.HasExited Then
+                Return False
+            End If
             Dim Threads As ProcessThreadCollection = Process.Threads
             Dim Result As Boolean = True
             For I = 0 To Threads.Count - 1
@@ -250,12 +253,39 @@
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function ThreadResume(ByVal Process As Process) As Boolean
+            If Process Is Nothing OrElse Process.HasExited Then
+                Return False
+            End If
             Dim Threads As ProcessThreadCollection = Process.Threads
             Dim Result As Boolean = True
             For I = 0 To Threads.Count - 1
                 Dim ThreadId As Int32 = Threads(I).Id
                 Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
                 Result = Result And ResumeThread(ThreadhWnd) <> -1
+            Next
+            Return Result
+        End Function
+        ''' <summary>
+        ''' 强制恢复进程的所有线程（Suspend Count减到0）
+        ''' </summary>
+        ''' <param name="Process">进程（Process）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function ThreadFree(ByVal Process As Process) As Boolean
+            If Process Is Nothing OrElse Process.HasExited Then
+                Return False
+            End If
+            Dim Threads As ProcessThreadCollection = Process.Threads
+            Dim Result As Boolean = True
+            For I = 0 To Threads.Count - 1
+                Dim ThreadId As Int32 = Threads(I).Id
+                Dim ThreadhWnd As IntPtr = OpenThread(ThreadAccess.All, False, ThreadId)
+                Dim Temp As Int32 = ResumeThread(ThreadhWnd)
+                Result = Result And Temp <> -1
+                While Temp > 0
+                    Temp = ResumeThread(ThreadhWnd)
+                    Result = Result And Temp <> -1
+                End While
             Next
             Return Result
         End Function
@@ -269,6 +299,9 @@
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function ThreadLimit(ByVal Process As Process, Optional ByVal SleepMillisecond As UInt32 = 50, Optional ByVal IntervalMillisecond As UInt32 = 50) As Boolean
+            If Process Is Nothing OrElse Process.HasExited Then
+                Return False
+            End If
             If SleepMillisecond <= 0 Then
                 SleepMillisecond = 1
             End If
@@ -291,6 +324,9 @@
             End Sub
             Private Sub Run()
                 While Thread.IsAlive
+                    If Process.HasExited Then
+                        Thread.Abort()
+                    End If
                     Dim Threads As ProcessThreadCollection = Process.Threads
                     For I = 0 To Threads.Count - 1
                         Dim ThreadId As Int32 = Threads(I).Id
