@@ -99,7 +99,7 @@
         ''' </summary>
         ''' <returns>结果区域值（System.Drawing.Rectangle）</returns>
         ''' <remarks></remarks>
-        Public Shared Function Area(ByVal hWnd As IntPtr) As System.Drawing.Rectangle
+        Public Shared Function Area() As System.Drawing.Rectangle
             Return My.Computer.Screen.Bounds
         End Function
         ''' <summary>
@@ -107,7 +107,7 @@
         ''' </summary>
         ''' <returns>结果大小值（System.Drawing.Size）</returns>
         ''' <remarks></remarks>
-        Public Shared Function Size(ByVal hWnd As IntPtr) As Size
+        Public Shared Function Size() As Size
             Return My.Computer.Screen.Bounds.Size
         End Function
         ''' <summary>
@@ -115,7 +115,7 @@
         ''' </summary>
         ''' <returns>结果坐标值（System.Drawing.Point）</returns>
         ''' <remarks></remarks>
-        Public Shared Function CenterPoint(ByVal hWnd As IntPtr) As Point
+        Public Shared Function CenterPoint() As Point
             Return New Point(My.Computer.Screen.Bounds.Left / 2, My.Computer.Screen.Bounds.Top / 2)
         End Function
 
@@ -124,7 +124,7 @@
         ''' </summary>
         ''' <returns>结果区域值（System.Drawing.Rectangle）</returns>
         ''' <remarks></remarks>
-        Public Shared Function WorkingArea(ByVal hWnd As IntPtr) As System.Drawing.Rectangle
+        Public Shared Function WorkingArea() As System.Drawing.Rectangle
             Return My.Computer.Screen.WorkingArea
         End Function
         ''' <summary>
@@ -132,7 +132,7 @@
         ''' </summary>
         ''' <returns>结果大小值（System.Drawing.Size）</returns>
         ''' <remarks></remarks>
-        Public Shared Function WorkingAreaSize(ByVal hWnd As IntPtr) As Size
+        Public Shared Function WorkingAreaSize() As Size
             Return My.Computer.Screen.WorkingArea.Size
         End Function
         ''' <summary>
@@ -140,7 +140,7 @@
         ''' </summary>
         ''' <returns>结果坐标值（System.Drawing.Point）</returns>
         ''' <remarks></remarks>
-        Public Shared Function WorkingAreaCenterPoint(ByVal hWnd As IntPtr) As Point
+        Public Shared Function WorkingAreaCenterPoint() As Point
             Return New Point(My.Computer.Screen.WorkingArea.Left / 2, My.Computer.Screen.WorkingArea.Top / 2)
         End Function
 

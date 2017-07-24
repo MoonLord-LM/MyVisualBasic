@@ -379,6 +379,38 @@
             Return Result
         End Function
 
+
+
+        Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As UInt32, ByVal lParam As Int32) As Int32
+        <Flags()> _
+        Private Enum MouseKey As UInt32
+            Up = 0
+            LeftButton = 1
+            RightButton = 2
+            Shift = 4
+            Control = 8
+            MiddleButton = 16
+            XButton1 = 32
+            XButton2 = 64
+        End Enum
+        ''' <summary>
+        ''' 向窗口发送鼠标消息（左键单击）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SendLeftClick(ByVal hWnd As IntPtr, ByVal Position As Point) As Boolean
+            Dim Result As Boolean = True
+            Dim Left As Int32 = Position.X
+            Dim Top As Int32 = Position.Y
+            Dim LParam As Int32 = Position.X Or Position.Y << 16
+            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
+            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
+            Return Result
+        End Function
+
+
+
         ''' <summary>
         ''' 获取窗口区域（大小和位置，即使窗口处于隐藏、最小化、最大化状态也能获取到）
         ''' </summary>
@@ -429,6 +461,23 @@
                 GetWindowRect(hWnd, WindowRect)
             End If
             Return New System.Drawing.Size(WindowRect.Right - WindowRect.Left, WindowRect.Bottom - WindowRect.Top)
+        End Function
+        ''' <summary>
+        ''' 获取窗口中心点坐标（即使窗口处于隐藏、最小化、最大化状态也能获取到）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>结果坐标值（System.Drawing.Point）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function GetCenterPoint(ByVal hWnd As IntPtr) As Point
+            Dim WindowRect As Rect
+            If IsIconic(hWnd) Or IsZoomed(hWnd) Then
+                Dim WindowPlacement As Placement
+                GetWindowPlacement(hWnd, WindowPlacement)
+                WindowRect = WindowPlacement.rcNormalPosition
+            Else
+                GetWindowRect(hWnd, WindowRect)
+            End If
+            Return New System.Drawing.Point((WindowRect.Right - WindowRect.Left) / 2, (WindowRect.Bottom - WindowRect.Top) / 2)
         End Function
         ''' <summary>
         ''' 获取窗口标题
