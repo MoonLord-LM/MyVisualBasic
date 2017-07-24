@@ -92,6 +92,58 @@
             End Try
         End Function
 
+
+
+        ''' <summary>
+        ''' 获取屏幕区域
+        ''' </summary>
+        ''' <returns>结果区域值（System.Drawing.Rectangle）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Area(ByVal hWnd As IntPtr) As System.Drawing.Rectangle
+            Return My.Computer.Screen.Bounds
+        End Function
+        ''' <summary>
+        ''' 获取屏幕区域大小
+        ''' </summary>
+        ''' <returns>结果大小值（System.Drawing.Size）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Size(ByVal hWnd As IntPtr) As Size
+            Return My.Computer.Screen.Bounds.Size
+        End Function
+        ''' <summary>
+        ''' 获取屏幕中心点坐标
+        ''' </summary>
+        ''' <returns>结果坐标值（System.Drawing.Point）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function CenterPoint(ByVal hWnd As IntPtr) As Point
+            Return New Point(My.Computer.Screen.Bounds.Left / 2, My.Computer.Screen.Bounds.Top / 2)
+        End Function
+
+        ''' <summary>
+        ''' 获取屏幕工作区域
+        ''' </summary>
+        ''' <returns>结果区域值（System.Drawing.Rectangle）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function WorkingArea(ByVal hWnd As IntPtr) As System.Drawing.Rectangle
+            Return My.Computer.Screen.WorkingArea
+        End Function
+        ''' <summary>
+        ''' 获取屏幕工作区域大小
+        ''' </summary>
+        ''' <returns>结果大小值（System.Drawing.Size）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function WorkingAreaSize(ByVal hWnd As IntPtr) As Size
+            Return My.Computer.Screen.WorkingArea.Size
+        End Function
+        ''' <summary>
+        ''' 获取屏幕工作区域中心点坐标
+        ''' </summary>
+        ''' <returns>结果坐标值（System.Drawing.Point）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function WorkingAreaCenterPoint(ByVal hWnd As IntPtr) As Point
+            Return New Point(My.Computer.Screen.WorkingArea.Left / 2, My.Computer.Screen.WorkingArea.Top / 2)
+        End Function
+
     End Class
 
 End Namespace

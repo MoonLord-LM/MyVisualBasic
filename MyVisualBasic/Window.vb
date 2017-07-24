@@ -244,10 +244,16 @@
             LeftButtonDown = 513
             LeftButtonUp = 514
             LeftButtonDoubleClick = 515
+            RightButtonDown = 516
+            RightButtonUp = 517
+            RightButtonDoubleClick = 518
             MiddleButtonDown = 519
             MiddleButtonUp = 520
             MiddleButtonDoubleClick = 521
             MouseWheel = 522
+            XButtonDown = 523
+            XButtonUp = 524
+            XButtonDoubleClick = 525
             MouseHorizontalWheel = 526
             MouseHover = 673
             MouseLeave = 675
