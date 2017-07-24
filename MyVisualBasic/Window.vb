@@ -394,6 +394,7 @@
             XButton1 = 32
             XButton2 = 64
         End Enum
+
         ''' <summary>
         ''' 向窗口发送鼠标消息（左键单击，点击可能不被正常处理）
         ''' </summary>

@@ -6,7 +6,7 @@ A function library to extend the My namespace of VB.NET.
 对Win32 API，VBScript，Batch等进行了封装，并分类整理了常用的函数功能  
 默认字符编码：UTF-8  
 项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
-开发测试环境：Microsoft Visual Studio 2010 SP1Rel + Microsoft Windows 7 Ultimate SP1  
+开发测试环境：Microsoft Visual Studio 2010 Ultimate SP1Rel + Microsoft Windows 7 Ultimate SP1  
   
 ## [用法]
 引入【MyVisualBasic】文件夹中的.vb文件，获得函数扩展  
