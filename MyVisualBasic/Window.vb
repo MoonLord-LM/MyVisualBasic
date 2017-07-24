@@ -232,6 +232,7 @@
             GetText = 13
             GetTextLength = 14
             Close = 16
+            MouseActivate = 33
             KeyDown = 256
             KeyUp = 257
             KeyChar = 258
@@ -239,6 +240,17 @@
             SystemKeyUp = 261
             SystemKeyChar = 262
             SystemCommand = 274
+            MouseMove = 512
+            LeftButtonDown = 513
+            LeftButtonUp = 514
+            LeftButtonDoubleClick = 515
+            MiddleButtonDown = 519
+            MiddleButtonUp = 520
+            MiddleButtonDoubleClick = 521
+            MouseWheel = 522
+            MouseHorizontalWheel = 526
+            MouseHover = 673
+            MouseLeave = 675
         End Enum
 
         Private Declare Function MapVirtualKey Lib "user32.dll" Alias "MapVirtualKeyA" (ByVal wCode As UInt32, ByVal wMapType As UInt32) As UInt32
@@ -299,7 +311,7 @@
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送按键消息（Ctrl组合键，实测：可发送Ctrl+S组合键）
+        ''' 向窗口发送按键消息（Ctrl组合键，实测：可发送Ctrl+S组合键，需要阻塞20毫秒，此过程中Ctrl键被按下）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
@@ -330,7 +342,7 @@
             Return Result
         End Function
         ''' <summary>
-        ''' 向窗口发送按键消息（Shift组合键，实测：可发送Shift+1组合键）
+        ''' 向窗口发送按键消息（Shift组合键，实测：可发送Shift+1组合键，需要阻塞20毫秒，此过程中Shift键被按下）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <param name="Key">键位（Windows.Forms.Keys）</param>
