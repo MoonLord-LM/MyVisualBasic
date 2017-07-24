@@ -421,8 +421,10 @@
             Dim Left As Int32 = Position.X
             Dim Top As Int32 = Position.Y
             Dim LParam As Int32 = Position.X Or Position.Y << 16
+            Result = Result And SendMessage(hWnd, WindowsMessage.ParentNotify, WindowsMessage.LeftButtonDown, LParam)
             Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
             Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
+            Result = Result And SendMessage(hWnd, WindowsMessage.ParentNotify, WindowsMessage.LeftButtonDown, LParam)
             Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonDoubleClick, MouseKey.LeftButton, LParam)
             Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
             Return Result
