@@ -463,7 +463,7 @@
             Return New System.Drawing.Size(WindowRect.Right - WindowRect.Left, WindowRect.Bottom - WindowRect.Top)
         End Function
         ''' <summary>
-        ''' 获取窗口中心点坐标（即使窗口处于隐藏、最小化、最大化状态也能获取到）
+        ''' 获取窗口中心点坐标（相对于屏幕的位置，即使窗口处于隐藏、最小化、最大化状态也能获取到）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <returns>结果坐标值（System.Drawing.Point）</returns>
@@ -477,7 +477,7 @@
             Else
                 GetWindowRect(hWnd, WindowRect)
             End If
-            Return New System.Drawing.Point((WindowRect.Right - WindowRect.Left) / 2, (WindowRect.Bottom - WindowRect.Top) / 2)
+            Return New System.Drawing.Point(WindowRect.Left + (WindowRect.Right - WindowRect.Left) / 2, WindowRect.Top + (WindowRect.Bottom - WindowRect.Top) / 2)
         End Function
         ''' <summary>
         ''' 获取窗口标题
