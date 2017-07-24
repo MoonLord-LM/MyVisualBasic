@@ -394,7 +394,7 @@
             XButton2 = 64
         End Enum
         ''' <summary>
-        ''' 向窗口发送鼠标消息（左键单击）
+        ''' 向窗口发送鼠标消息（左键单击，点击可能不被正常处理）
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
         ''' <returns>是否执行成功</returns>
@@ -405,6 +405,23 @@
             Dim Top As Int32 = Position.Y
             Dim LParam As Int32 = Position.X Or Position.Y << 16
             Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
+            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
+            Return Result
+        End Function
+        ''' <summary>
+        ''' 向窗口发送鼠标消息（左键双击，点击可能不被正常处理）
+        ''' </summary>
+        ''' <param name="hWnd">窗口句柄（IntPtr）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SendLeftDoubleClick(ByVal hWnd As IntPtr, ByVal Position As Point) As Boolean
+            Dim Result As Boolean = True
+            Dim Left As Int32 = Position.X
+            Dim Top As Int32 = Position.Y
+            Dim LParam As Int32 = Position.X Or Position.Y << 16
+            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
+            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
+            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonDoubleClick, MouseKey.LeftButton, LParam)
             Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
             Return Result
         End Function

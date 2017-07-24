@@ -116,7 +116,7 @@
         ''' <returns>结果坐标值（System.Drawing.Point）</returns>
         ''' <remarks></remarks>
         Public Shared Function CenterPoint() As Point
-            Return New Point(My.Computer.Screen.Bounds.Left / 2, My.Computer.Screen.Bounds.Top / 2)
+            Return New Point(My.Computer.Screen.Bounds.Width / 2, My.Computer.Screen.Bounds.Height / 2)
         End Function
 
         ''' <summary>
@@ -141,7 +141,7 @@
         ''' <returns>结果坐标值（System.Drawing.Point）</returns>
         ''' <remarks></remarks>
         Public Shared Function WorkingAreaCenterPoint() As Point
-            Return New Point(My.Computer.Screen.WorkingArea.Left / 2, My.Computer.Screen.WorkingArea.Top / 2)
+            Return New Point(My.Computer.Screen.WorkingArea.Width / 2, My.Computer.Screen.WorkingArea.Height / 2)
         End Function
 
     End Class
