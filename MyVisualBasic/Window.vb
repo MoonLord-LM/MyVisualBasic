@@ -207,7 +207,6 @@
         Private Declare Function GetWindowPlacement Lib "user32.dll" Alias "GetWindowPlacement" (ByVal hWnd As IntPtr, ByRef lpwndpl As Placement) As Boolean
         Private Declare Function GetClassName Lib "user32.dll" Alias "GetClassNameA" (ByVal hWnd As IntPtr, ByVal lpClassName As System.Text.StringBuilder, ByVal nMaxCount As UInt32) As UInt32
         Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As Int32, ByVal lParam As System.Text.StringBuilder) As Int32
-        Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As Int32, Optional ByVal lParam As Object = Nothing) As Int32
         Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, Optional ByVal wParam As Object = Nothing, Optional ByVal lParam As Object = Nothing) As Int32
         Private Structure Rect
             Dim Left As Int32
@@ -255,6 +254,7 @@
             XButtonUp = 524
             XButtonDoubleClick = 525
             MouseHorizontalWheel = 526
+            ParentNotify = 528
             MouseHover = 673
             MouseLeave = 675
         End Enum
@@ -381,7 +381,8 @@
 
 
 
-        Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As UInt32, ByVal lParam As Int32) As Int32
+        Private Declare Function PostMessage Lib "user32.dll" Alias "PostMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As UInt32, ByVal lParam As Int32) As Boolean
+        Private Declare Function SendMessage Lib "user32.dll" Alias "SendMessageA" (ByVal hWnd As IntPtr, ByVal wMsg As UInt32, ByVal wParam As UInt32, ByVal lParam As Int32) As Boolean
         <Flags()> _
         Private Enum MouseKey As UInt32
             Up = 0
@@ -404,8 +405,9 @@
             Dim Left As Int32 = Position.X
             Dim Top As Int32 = Position.Y
             Dim LParam As Int32 = Position.X Or Position.Y << 16
-            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
-            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
+            Result = Result And SendMessage(hWnd, WindowsMessage.ParentNotify, WindowsMessage.LeftButtonDown, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
             Return Result
         End Function
         ''' <summary>
@@ -419,10 +421,10 @@
             Dim Left As Int32 = Position.X
             Dim Top As Int32 = Position.Y
             Dim LParam As Int32 = Position.X Or Position.Y << 16
-            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
-            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
-            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonDoubleClick, MouseKey.LeftButton, LParam)
-            Result = Result And SendMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonDown, MouseKey.LeftButton, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonDoubleClick, MouseKey.LeftButton, LParam)
+            Result = Result And PostMessage(hWnd, WindowsMessage.LeftButtonUp, MouseKey.Up, LParam)
             Return Result
         End Function
 
@@ -503,7 +505,7 @@
         ''' <returns>结果字符串（失败返回空字符串）</returns>
         ''' <remarks></remarks>
         Public Shared Function GetTitle(ByVal hWnd As IntPtr) As String
-            Dim Length As Int32 = SendMessage(hWnd, WindowsMessage.GetTextLength, 0) + 1
+            Dim Length As Int32 = SendMessage(hWnd, WindowsMessage.GetTextLength) + 1
             Dim StringBuilder As New System.Text.StringBuilder(Length)
             SendMessage(hWnd, WindowsMessage.GetText, Length, StringBuilder)
             Return StringBuilder.ToString()
@@ -762,9 +764,9 @@
         ''' <remarks></remarks>
         Public Shared Function SetCanRedraw(ByVal hWnd As IntPtr, Optional ByVal CanRedraw As Boolean = True) As Boolean
             If CanRedraw Then
-                Return SendMessage(hWnd, WindowsMessage.SetRedraw, 1)
+                Return SendMessage(hWnd, WindowsMessage.SetRedraw, True) = 0
             Else
-                Return SendMessage(hWnd, WindowsMessage.SetRedraw, 0)
+                Return SendMessage(hWnd, WindowsMessage.SetRedraw, False) = 0
             End If
         End Function
         ''' <summary>
