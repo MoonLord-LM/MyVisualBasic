@@ -1,7 +1,7 @@
 ﻿Class Program
 
     ''' <summary>
-    ''' 自定义的应用程序启动方式
+    ''' 应用程序的主入口点。
     ''' </summary>
     ''' <remarks></remarks>
     <STAThread()> _
@@ -26,10 +26,19 @@
 
     End Sub
 
+
+
+    ''' <summary>
+    ''' 在这里处理UI线程异常，注意：函数执行完成后，应用程序仍会继续运行
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Shared Sub Application_ThreadException(ByVal sender As Object, ByVal e As Threading.ThreadExceptionEventArgs)
         MessageBox.Show("窗体UI线程发生异常，" & DateTime.Now.ToString() & "：" & vbCrLf & e.Exception.ToString())
     End Sub
-
+    ''' <summary>
+    ''' 在这里处理子线程异常，注意：函数执行完成后，应用程序就会被终止
+    ''' </summary>
+    ''' <remarks></remarks>
     Private Shared Sub CurrentDomain_UnhandledException(ByVal sender As Object, ByVal e As UnhandledExceptionEventArgs)
         MessageBox.Show("子线程发生异常，" & DateTime.Now.ToString() & "：" & vbCrLf & e.ExceptionObject.ToString())
     End Sub
