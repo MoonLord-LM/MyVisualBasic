@@ -77,6 +77,24 @@
             Return Source.Substring(0, Source.IndexOf(CutString))
         End Function
 
+
+
+        ''' <summary>
+        ''' 搜索字符串数组，取出不为空字符串""的元素，返回新数组（包括空格和制表符）
+        ''' </summary>
+        ''' <param name="Source">要搜索的字符串数组</param>
+        ''' <returns>结果字符串数组（失败返回空String数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function SelectNotEmpty(ByVal Source As String()) As String()
+            Dim Result As List(Of String) = New List(Of String)
+            For I = 0 To Source.Length - 1
+                If Source(I) <> "" Then
+                    Result.Add(Source(I))
+                End If
+            Next
+            Return Result.ToArray()
+        End Function
+
     End Class
 
 End Namespace

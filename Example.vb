@@ -55,6 +55,8 @@
             End While
         End Sub
 
+
+
         ''' <summary>
         ''' 获取上一次调用Win32 API产生的错误信息（实测：错误信息会一直保留，直到下一次调用Win32 API）
         ''' </summary>
@@ -65,6 +67,8 @@
             Dim ErrorMessage As String = New System.ComponentModel.Win32Exception(Runtime.InteropServices.Marshal.GetLastWin32Error()).Message
             Return ErrorCode & " " & ErrorMessage
         End Function
+
+
 
         ''' <summary>
         ''' 在鼠标位置附近，创建一个无边框窗口，实时显示全屏的截图
@@ -115,6 +119,8 @@
             End Sub
         End Class
 
+
+
         ''' <summary>
         ''' 获取一个窗体的所有的可见子窗体句柄，保存信息并截图
         ''' </summary>
@@ -142,6 +148,54 @@
                 End If
                 I = I + 1
             End While
+        End Sub
+
+
+
+        ''' <summary>
+        ''' 将当前目录下的，所有用.NET Reflector从“.vb”转换生成的“.cs”文件，进行简单的修正
+        ''' </summary>
+        ''' <remarks></remarks>
+        Public Shared Sub CheckVBToCSharp()
+            Dim Dialog1 As New FolderBrowserDialog
+            Dialog1.Description = "请选择反编译出的 C# 代码的路径"
+            Dialog1.SelectedPath = "F:\Desktop\新建文件夹\MyVisualBasic\My2"
+            While Dialog1.ShowDialog() <> DialogResult.OK
+            End While
+
+            Dim CSFiles As String() = My.IO.ListFile(Dialog1.SelectedPath)
+            For FI = 0 To CSFiles.Length - 1
+                Dim File As String = CSFiles(FI)
+                Dim Codes As String() = My.IO.ReadStringArray(File)
+                For CI = 0 To Codes.Length - 1
+                    Dim Code As String = Codes(CI)
+                    If Code.Contains("ProjectData.SetProjectError(exception1);") Then
+                        Codes(CI) = ""
+                        Continue For
+                    End If
+                    If Code.Contains("Exception exception = exception1;") Then
+                        Codes(CI) = ""
+                        Continue For
+                    End If
+                    If Code.Contains("ProjectData.ClearProjectError();") Then
+                        Codes(CI) = ""
+                        Continue For
+                    End If
+                    Code.Replace("catch (Exception exception1)", "catch (Exception ex)")
+                    Code.Replace("string str;", "string result;")
+                    Code.Replace("str = ", "result = ")
+                    Code.Replace("return str;", "return result;")
+                    Code.Replace("byte[] buffer;", "byte[] result;")
+                    Code.Replace("buffer = ", "result = ")
+                    Code.Replace("return buffer;", "return result;")
+                    Code.Replace("bool flag;", "bool result;")
+                    Code.Replace("flag = ", "result = ")
+                    Code.Replace("return flag;", "return result;")
+                    Codes(CI) = Code
+                Next
+                Codes = My.StringProcessing.SelectNotEmpty(Codes)
+                My.IO.WriteStringArray(Codes, File)
+            Next
         End Sub
 
     End Class
