@@ -111,7 +111,7 @@
         ''' <summary>
         ''' 移动鼠标位置，到指定的像素点坐标
         ''' </summary>
-        ''' <param name="Position">坐标（原点为屏幕左上角，X向右为正方向，Y向下为正方向）</param>
+        ''' <param name="Position">位置坐标（原点为屏幕左上角，X向右为正方向，Y向下为正方向）</param>
         ''' <returns>是否执行成功</returns>
         ''' <remarks></remarks>
         Public Shared Function MoveToPosition(ByVal Position As Point) As Boolean
@@ -290,20 +290,6 @@
 
 
         ''' <summary>
-        ''' 鼠标滚轮向上滚动
-        ''' </summary>
-        ''' <param name="ScrollValue">滚动距离（单位为像素）</param>
-        ''' <returns>是否执行成功</returns>
-        ''' <remarks></remarks>
-        Public Shared Function WheelUp(ByVal ScrollValue As Integer) As Boolean
-            Try
-                mouse_event(MouseEvent.Wheel, 0, 0, ScrollValue, 0)
-                Return True
-            Catch ex As Exception
-                Return False
-            End Try
-        End Function
-        ''' <summary>
         ''' 鼠标滚轮向下滚动
         ''' </summary>
         ''' <param name="ScrollValue">滚动距离（单位为像素）</param>
@@ -312,6 +298,20 @@
         Public Shared Function WheelDown(ByVal ScrollValue As Integer) As Boolean
             Try
                 mouse_event(MouseEvent.Wheel, 0, 0, -ScrollValue, 0)
+                Return True
+            Catch ex As Exception
+                Return False
+            End Try
+        End Function
+        ''' <summary>
+        ''' 鼠标滚轮向上滚动
+        ''' </summary>
+        ''' <param name="ScrollValue">滚动距离（单位为像素）</param>
+        ''' <returns>是否执行成功</returns>
+        ''' <remarks></remarks>
+        Public Shared Function WheelUp(ByVal ScrollValue As Integer) As Boolean
+            Try
+                mouse_event(MouseEvent.Wheel, 0, 0, ScrollValue, 0)
                 Return True
             Catch ex As Exception
                 Return False

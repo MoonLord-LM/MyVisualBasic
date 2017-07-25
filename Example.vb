@@ -1,5 +1,5 @@
 ﻿Namespace My
-    
+
     ''' <summary>
     ''' 范例代码（暂未整理到 MyVisualBasic 库中的可参考代码）
     ''' </summary>
@@ -160,42 +160,46 @@
             Dim Dialog1 As New FolderBrowserDialog
             Dialog1.Description = "请选择反编译出的 C# 代码的路径"
             Dialog1.SelectedPath = "F:\Desktop\新建文件夹\MyVisualBasic\My"
-            While Dialog1.ShowDialog() <> DialogResult.OK
-            End While
-
-            Dim CSFiles As String() = My.IO.ListFile(Dialog1.SelectedPath)
-            For FI = 0 To CSFiles.Length - 1
-                Dim File As String = CSFiles(FI)
-                Dim Codes As String() = My.IO.ReadStringArray(File)
-                For CI = 0 To Codes.Length - 1
-                    Dim Code As String = Codes(CI)
-                    If Code.Contains("ProjectData.SetProjectError(exception1);") Then
-                        Codes(CI) = ""
-                        Continue For
-                    End If
-                    If Code.Contains("Exception exception = exception1;") Then
-                        Codes(CI) = ""
-                        Continue For
-                    End If
-                    If Code.Contains("ProjectData.ClearProjectError();") Then
-                        Codes(CI) = ""
-                        Continue For
-                    End If
-                    Code.Replace("catch (Exception exception1)", "catch (Exception ex)")
-                    Code.Replace("string str;", "string result;")
-                    Code.Replace("str = ", "result = ")
-                    Code.Replace("return str;", "return result;")
-                    Code.Replace("byte[] buffer;", "byte[] result;")
-                    Code.Replace("buffer = ", "result = ")
-                    Code.Replace("return buffer;", "return result;")
-                    Code.Replace("bool flag;", "bool result;")
-                    Code.Replace("flag = ", "result = ")
-                    Code.Replace("return flag;", "return result;")
-                    Codes(CI) = Code
+            If Dialog1.ShowDialog() = DialogResult.OK Then
+                Dim CSFiles As String() = My.IO.ListFile(Dialog1.SelectedPath)
+                For FI = 0 To CSFiles.Length - 1
+                    Dim File As String = CSFiles(FI)
+                    Dim Codes As String() = My.IO.ReadStringArray(File)
+                    For CI = 0 To Codes.Length - 1
+                        Dim Code As String = Codes(CI)
+                        If Code.Contains("ProjectData.SetProjectError(exception1);") Then
+                            Codes(CI) = ""
+                            Continue For
+                        End If
+                        If Code.Contains("Exception exception = exception1;") Then
+                            Codes(CI) = ""
+                            Continue For
+                        End If
+                        If Code.Contains("ProjectData.ClearProjectError();") Then
+                            Codes(CI) = ""
+                            Continue For
+                        End If
+                        If Code.Contains("using Microsoft.VisualBasic.CompilerServices;") Then
+                            Codes(CI) = ""
+                            Continue For
+                        End If
+                        Code = Code.Replace("namespace MyVisualBasic.My", "namespace My")
+                        Code = Code.Replace("catch (Exception exception1)", "catch (Exception ex)")
+                        Code = Code.Replace("string str;", "string result;")
+                        Code = Code.Replace("str = ", "result = ")
+                        Code = Code.Replace("return str;", "return result;")
+                        Code = Code.Replace("byte[] buffer;", "byte[] result;")
+                        Code = Code.Replace("buffer = ", "result = ")
+                        Code = Code.Replace("return buffer;", "return result;")
+                        Code = Code.Replace("bool flag;", "bool result;")
+                        Code = Code.Replace("flag = ", "result = ")
+                        Code = Code.Replace("return flag;", "return result;")
+                        Codes(CI) = Code
+                    Next
+                    Codes = My.StringProcessing.SelectNotEmpty(Codes)
+                    My.IO.WriteStringArray(Codes, File)
                 Next
-                Codes = My.StringProcessing.SelectNotEmpty(Codes)
-                My.IO.WriteStringArray(Codes, File)
-            Next
+            End If
         End Sub
 
     End Class

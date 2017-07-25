@@ -195,7 +195,7 @@
 
 
         ''' <summary>
-        ''' 获取指定目录下的全部的文件列表
+        ''' 获取指定目录下的全部文件的路径列表
         ''' </summary>
         ''' <param name="SearchDirectory">要搜索的文件夹路径（默认为程序运行的当前文件夹）</param>
         ''' <returns>包含所有文件路径的结果字符串数组（失败返回空String数组）</returns>
@@ -247,16 +247,17 @@
                 If TargetPath.Contains(":") = False Then
                     TargetPath = System.IO.Directory.GetCurrentDirectory + "\" + TargetPath
                 End If
+                If WorkingDirectory = "" Then
+                    WorkingDirectory = System.IO.Directory.GetParent(LinkFilePath).FullName
+                End If
                 Dim Shortcut As Object = CreateObject("WScript.Shell").CreateShortcut(LinkFilePath)
-                If WorkingDirectory = "" Then WorkingDirectory = System.IO.Directory.GetParent(LinkFilePath).FullName
-                With Shortcut
-                    .TargetPath = TargetPath
-                    .IconLocation = TargetPath
-                    .Arguments = Arguments
-                    .Description = Description
-                    .WorkingDirectory = WorkingDirectory
-                    .Save()
-                End With
+                Shortcut.TargetPath = TargetPath
+                Shortcut.IconLocation = TargetPath
+                Shortcut.Arguments = Arguments
+                Shortcut.Description = Description
+                Shortcut.WorkingDirectory = WorkingDirectory
+                Shortcut.Save()
+                Shortcut = Nothing
                 Return True
             Catch ex As Exception
                 Return False
