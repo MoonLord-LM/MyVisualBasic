@@ -159,7 +159,7 @@
         Public Shared Sub CheckVBToCSharp()
             Dim Dialog1 As New FolderBrowserDialog
             Dialog1.Description = "请选择反编译出的 C# 代码的路径"
-            Dialog1.SelectedPath = "F:\Desktop\新建文件夹\MyVisualBasic\My2"
+            Dialog1.SelectedPath = "F:\Desktop\新建文件夹\MyVisualBasic\My"
             While Dialog1.ShowDialog() <> DialogResult.OK
             End While
 
