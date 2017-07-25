@@ -47,6 +47,36 @@
             Return Result.ToArray()
         End Function
 
+
+
+        ''' <summary>
+        ''' 搜索字符串（搜寻最后一个裁剪标志字符串，取出之后的部分）
+        ''' </summary>
+        ''' <param name="Source">要搜索的字符串</param>
+        ''' <param name="CutString">裁剪位置的标志字符串（结果中不包含这一部分）</param>
+        ''' <returns>结果字符串（失败返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindAfter(ByVal Source As String, ByVal CutString As String) As String
+            If Source.Contains(CutString) = False Then
+                Return ""
+            End If
+            Return Source.Substring(Source.LastIndexOf(CutString) + CutString.Length)
+        End Function
+
+        ''' <summary>
+        ''' 搜索字符串（搜寻第一个裁剪标志字符串，取出之前的部分）
+        ''' </summary>
+        ''' <param name="Source">要搜索的字符串</param>
+        ''' <param name="CutString">裁剪位置的标志字符串（结果中不包含这一部分）</param>
+        ''' <returns>结果字符串（失败返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function FindBefore(ByVal Source As String, ByVal CutString As String) As String
+            If Source.Contains(CutString) = False Then
+                Return ""
+            End If
+            Return Source.Substring(0, Source.IndexOf(CutString))
+        End Function
+
     End Class
 
 End Namespace
