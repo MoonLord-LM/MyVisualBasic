@@ -153,7 +153,7 @@
 
 
         ''' <summary>
-        ''' 将当前目录下的，所有用.NET Reflector从“.vb”转换生成的“.cs”文件，进行简单的修正
+        ''' 对当前目录下的，所有用.NET Reflector从“.vb”转换生成的“.cs”文件，进行简单的修正
         ''' </summary>
         ''' <remarks></remarks>
         Public Shared Sub CheckVBToCSharp()
