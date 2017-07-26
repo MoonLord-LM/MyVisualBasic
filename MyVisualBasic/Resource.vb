@@ -9,7 +9,7 @@
         ''' <summary>
         ''' 读取程序嵌入的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
         ''' </summary>
-        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.zip文件在Resources文件夹内，则此处的参数应为"Resources.A.zip"）</param>
         ''' <returns>结果Byte数组（失败返回空Byte数组）</returns>
         ''' <remarks></remarks>
         Public Shared Function ReadByte(ByVal ResourceName As String) As Byte()
@@ -44,7 +44,7 @@
         ''' <summary>
         ''' 读取程序嵌入的文本类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
         ''' </summary>
-        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.txt文件在Resources文件夹内，则此处的参数应为"Resources.A.txt"）</param>
         ''' <returns>结果字符串（失败返回空字符串）</returns>
         ''' <remarks></remarks>
         Public Shared Function ReadString(ByVal ResourceName As String) As String
@@ -63,7 +63,7 @@
         ''' <summary>
         ''' 读取程序嵌入的文本类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
         ''' </summary>
-        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.txt文件在Resources文件夹内，则此处的参数应为"Resources.A.txt"）</param>
         ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
         ''' <returns>结果字符串（失败返回空字符串）</returns>
         ''' <remarks></remarks>
@@ -84,7 +84,7 @@
         ''' <summary>
         ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
         ''' </summary>
-        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.txt文件在Resources文件夹内，则此处的参数应为"Resources.A.txt"）</param>
         ''' <returns>结果字符串数组（失败返回空String数组）</returns>
         ''' <remarks></remarks>
         Public Shared Function ReadStringArray(ByVal ResourceName As String) As String()
@@ -103,7 +103,7 @@
         ''' <summary>
         ''' 读取程序嵌入的字符串数组类型的资源文件（注意必须在解决方案资源管理器中，将资源文件的"属性"-"生成操作"设置为"嵌入的资源"）
         ''' </summary>
-        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.jpg文件在Resources文件夹内，则此处的参数应为"Resources.A.jpg"）</param>
+        ''' <param name="ResourceName">资源文件名称（注意这个参数的值为资源文件在工程内的相对路径，例如A.txt文件在Resources文件夹内，则此处的参数应为"Resources.A.txt"）</param>
         ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
         ''' <returns>结果字符串数组（失败返回空String数组）</returns>
         ''' <remarks></remarks>
