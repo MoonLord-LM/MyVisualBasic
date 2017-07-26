@@ -101,7 +101,7 @@
 
 
         ''' <summary>
-        ''' Base64解码（用于URL的改进Base64编码，编码结果的字符串中包含字母A-Z，a-z，数字0-9，符号-_=）
+        ''' Base64编码（用于URL的改进Base64编码，编码结果的字符串中包含字母A-Z，a-z，数字0-9，符号-_=）
         ''' </summary>
         ''' <param name="Source">要编码的字符串</param>
         ''' <returns>编码后的结果字符串</returns>
@@ -110,7 +110,7 @@
             Return Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(Source)).Replace("+", "-").Replace("/", "_")
         End Function
         ''' <summary>
-        ''' Base64解码（用于URL的改进Base64编码，编码结果的字符串中包含字母A-Z，a-z，数字0-9，符号-_=）
+        ''' Base64编码（用于URL的改进Base64编码，编码结果的字符串中包含字母A-Z，a-z，数字0-9，符号-_=）
         ''' </summary>
         ''' <param name="Source">要编码的字符串</param>
         ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
