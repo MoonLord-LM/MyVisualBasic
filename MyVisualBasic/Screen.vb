@@ -27,7 +27,7 @@
         ''' <summary>
         ''' 获取屏幕截图（指定区域的截图）
         ''' </summary>
-        ''' <param name="Area">指定区域</param>
+        ''' <param name="Area">指定区域（System.Drawing.Rectangle）</param>
         ''' <returns>结果图片（失败返回1*1个像素，#00000000透明色的图片）</returns>
         ''' <remarks></remarks>
         Public Shared Function Image(ByVal Area As Rectangle) As Bitmap
@@ -70,7 +70,7 @@
         ''' <summary>
         ''' 获取屏幕截图（指定区域的缩略图）
         ''' </summary>
-        ''' <param name="Area">指定区域</param>
+        ''' <param name="Area">指定区域（System.Drawing.Rectangle）</param>
         ''' <param name="Scale">缩略比例（应大于0，且小于等于1）</param>
         ''' <returns>结果图片（失败返回1*1个像素，#00000000透明色的图片）</returns>
         ''' <remarks></remarks>
