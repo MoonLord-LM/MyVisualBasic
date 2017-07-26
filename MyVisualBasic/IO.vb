@@ -148,7 +148,7 @@
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <returns>是否写入成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function WriteStringArray(ByRef StringArray As String(), ByVal FilePath As String) As Boolean
+        Public Shared Function WriteStringArray(ByVal StringArray As String(), ByVal FilePath As String) As Boolean
             Dim Builder As System.Text.StringBuilder
             Dim Writer As System.IO.StreamWriter
             Try
@@ -175,7 +175,7 @@
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <returns>是否写入成功</returns>
         ''' <remarks></remarks>
-        Public Shared Function AppendStringArray(ByRef StringArray As String(), ByVal FilePath As String) As Boolean
+        Public Shared Function AppendStringArray(ByVal StringArray As String(), ByVal FilePath As String) As Boolean
             Dim Builder As System.Text.StringBuilder
             Dim Writer As System.IO.StreamWriter
             Try
