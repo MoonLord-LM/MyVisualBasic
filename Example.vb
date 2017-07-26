@@ -22,10 +22,10 @@
                 Try
                     ReDim Preserve Testing(BlockSize / 4 - 1)
                 Catch ex As System.OutOfMemoryException
-                    Dim Result = New OutOfMemoryException("【内存检测通过】：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB）。")
+                    ex = New OutOfMemoryException("【内存检测通过】：" & vbCrLf & "测试通过 " & Tested.Count & " * " & BlockSizeMB & " MB（" & TestedGB & "GB）。")
                     Tested.Clear()
                     System.GC.Collect()
-                    Throw Result
+                    Throw ex
                 End Try
                 For I = 0 To Testing.Length - 1
                     If Testing(I) <> 0 Then
@@ -185,6 +185,8 @@
                         End If
                         Code = Code.Replace("namespace MyVisualBasic.My", "namespace My")
                         Code = Code.Replace("catch (Exception exception1)", "catch (Exception ex)")
+                        Code = Code.Replace("catch (Exception exception3)", "catch (Exception ex)")
+                        Code = Code.Replace("catch (Exception exception5)", "catch (Exception ex)")
                         Code = Code.Replace("string str;", "string result;")
                         Code = Code.Replace("str = ", "result = ")
                         Code = Code.Replace("return str;", "return result;")
