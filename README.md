@@ -101,7 +101,7 @@ A function library to extend the My namespace of VB.NET.
 16. VB.NET中，使用“&HFFFFFFFFUI”的形式，尾缀UI，来表示16进制的无符号整数，即UInt32.MaxValue  
 17. VB.NET中，使用“AndAlso”、“OrElse”，来实现类似其它语言中的“&&”、“||”逻辑判断短路  
 18. 要想让窗体在启动的时候就隐藏，最好使用“Opacity = 0”来隐藏  
-    如果使用“Visible = False”或“Hide()”，写在Form_Load事件中写是无效的，写在Form_Shown事件中会导致窗体闪一下再消失  
+    如果使用“Visible = False”或“Hide()”，写在Form_Load事件中无效果，写在Form_Shown事件中会导致窗体闪一下再消失  
 
 ## [示例]
 	'创建快捷方式  
