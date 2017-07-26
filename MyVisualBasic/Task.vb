@@ -161,7 +161,7 @@
         ''' 根据进程名称，获取进程
         ''' </summary>
         ''' <param name="TaskName">进程名称（不含".exe"后缀）</param>
-        ''' <returns>结果进程（Process）</returns>
+        ''' <returns>结果进程（Process，失败返回Nothing）</returns>
         ''' <remarks></remarks>
         Public Shared Function FindByName(ByVal TaskName As String) As Process
             Dim Processes As Process() = Process.GetProcesses()
@@ -176,7 +176,7 @@
         ''' 根据进程文件路径，获取进程
         ''' </summary>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
-        ''' <returns>结果进程（Process）</returns>
+        ''' <returns>结果进程（Process，失败返回Nothing）</returns>
         ''' <remarks></remarks>
         Public Shared Function FindByFilePath(ByVal FilePath As String) As Process
             Dim Processes As Process() = Process.GetProcesses()
@@ -198,7 +198,7 @@
         ''' 搜索窗口标题，获取进程（优先搜索字符串完全相同的，然后搜索包含有指定字符串的）
         ''' </summary>
         ''' <param name="Title">窗口标题（字符串不必完全相同）</param>
-        ''' <returns>结果进程（Process）</returns>
+        ''' <returns>结果进程（Process，失败返回Nothing）</returns>
         ''' <remarks></remarks>
         Public Shared Function SearchByTitle(ByVal Title As String) As Process
             Dim Processes As Process() = Process.GetProcesses()
