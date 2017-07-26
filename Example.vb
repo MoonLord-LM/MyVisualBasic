@@ -167,6 +167,9 @@
                     Dim Codes As String() = My.IO.ReadStringArray(File)
                     For CI = 0 To Codes.Length - 1
                         Dim Code As String = Codes(CI)
+                        If (Code = "") Then
+                            Codes(CI) = " "
+                        End If
                         If Code.Contains("ProjectData.SetProjectError(exception1);") Then
                             Codes(CI) = ""
                             Continue For

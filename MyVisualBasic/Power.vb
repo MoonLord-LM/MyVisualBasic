@@ -1,5 +1,5 @@
 ﻿Namespace My
-    
+
     ''' <summary>
     ''' 电源管理计划相关函数
     ''' </summary>

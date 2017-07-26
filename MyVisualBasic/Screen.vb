@@ -1,5 +1,5 @@
 ﻿Namespace My
-    
+
     ''' <summary>
     ''' 屏幕截图相关函数
     ''' </summary>
