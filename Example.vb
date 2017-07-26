@@ -81,7 +81,6 @@
         <Global.Microsoft.VisualBasic.CompilerServices.DesignerGenerated()> _
         Private Class CaptureForm
             Inherits System.Windows.Forms.Form
-            <System.Diagnostics.DebuggerNonUserCode()> _
             Protected Overrides Sub Dispose(ByVal disposing As Boolean)
                 Try
                     If disposing AndAlso components IsNot Nothing Then
@@ -92,7 +91,6 @@
                 End Try
             End Sub
             Private components As System.ComponentModel.IContainer
-            <System.Diagnostics.DebuggerStepThrough()> _
             Private Sub InitializeComponent()
                 Me.components = New System.ComponentModel.Container()
                 Me.Timer1 = New System.Windows.Forms.Timer(Me.components)
@@ -108,13 +106,15 @@
                 Me.FormBorderStyle = Windows.Forms.FormBorderStyle.None
                 Me.SetStyle(ControlStyles.OptimizedDoubleBuffer, True)
                 Me.SetStyle(ControlStyles.AllPaintingInWmPaint, True)
+                Me.Opacity = 0
             End Sub
             Private Sub Timer1_Tick(sender As System.Object, e As System.EventArgs) Handles Timer1.Tick
                 Timer1.Enabled = False
                 If Not BackgroundImage Is Nothing Then BackgroundImage.Dispose()
                 Me.BackgroundImage = My.Screen.ImageThumbnail(0.5)
                 Me.Size = Me.BackgroundImage.Size
-                Me.Location = My.Mouse.Position() + New Point(10, 10)
+                Me.Location = My.Mouse.Position() + New Size(10, 10)
+                Me.Opacity = 1
                 Timer1.Enabled = True
             End Sub
         End Class
