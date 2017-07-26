@@ -1,7 +1,7 @@
 ﻿Namespace My
     
     ''' <summary>
-    ''' HTTP网络请求相关函数
+    ''' 字符串处理相关函数
     ''' </summary>
     ''' <remarks></remarks>
     Partial Public NotInheritable Class StringProcessing
