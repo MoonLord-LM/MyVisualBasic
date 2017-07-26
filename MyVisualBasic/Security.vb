@@ -299,6 +299,27 @@
         ''' <summary>
         ''' DES加密
         ''' </summary>
+        ''' <param name="Source">要加密的Byte数组</param>
+        ''' <param name="SecretKey">加密密钥（8的整数倍字节数的字符串）</param>
+        ''' <returns>加密后的结果Byte数组（失败返回空Byte数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function DES_Encode(ByVal Source As Byte(), ByVal SecretKey As String) As Byte()
+            Dim DES As New System.Security.Cryptography.DESCryptoServiceProvider()
+            Try
+                DES.Key = System.Text.Encoding.UTF8.GetBytes(SecretKey)
+                DES.IV = System.Text.Encoding.UTF8.GetBytes(SecretKey)
+            Catch ex As System.ArgumentException '加密失败（通常是由于SecretKey的字节数不是8的倍数）
+                Return New Byte() {}
+            End Try
+            Dim MemoryStream As New System.IO.MemoryStream()
+            Dim CryptoStream As New System.Security.Cryptography.CryptoStream(MemoryStream, DES.CreateEncryptor(), System.Security.Cryptography.CryptoStreamMode.Write)
+            CryptoStream.Write(Source, 0, Source.Length)
+            CryptoStream.FlushFinalBlock()
+            Return MemoryStream.ToArray()
+        End Function
+        ''' <summary>
+        ''' DES加密
+        ''' </summary>
         ''' <param name="Source">要加密的字符串</param>
         ''' <param name="SecretKey">加密密钥（8的整数倍字节数的字符串）</param>
         ''' <returns>加密后的结果Byte数组（失败返回空Byte数组）</returns>
@@ -323,9 +344,34 @@
         ''' </summary>
         ''' <param name="Source">要解密的Byte数组</param>
         ''' <param name="SecretKey">解密密钥（8的整数倍字节数的字符串）</param>
+        ''' <returns>解密后的结果Byte数组（失败返回空Byte数组）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function DES_Decode(ByVal Source As Byte(), ByVal SecretKey As String) As Byte()
+            Dim DES As New System.Security.Cryptography.DESCryptoServiceProvider()
+            Try
+                DES.Key = System.Text.Encoding.UTF8.GetBytes(SecretKey)
+                DES.IV = System.Text.Encoding.UTF8.GetBytes(SecretKey)
+            Catch ex As System.ArgumentException '解密失败（通常是由于SecretKey的字节数不是8的倍数）
+                Return New Byte() {}
+            End Try
+            Dim MemoryStream As New System.IO.MemoryStream()
+            Dim CryptoStream As New System.Security.Cryptography.CryptoStream(MemoryStream, DES.CreateDecryptor, System.Security.Cryptography.CryptoStreamMode.Write)
+            CryptoStream.Write(Source, 0, Source.Length)
+            Try
+                CryptoStream.FlushFinalBlock()
+            Catch ex As System.Security.Cryptography.CryptographicException '解密失败（通常是由于SecretKey不匹配）
+                Return New Byte() {}
+            End Try
+            Return MemoryStream.ToArray()
+        End Function
+        ''' <summary>
+        ''' DES解密
+        ''' </summary>
+        ''' <param name="Source">要解密的Byte数组</param>
+        ''' <param name="SecretKey">解密密钥（8的整数倍字节数的字符串）</param>
         ''' <returns>解密后的结果字符串（失败返回空字符串）</returns>
         ''' <remarks></remarks>
-        Public Shared Function DES_Decode(ByVal Source As Byte(), ByVal SecretKey As String) As String
+        Public Shared Function DES_Decode_String(ByVal Source As Byte(), ByVal SecretKey As String) As String
             Dim DES As New System.Security.Cryptography.DESCryptoServiceProvider()
             Try
                 DES.Key = System.Text.Encoding.UTF8.GetBytes(SecretKey)
@@ -347,7 +393,7 @@
 
 
         ''' <summary>
-        ''' RSA加密
+        ''' RSA加密（使用本函数库内置的密钥）
         ''' </summary>
         ''' <param name="Source">要加密的字符串</param>
         ''' <returns>加密后的结果Byte数组</returns>
@@ -359,7 +405,7 @@
         End Function
 
         ''' <summary>
-        ''' RSA解密
+        ''' RSA解密（使用本函数库内置的密钥）
         ''' </summary>
         ''' <param name="Source">要解密的Byte数组</param>
         ''' <returns>解密后的结果字符串（失败返回空字符串）</returns>
@@ -399,7 +445,7 @@
         ''' <summary>
         ''' 二进制形式化（只由0和1组成的，8的整数倍位数的2进制字符串）
         ''' </summary>
-        ''' <param name="Source">要编码的Byte数组</param>
+        ''' <param name="Source">要编码的字符串</param>
         ''' <param name="ContainSpace">是否将结果每8位以空格隔开</param>
         ''' <returns>编码后的结果字符串</returns>
         ''' <remarks></remarks>
@@ -419,7 +465,7 @@
         ''' <summary>
         ''' 二进制形式化（只由0和1组成的，8的整数倍位数的2进制字符串）
         ''' </summary>
-        ''' <param name="Source">要编码的Byte数组</param>
+        ''' <param name="Source">要编码的字符串</param>
         ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
         ''' <param name="ContainSpace">是否将结果每8位以空格隔开</param>
         ''' <returns>编码后的结果字符串</returns>
