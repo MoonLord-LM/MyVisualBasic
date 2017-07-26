@@ -446,7 +446,7 @@
         ''' <remarks></remarks>
         Public Shared Function Binary_Decode(ByVal Source As String) As Byte()
             Source = Source.Replace(" ", "")
-            Dim Result(Source.Length / 8) As Byte
+            Dim Result(Source.Length / 8 - 1) As Byte
             For I = 0 To Source.Length / 8 - 1
                 Dim SourceByte As String = Source.Substring(I * 8, 8)
                 Result(I) = Convert.ToByte(SourceByte, 2)
@@ -461,7 +461,7 @@
         ''' <remarks></remarks>
         Public Shared Function Binary_Decode_String(ByVal Source As String) As String
             Source = Source.Replace(" ", "")
-            Dim Result(Source.Length / 8) As Byte
+            Dim Result(Source.Length / 8 - 1) As Byte
             For I = 0 To Source.Length / 8 - 1
                 Dim SourceByte As String = Source.Substring(I * 8, 8)
                 Result(I) = Convert.ToByte(SourceByte, 2)
@@ -477,7 +477,7 @@
         ''' <remarks></remarks>
         Public Shared Function Binary_Decode_String(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
             Source = Source.Replace(" ", "")
-            Dim Result(Source.Length / 8) As Byte
+            Dim Result(Source.Length / 8 - 1) As Byte
             For I = 0 To Source.Length / 8 - 1
                 Dim SourceByte As String = Source.Substring(I * 8, 8)
                 Result(I) = Convert.ToByte(SourceByte, 2)
