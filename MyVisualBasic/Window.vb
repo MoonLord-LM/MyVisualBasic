@@ -379,7 +379,7 @@
         ''' 获取窗口进程
         ''' </summary>
         ''' <param name="hWnd">窗口句柄（IntPtr）</param>
-        ''' <returns>结果进程（Process）</returns>
+        ''' <returns>结果进程（Process，失败返回Nothing）</returns>
         ''' <remarks></remarks>
         Public Shared Function GetProcess(ByVal hWnd As IntPtr) As Process
             Dim ProcessId As Int32
@@ -727,7 +727,7 @@
         Public Shared Function SetFocus(ByVal hWnd As IntPtr) As Boolean
             Dim ForegroundThreadId As Int32
             Dim HandleThreadId As Int32
-            Dim Result As Int32
+            Dim Result As Boolean
             ForegroundThreadId = GetWindowThreadProcessId(GetForegroundWindow(), Nothing)
             HandleThreadId = GetWindowThreadProcessId(hWnd, Nothing)
             AttachThreadInput(HandleThreadId, ForegroundThreadId, True)
