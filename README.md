@@ -154,10 +154,13 @@ Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间
   
 ## [笔记]
 01. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
-02. VB.NET中，数组与ArrayList互相转换：(New ArrayList(New String() {})).ToArray(String.Empty.GetType())  
-03. VB.NET中，数组元素个数的声明与其它语言不同，Dim Array(2) As String : MsgBox(Array.Length)，输出3  
-04. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
-05. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，将“启动对象”设置为自定义的Main函数（参考本函数库中的Program.vb文件）  
+02. VB.NET中，数组与ArrayList互相转换：  
+    Dim ArrayList As New ArrayList(New String() {}) : ArrayList.ToArray(String.Empty.GetType())  
+03. VB.NET中，数组元素个数的声明与其它语言不同，以下代码会输出3：  
+    Dim Array(2) As String  
+    MsgBox(Array.Length)  
+04. VB.NET中，双引号使用两个双引号来转义替代，如 """" 表示1个双引号的字符串，字符串用 & 符号来连接  
+05. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，将“启动对象”设置为自定义的Main函数（参考本函数库中的 Program.vb 文件）  
 06. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程，而 OutOfMemoryException 则可以捕获并处理  
 07. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
     Bmp（最大）> Tiff > Exif/Icon/MemoryBmp > Png/Emf/Wmf（默认） > Gif > Jpeg（最小）  
@@ -180,8 +183,8 @@ Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间
     SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '先在缓冲区中绘制，然后再绘制到屏幕上，以减少闪烁  
     SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
 14. VB.NET中，使用“SyncLock Me”和“End SyncLock”代码块，来实现类似其它语言中的“synchronized(this)”同步锁  
-15. VB.NET中，使用“Nothing”、“New IntPtr(0)”，来实现类似其它语言中的“null”空指针  
-16. VB.NET中，使用“&HFFFFFFFFUI”的形式，尾缀UI，来表示16进制的无符号整数，即UInt32.MaxValue  
+15. VB.NET中，使用“Nothing”、“New IntPtr(0)”、“IntPtr.Zero”，来实现类似其它语言中的“null”空指针  
+16. VB.NET中，使用“&HFFFFFFFFUI”的形式，尾缀UI，来表示16进制的32位无符号整数，即UInt32.MaxValue  
 17. VB.NET中，使用“AndAlso”、“OrElse”，来实现类似其它语言中的“&&”、“||”逻辑判断短路  
 18. 要想让窗体在启动的时候就隐藏，最好使用“Opacity = 0”来隐藏  
     如果使用“Visible = False”或“Hide()”，写在Form_Load事件中无效果，写在Form_Shown事件中会导致窗体闪一下再消失  
