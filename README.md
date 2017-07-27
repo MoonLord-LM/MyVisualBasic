@@ -1,18 +1,16 @@
 # MyVisualBasic
-A function library to extend the My namespace of VB.NET.  
+MyVisualBasic, a function library for Windows application development, extends the "My" namespace of VB.NET.
   
 ## [简介]
-扩展 VB.NET 中的 My 命名空间的函数库  
-对Win32 API，VBScript，Batch等进行了封装，并分类整理了常用的函数功能  
-默认字符编码：UTF-8  
-项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
-开发测试环境：Microsoft Visual Studio 2010 Ultimate SP1Rel + Microsoft Windows 7 Ultimate SP1  
+Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间  
+对Win32 API，VBScript，Batch等进行了封装，对常用的函数功能进行了分类整理  
   
 ## [用法]
-引入【MyVisualBasic】文件夹中的.vb文件，获得函数扩展  
-各个.vb文件之间互不依赖，可根据需要选择使用，推荐直接引入整个文件夹  
+引入【MyVisualBasic】文件夹中的任意 ".vb" 文件，获得函数功能的扩展  
+引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
+各个.vb文件之间互不依赖，可根据需要选择使用，推荐完全引入，直接复制粘贴整个文件夹  
   
-## [说明]
+## [结构]
 <table>
     <tr>
         <td><a href="MyVisualBasic\Security.vb">Security.vb</a></td>
@@ -63,45 +61,6 @@ A function library to extend the My namespace of VB.NET.
 		<td>窗口管理、控制相关函数</td>
     </tr>
 </table>
-  
-## [参考]
-- 引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
-- 空行规则：同一方面的函数放在同一源文件中，重载函数不用空行隔开，相关函数隔开一行，无关函数隔开三行  
-- 注释示例：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
-  
-## [教程]
-01. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
-02. VB.NET中，数组与ArrayList互相转换：(New ArrayList(New String() {})).ToArray(String.Empty.GetType())  
-03. VB.NET中，数组元素个数的声明与其它语言不同，Dim Array(2) As String : MsgBox(Array.Length)，输出3  
-04. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
-05. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，将“启动对象”设置为自定义的Main函数（参考本函数库中的Program.vb文件）  
-06. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程，而 OutOfMemoryException 则可以捕获并处理  
-07. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
-    Bmp（最大）> Tiff > Exif/Icon/MemoryBmp > Png/Emf/Wmf（默认） > Gif > Jpeg（最小）  
-08. VB.NET中，SendKeys函数不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event函数实现才可以：  
-    My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
-    System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
-    My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
-09. 在Windows中，底层的keybd_event函数，也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
-    My.Keyboard.Click(Keys.LWin, Keys.D) 'Win+D 显示桌面，有效  
-    My.Keyboard.Click(Keys.LWin, Keys.L) 'Win+L 锁定电脑，无效  
-    My.Keyboard.Click(Keys.ControlKey, Keys.ShiftKey, Keys.Escape) 'Ctrl+Shift+Esc 打开任务管理器，有效  
-    My.Keyboard.Click(Keys.ControlKey, Keys.Menu, Keys.Delete) 'Ctrl+Alt+Delete 跳转系统界面，无效  
-10. 无法模拟“Win+L”的问题，本函数库提供了一个替代方案，调用“user32.dll”中的“LockWorkStation”：  
-    My.Power.Lock() '锁定电脑，有效  
-11. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针  
-12. VB.NET中，调用.dll文件时，Alias后的函数名才是.dll中真正起作用的函数的名称，Alias不存在时，才会寻找同名函数  
-13. VB.NET中，频繁修改窗体内容（如修改背景图片），会导致内存泄露和卡顿闪烁的问题，解决方案：  
-	If Not BackgroundImage Is Nothing Then BackgroundImage.Dispose() '在修改背景图片之前，销毁旧的背景图片  
-    System.GC.Collect() '在适当的时机和代码位置，强制进行即时垃圾回收（会增加 CPU 负荷）  
-    SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '先在缓冲区中绘制，然后再绘制到屏幕上，以减少闪烁  
-    SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
-14. VB.NET中，使用“SyncLock Me”和“End SyncLock”代码块，来实现类似其它语言中的“synchronized(this)”同步锁  
-15. VB.NET中，使用“Nothing”、“New IntPtr(0)”，来实现类似其它语言中的“null”空指针  
-16. VB.NET中，使用“&HFFFFFFFFUI”的形式，尾缀UI，来表示16进制的无符号整数，即UInt32.MaxValue  
-17. VB.NET中，使用“AndAlso”、“OrElse”，来实现类似其它语言中的“&&”、“||”逻辑判断短路  
-18. 要想让窗体在启动的时候就隐藏，最好使用“Opacity = 0”来隐藏  
-    如果使用“Visible = False”或“Hide()”，写在Form_Load事件中无效果，写在Form_Shown事件中会导致窗体闪一下再消失  
 
 ## [示例]
 	'创建快捷方式  
@@ -182,3 +141,47 @@ A function library to extend the My namespace of VB.NET.
     My.Time.Wait(100)  
     My.Window.Image(Calc).Save(SavePath & "\计算结果" & My.Time.Stamp() & ".png")  
     My.Task.KillAsync("calc.exe")  
+
+## [说明]
+- 默认字符编码：UTF-8  
+- 开发测试环境：Windows 7 + Visual Studio 2010（.NET Franmework 2.0）  
+- 项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
+- 代码空行规则：可以重载的或功能类似的函数不用空行隔开，有一定关系的函数隔开一行，无关的函数隔开三行  
+- 代码注释示例：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
+- 总体设计准则：采用面向过程(Procedure Oriented)为主，面向对象（Object Oriented）为辅的设计和实现方法，函数功能模块化  
+- 函数实现准则：所有可供外部调用的函数功能，都采用公共静态（Public Shared）声明，并且保证相互之间没有依赖关系  
+- 其它语言实现：<a href="..\MyCSharp">MyCSharp（C#语言等价实现）</a>
+  
+## [笔记]
+01. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
+02. VB.NET中，数组与ArrayList互相转换：(New ArrayList(New String() {})).ToArray(String.Empty.GetType())  
+03. VB.NET中，数组元素个数的声明与其它语言不同，Dim Array(2) As String : MsgBox(Array.Length)，输出3  
+04. VB.NET中，双引号使用两个双引号来转义替代，如""""表示1个双引号的字符串，字符串用&符号来连接  
+05. VB.NET中，想要在“调试”状态下，程序也能正常捕获UI异常，需要：项目，属性，应用程序，取消“启用应用程序框架”，将“启动对象”设置为自定义的Main函数（参考本函数库中的Program.vb文件）  
+06. 从 .NET Framework 2.0 版开始，将无法通过 try-catch 块捕获 StackOverflowException 对象，并且默认情况下将立即终止相应的进程，而 OutOfMemoryException 则可以捕获并处理  
+07. System.Drawing.Imaging.ImageFormat的图片保存质量及文件大小降序排列，实测结果：  
+    Bmp（最大）> Tiff > Exif/Icon/MemoryBmp > Png/Emf/Wmf（默认） > Gif > Jpeg（最小）  
+08. VB.NET中，SendKeys函数不能模拟发送PrintScreen键（全屏截图），必须使用底层的keybd_event函数实现才可以：  
+    My.Computer.Keyboard.SendKeys(Keys.PrintScreen) '内置函数，无效  
+    System.Windows.Forms.SendKeys.Send(Keys.PrintScreen) '内置函数，无效  
+    My.Keyboard.Click(Keys.PrintScreen) '本函数库，有效  
+09. 在Windows中，底层的keybd_event函数，也不能发送某些（跳转到当前用户的界面之外的）特殊组合键：  
+    My.Keyboard.Click(Keys.LWin, Keys.D) 'Win+D 显示桌面，有效  
+    My.Keyboard.Click(Keys.LWin, Keys.L) 'Win+L 锁定电脑，无效  
+    My.Keyboard.Click(Keys.ControlKey, Keys.ShiftKey, Keys.Escape) 'Ctrl+Shift+Esc 打开任务管理器，有效  
+    My.Keyboard.Click(Keys.ControlKey, Keys.Menu, Keys.Delete) 'Ctrl+Alt+Delete 跳转系统界面，无效  
+10. 无法模拟“Win+L”的问题，本函数库提供了一个替代方案，调用“user32.dll”中的“LockWorkStation”：  
+    My.Power.Lock() '锁定电脑，有效  
+11. VB.NET中，需要将函数指针作为参数传递时，可以用“Delegate Function”定义一个函数类型，然后用“AddressOf”获得函数的指针  
+12. VB.NET中，调用.dll文件时，Alias后的函数名才是.dll中真正起作用的函数的名称，Alias不存在时，才会寻找同名函数  
+13. VB.NET中，频繁修改窗体内容（如修改背景图片），会导致内存泄露和卡顿闪烁的问题，解决方案：  
+	If Not BackgroundImage Is Nothing Then BackgroundImage.Dispose() '在修改背景图片之前，销毁旧的背景图片  
+    System.GC.Collect() '在适当的时机和代码位置，强制进行即时垃圾回收（会增加 CPU 负荷）  
+    SetStyle(ControlStyles.OptimizedDoubleBuffer, True) '先在缓冲区中绘制，然后再绘制到屏幕上，以减少闪烁  
+    SetStyle(ControlStyles.AllPaintingInWmPaint, True) '忽略擦除背景的窗口消息，不擦除之前的背景，以减少闪烁  
+14. VB.NET中，使用“SyncLock Me”和“End SyncLock”代码块，来实现类似其它语言中的“synchronized(this)”同步锁  
+15. VB.NET中，使用“Nothing”、“New IntPtr(0)”，来实现类似其它语言中的“null”空指针  
+16. VB.NET中，使用“&HFFFFFFFFUI”的形式，尾缀UI，来表示16进制的无符号整数，即UInt32.MaxValue  
+17. VB.NET中，使用“AndAlso”、“OrElse”，来实现类似其它语言中的“&&”、“||”逻辑判断短路  
+18. 要想让窗体在启动的时候就隐藏，最好使用“Opacity = 0”来隐藏  
+    如果使用“Visible = False”或“Hide()”，写在Form_Load事件中无效果，写在Form_Shown事件中会导致窗体闪一下再消失  
