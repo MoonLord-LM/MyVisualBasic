@@ -150,7 +150,7 @@ Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间
 - 代码注释示例：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
 - 总体设计准则：采用面向过程(Procedure Oriented)为主，面向对象（Object Oriented）为辅的设计和实现方法，函数功能模块化  
 - 函数实现准则：所有可供外部调用的函数功能，都采用公共静态（Public Shared）声明，并且保证相互之间没有依赖关系  
-- 其它语言实现：<a href="..\MyCSharp">MyCSharp（C#语言等价实现）</a>
+- 其它语言实现：<a href="....\MyCSharp">MyCSharp（本函数库的 C# 语言等价实现）</a>
   
 ## [笔记]
 01. 在Visual Studio中显示行号：工具，选项，文本编辑器，所有语言，显示行号  
