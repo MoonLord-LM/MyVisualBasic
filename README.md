@@ -1,5 +1,5 @@
 # MyVisualBasic
-MyVisualBasic, a function library for Windows application development, extends the "My" namespace of VB.NET.
+MyVisualBasic, a function library for Windows application development, extends the "My" namespace of VB.NET.  
   
 ## [简介]
 Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间  
@@ -7,8 +7,8 @@ Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间
   
 ## [用法]
 引入【MyVisualBasic】文件夹中的任意 ".vb" 文件，获得函数功能的扩展  
-引入方法：解决方案资源管理器，显示所有文件，刷新，右键“.vb”文件，包括在项目内  
-各个.vb文件之间互不依赖，可根据需要选择使用，推荐完全引入，直接复制粘贴整个文件夹  
+引入方法：解决方案资源管理器，显示所有文件，刷新，右键 ".vb" 文件，包括在项目内  
+各个 ".vb" 文件之间互不依赖，可根据需要选择使用，推荐完全引入，直接复制粘贴整个文件夹  
   
 ## [结构]
 <table>
