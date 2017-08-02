@@ -124,40 +124,68 @@
 
 
         ''' <summary>
-        ''' 读取文件中的字符串数组（UTF-8）
+        ''' 读取文件中的一维字符串数组（UTF-8，注意文件的字符串内容为空时，返回空String数组）
         ''' </summary>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <returns>结果字符串数组（失败返回空String数组）</returns>
         ''' <remarks></remarks>
         Public Shared Function ReadStringArray(ByVal FilePath As String) As String()
+            If System.IO.File.Exists(FilePath) = False Then
+                Return New String() {}
+            End If
+            Dim FileInfo As New System.IO.FileInfo(FilePath)
+            If FileInfo.Length = 0 Then
+                Return New String() {}
+            End If
             Dim Reader As System.IO.StreamReader
             Try
                 Reader = New System.IO.StreamReader(FilePath, System.Text.Encoding.UTF8)
                 Dim Temp As String = Reader.ReadToEnd()
                 Reader.Dispose()
-                Return Temp.Replace(Chr(13) + Chr(10), Chr(10)).Split(New Char() {Chr(10)})
+                If Temp.Length = 0 Then
+                    Return New String() {}
+                Else
+                    Temp = Temp.Replace(Chr(13) + Chr(10), Chr(10))
+                    Dim Result As String() = Temp.Split(New Char() {Chr(10)})
+                    For I = 0 To Result.Length - 1
+                        Result(I) = Result(I).Replace("\\", "\@")
+                        Result(I) = Result(I).Replace("\r", Chr(13))
+                        Result(I) = Result(I).Replace("\n", Chr(10))
+                        Result(I) = Result(I).Replace("\@", "\")
+                    Next
+                    Return Result
+                End If
             Catch ex As Exception
                 Return New String() {}
             End Try
         End Function
 
         ''' <summary>
-        ''' 将字符串数组写入文件（覆盖，不包含UTF8的BOM头）
+        ''' 将一维字符串数组写入文件（覆盖，不包含UTF8的BOM头，注意数组的字符串内容为空时，不会实际创建或写入文件）
         ''' </summary>
         ''' <param name="StringArray">字符串数组</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <returns>是否写入成功</returns>
         ''' <remarks></remarks>
         Public Shared Function WriteStringArray(ByVal StringArray As String(), ByVal FilePath As String) As Boolean
+            If StringArray.Length = 0 Then
+                Return False
+            End If
+            For I = 0 To StringArray.Length - 1
+                StringArray(I) = StringArray(I).Replace("\", "\\")
+                StringArray(I) = StringArray(I).Replace(Chr(13), "\r")
+                StringArray(I) = StringArray(I).Replace(Chr(10), "\n")
+            Next
             Dim Builder As System.Text.StringBuilder
             Dim Writer As System.IO.StreamWriter
             Try
                 Builder = New System.Text.StringBuilder()
-                For I = 0 To StringArray.Length - 2
-                    Builder.Append(StringArray(I) & vbCrLf)
+                Builder.Append(StringArray(0))
+                For I = 1 To StringArray.Length - 1
+                    Builder.Append(vbCrLf & StringArray(I))
                 Next
-                If StringArray.Length > 0 Then
-                    Builder.Append(StringArray(StringArray.Length - 1))
+                If Builder.Length = 0 Then
+                    Return False
                 End If
                 Writer = New System.IO.StreamWriter(FilePath, False, New System.Text.UTF8Encoding(False))
                 Writer.Write(Builder)
@@ -169,20 +197,38 @@
         End Function
 
         ''' <summary>
-        ''' 将字符串数组写入文件（追加，不包含UTF8的BOM头）
+        ''' 将一维字符串数组写入文件（追加，不包含UTF8的BOM头，注意数组的字符串内容为空时，不会实际创建或写入文件）
         ''' </summary>
         ''' <param name="StringArray">字符串数组</param>
         ''' <param name="FilePath">文件路径（可以是相对路径）</param>
         ''' <returns>是否写入成功</returns>
         ''' <remarks></remarks>
         Public Shared Function AppendStringArray(ByVal StringArray As String(), ByVal FilePath As String) As Boolean
+            If StringArray.Length = 0 Then
+                Return False
+            End If
+            For I = 0 To StringArray.Length - 1
+                StringArray(I) = StringArray(I).Replace("\", "\\")
+                StringArray(I) = StringArray(I).Replace(Chr(13), "\r")
+                StringArray(I) = StringArray(I).Replace(Chr(10), "\n")
+            Next
             Dim Builder As System.Text.StringBuilder
             Dim Writer As System.IO.StreamWriter
             Try
                 Builder = New System.Text.StringBuilder()
-                For I = 0 To StringArray.Length - 1
+                If System.IO.File.Exists(FilePath) Then
+                    Dim FileInfo As New System.IO.FileInfo(FilePath)
+                    If FileInfo.Length > 0 Then
+                        Builder.Append(vbCrLf)
+                    End If
+                End If
+                Builder.Append(StringArray(0))
+                For I = 1 To StringArray.Length - 1
                     Builder.Append(vbCrLf & StringArray(I))
                 Next
+                If Builder.Length = 0 Then
+                    Return False
+                End If
                 Writer = New System.IO.StreamWriter(FilePath, True, New System.Text.UTF8Encoding(False))
                 Writer.Write(Builder)
                 Writer.Dispose()
