@@ -10,45 +10,35 @@
         ''' URL编码
         ''' </summary>
         ''' <param name="Source">要编码的字符串</param>
-        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
         ''' <returns>编码后的结果字符串</returns>
         ''' <remarks></remarks>
-        Public Shared Function URL_Encode(ByVal Source As String, Optional ByVal ToUpper As Boolean = False) As String
-            If ToUpper Then
-                Return System.Web.HttpUtility.UrlEncode(Source, System.Text.Encoding.UTF8).ToUpper()
-            Else
-                Return System.Web.HttpUtility.UrlEncode(Source, System.Text.Encoding.UTF8).ToLower()
-            End If
+        Public Shared Function URL_Encode(ByVal Source As String) As String
+            Return System.Web.HttpUtility.UrlEncode(Source, System.Text.Encoding.UTF8)
         End Function
         ''' <summary>
         ''' URL编码
         ''' </summary>
         ''' <param name="Source">要编码的字符串</param>
         ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
-        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
         ''' <returns>编码后的结果字符串</returns>
         ''' <remarks></remarks>
-        Public Shared Function URL_Encode(ByVal Source As String, ByVal Encoding As System.Text.Encoding, Optional ByVal ToUpper As Boolean = False) As String
-            If ToUpper Then
-                Return System.Web.HttpUtility.UrlEncode(Source, Encoding).ToUpper()
-            Else
-                Return System.Web.HttpUtility.UrlEncode(Source, Encoding).ToLower()
-            End If
+        Public Shared Function URL_Encode(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
+            Return System.Web.HttpUtility.UrlEncode(Source, Encoding)
         End Function
 
         ''' <summary>
         ''' URL解码
         ''' </summary>
-        ''' <param name="Source">要解码的字符串（不区分大小写字母形式）</param>
+        ''' <param name="Source">要解码的字符串</param>
         ''' <returns>解码后的结果字符串</returns>
         ''' <remarks></remarks>
         Public Shared Function URL_Decode(ByVal Source As String) As String
             Return System.Web.HttpUtility.UrlDecode(Source, System.Text.Encoding.UTF8)
         End Function
         ''' <summary>
-        ''' URL解码（大小写形式都可以识别）
+        ''' URL解码
         ''' </summary>
-        ''' <param name="Source">要解码的字符串（不区分大小写字母形式）</param>
+        ''' <param name="Source">要解码的字符串</param>
         ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
         ''' <returns>解码后的结果字符串</returns>
         ''' <remarks></remarks>
@@ -553,6 +543,24 @@
                 Result(I) = Convert.ToByte(SourceByte, 2)
             Next
             Return Result
+        End Function
+
+
+
+        ''' <summary>
+        ''' 根据文件的名称、大小、哈希值，生成文件的ED2K下载链接
+        ''' </summary>
+        ''' <param name="FileName">文件名称（不必准确）</param>
+        ''' <param name="FileLength">文件大小（必须准确）</param>
+        ''' <param name="FileHash">文件哈希值（必须准确，32位字符串）</param>
+        ''' <returns>生成的ED2K链接结果字符串（失败返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Generate_ED2K(ByVal FileName As String, ByVal FileLength As Integer, ByVal FileHash As String) As String
+            If FileHash.Length <> 32 Then
+                Return ""
+            End If
+            FileName = System.Web.HttpUtility.UrlEncode(FileName, System.Text.Encoding.UTF8)
+            Return "ed2k://|file|" & FileName & "|" & FileLength & "|" & FileHash & "|/"
         End Function
 
     End Class
