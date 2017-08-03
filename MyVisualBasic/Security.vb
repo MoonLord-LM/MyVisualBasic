@@ -548,6 +548,96 @@
 
 
         ''' <summary>
+        ''' 十六进制编码（由0-F组成的，2的整数倍位数的16进制字符串）
+        ''' </summary>
+        ''' <param name="Source">要编码的Byte数组</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>编码后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Encode(ByVal Source As Byte(), Optional ByVal ToUpper As Boolean = True) As String
+            If ToUpper Then
+                Return BitConverter.ToString(Source).Replace("-", "").ToUpper()
+            Else
+                Return BitConverter.ToString(Source).Replace("-", "").ToLower()
+            End If
+        End Function
+        ''' <summary>
+        ''' 十六进制编码（由0-F组成的，2的整数倍位数的16进制字符串）
+        ''' </summary>
+        ''' <param name="Source">要编码的字符串</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>编码后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Encode(ByVal Source As String, Optional ByVal ToUpper As Boolean = True) As String
+            If ToUpper Then
+                Return BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes(Source)).Replace("-", "").ToUpper()
+            Else
+                Return BitConverter.ToString(System.Text.Encoding.UTF8.GetBytes(Source)).Replace("-", "").ToLower()
+            End If
+        End Function
+        ''' <summary>
+        ''' 十六进制编码（由0-F组成的，2的整数倍位数的16进制字符串）
+        ''' </summary>
+        ''' <param name="Source">要编码的字符串</param>
+        ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>编码后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Encode(ByVal Source As String, ByVal Encoding As System.Text.Encoding, Optional ByVal ToUpper As Boolean = True) As String
+            If ToUpper Then
+                Return BitConverter.ToString(Encoding.GetBytes(Source)).Replace("-", "").ToUpper()
+            Else
+                Return BitConverter.ToString(Encoding.GetBytes(Source)).Replace("-", "").ToLower()
+            End If
+        End Function
+
+        ''' <summary>
+        ''' 十六进制解码（将由0-F组成的，2的整数倍位数的16进制字符串，转换为原始意义的Byte数组）
+        ''' </summary>
+        ''' <param name="Source">要解码的字符串</param>
+        ''' <returns>解码后的结果Byte数组</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Decode(ByVal Source As String) As Byte()
+            Dim Result(Source.Length / 2 - 1) As Byte
+            For I = 0 To Source.Length / 2 - 1
+                Dim SourceByte As String = Source.Substring(I * 2, 2)
+                Result(I) = Convert.ToByte(SourceByte, 16)
+            Next
+            Return Result
+        End Function
+        ''' <summary>
+        ''' 十六进制解码（将由0-F组成的，2的整数倍位数的16进制字符串，转换为原始意义的字符串）
+        ''' </summary>
+        ''' <param name="Source">要解码的字符串</param>
+        ''' <returns>解码后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Decode_String(ByVal Source As String) As String
+            Dim Result(Source.Length / 2 - 1) As Byte
+            For I = 0 To Source.Length / 2 - 1
+                Dim SourceByte As String = Source.Substring(I * 2, 2)
+                Result(I) = Convert.ToByte(SourceByte, 16)
+            Next
+            Return System.Text.Encoding.UTF8.GetString(Result)
+        End Function
+        ''' <summary>
+        ''' 十六进制解码（将由0-F组成的，2的整数倍位数的16进制字符串，转换为原始意义的字符串）
+        ''' </summary>
+        ''' <param name="Source">要解码的字符串</param>
+        ''' <param name="Encoding">使用特定的字符编码（默认UTF-8）</param>
+        ''' <returns>解码后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Decode_String(ByVal Source As String, ByVal Encoding As System.Text.Encoding) As String
+            Dim Result(Source.Length / 2 - 1) As Byte
+            For I = 0 To Source.Length / 2 - 1
+                Dim SourceByte As String = Source.Substring(I * 2, 2)
+                Result(I) = Convert.ToByte(SourceByte, 16)
+            Next
+            Return System.Text.Encoding.UTF8.GetString(Result)
+        End Function
+
+
+
+        ''' <summary>
         ''' 根据文件的名称、大小、哈希值，生成文件的ED2K下载链接
         ''' </summary>
         ''' <param name="FileName">文件名称（不必准确）</param>
