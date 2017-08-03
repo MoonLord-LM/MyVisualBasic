@@ -564,6 +564,20 @@
         ''' <summary>
         ''' 十六进制编码（由0-F组成的，2的整数倍位数的16进制字符串）
         ''' </summary>
+        ''' <param name="Source">要编码的Int32值</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>编码后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Encode(ByVal Source As Int32, Optional ByVal ToUpper As Boolean = True) As String
+            If ToUpper Then
+                Return Source.ToString("X8")
+            Else
+                Return Source.ToString("x8")
+            End If
+        End Function
+        ''' <summary>
+        ''' 十六进制编码（由0-F组成的，2的整数倍位数的16进制字符串）
+        ''' </summary>
         ''' <param name="Source">要编码的字符串</param>
         ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
         ''' <returns>编码后的结果字符串</returns>
@@ -604,6 +618,15 @@
                 Result(I) = Convert.ToByte(SourceByte, 16)
             Next
             Return Result
+        End Function
+        ''' <summary>
+        ''' 十六进制解码（将由0-F组成的，2的整数倍位数的16进制字符串，转换为原始意义的Int32值）
+        ''' </summary>
+        ''' <param name="Source">要解码的字符串</param>
+        ''' <returns>解码后的结果Int32值</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Hex_Decode_Int32(ByVal Source As String) As String
+            Return Int32.Parse(Source, System.Globalization.NumberStyles.HexNumber)
         End Function
         ''' <summary>
         ''' 十六进制解码（将由0-F组成的，2的整数倍位数的16进制字符串，转换为原始意义的字符串）
