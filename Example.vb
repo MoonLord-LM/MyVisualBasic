@@ -207,6 +207,79 @@
             End If
         End Sub
 
+
+
+        ''' <summary>
+        ''' 文件列表式备份（保存文件的绝对路径、名称、后缀、大小、哈希值、ED2K链接等）
+        ''' </summary>
+        ''' <param name="CalculateHash">是否读取文件内容，计算哈希值（较慢）</param>
+        ''' <remarks></remarks>
+        Public Shared Sub FileListBackup(Optional ByVal CalculateHash As Boolean = False)
+            Dim Dialog1 As New FolderBrowserDialog
+            Dialog1.Description = "请选择要备份的文件夹路径"
+            If Dialog1.ShowDialog() = DialogResult.OK Then
+                Dim DirInfo As New System.IO.DirectoryInfo(Dialog1.SelectedPath)
+                Dim SavePath As String = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory)
+                SavePath = SavePath & "\" & "【" & DirInfo.Name & "】" & My.Time.Stamp() & ".log"
+                My.IO.WriteString("【备份时间：" & Now & "】" & vbCrLf, SavePath)
+                My.IO.AppendString("【备份路径：" & DirInfo.FullName & "】" & vbCrLf, SavePath)
+                My.IO.AppendString("【本地时区：" & TimeZone.CurrentTimeZone.StandardName & " " & TimeZone.CurrentTimeZone.GetUtcOffset(Now).ToString() & "】" & vbCrLf, SavePath)
+                Dim Files As String() = My.IO.ListFile(Dialog1.SelectedPath)
+                My.IO.AppendString("【文件数目：" & Files.Length & "】" & vbCrLf, SavePath)
+                If CalculateHash = False Then
+                    My.IO.AppendString("【属性说明：完整路径、文件名、文件后缀<快捷方式指向位置>、文件大小、创建时间、修改时间、访问时间】" & vbCrLf, SavePath)
+                Else
+                    My.IO.AppendString("【属性说明：完整路径、文件名、文件后缀<快捷方式指向位置>、文件大小、创建时间、修改时间、访问时间、ED2K下载链接、MD5值、SHA1值、SHA256值、SHA384值、SHA512值】" & vbCrLf, SavePath)
+                End If
+                For I = 0 To Files.Length - 1
+                    Dim File As String = Files(I)
+                    Dim FileInfo As New System.IO.FileInfo(File)
+                    Dim Buffer As New System.Text.StringBuilder()
+                    Buffer.Append(vbCrLf)
+                    Buffer.Append("""" & I + 1 & """")
+                    Buffer.Append(" ")
+                    Buffer.Append("""" & FileInfo.FullName & """")
+                    Buffer.Append(" ")
+                    Buffer.Append("""" & FileInfo.Name & """")
+                    Buffer.Append(" ")
+                    If FileInfo.Extension.ToLower() <> ".lnk" Then
+                        Buffer.Append("""" & FileInfo.Extension & """")
+                        Buffer.Append(" ")
+                    Else
+                        Dim Link As String = My.IO.ReadLinkFile(File)
+                        Buffer.Append("""" & FileInfo.Extension & "<" & Link & ">" & """")
+                        Buffer.Append(" ")
+                        File = Link
+                    End If
+                    Buffer.Append("""" & FileInfo.Length & """")
+                    Buffer.Append(" ")
+                    Buffer.Append("""" & FileInfo.CreationTime() & """")
+                    Buffer.Append(" ")
+                    Buffer.Append("""" & FileInfo.LastWriteTime() & """")
+                    Buffer.Append(" ")
+                    Buffer.Append("""" & FileInfo.LastAccessTime() & """")
+                    Buffer.Append(" ")
+                    If CalculateHash Then
+                        Dim Source As Byte() = My.IO.ReadByte(File)
+                        Buffer.Append("""" & My.Security.Generate_ED2K_Link(FileInfo.Name, Source) & """")
+                        Buffer.Append(" ")
+                        Buffer.Append("""" & My.Security.MD5_Encode(Source) & """")
+                        Buffer.Append(" ")
+                        Buffer.Append("""" & My.Security.SHA1_Encode(Source) & """")
+                        Buffer.Append(" ")
+                        Buffer.Append("""" & My.Security.SHA256_Encode(Source) & """")
+                        Buffer.Append(" ")
+                        Buffer.Append("""" & My.Security.SHA384_Encode(Source) & """")
+                        Buffer.Append(" ")
+                        Buffer.Append("""" & My.Security.SHA512_Encode(Source) & """")
+                        Buffer.Append(" ")
+                    End If
+                    My.IO.AppendString(Buffer.ToString(), SavePath)
+                Next
+            End If
+
+        End Sub
+
     End Class
 
 End Namespace
