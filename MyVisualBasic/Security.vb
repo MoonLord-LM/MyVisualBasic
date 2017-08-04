@@ -821,19 +821,102 @@
 
 
         ''' <summary>
+        ''' MD4混合加密（用于ED2K链接中的文件哈希值的计算，摘要结果为32位16进制字符串）
+        ''' </summary>
+        ''' <param name="Source">要加密的Byte数组</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>加密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function MD4_ED2K_Encode(ByVal Source As Byte(), Optional ByVal ToUpper As Boolean = True) As String
+            Dim ChunkSize As Integer = 9728000
+            Dim ChunkCount As Integer = Math.Ceiling(Source.Length / ChunkSize)
+            Dim ChunkBuffer(ChunkSize - 1) As Byte
+            Dim ChunkHash As New List(Of Byte)
+            For I = 0 To ChunkCount - 1
+                If Source.Length - (ChunkSize * I) > ChunkSize Then
+                    Array.Copy(Source, ChunkSize * I, ChunkBuffer, 0, ChunkSize)
+                    Dim Chunk_MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(ChunkBuffer)
+                    ChunkHash.AddRange(Chunk_MD4.DigestResult())
+                    For J = 0 To ChunkBuffer.Length - 1
+                        ChunkBuffer(J) = 0
+                    Next
+                Else
+                    ReDim ChunkBuffer(Source.Length - (ChunkSize * I) - 1)
+                    Array.Copy(Source, ChunkSize * I, ChunkBuffer, 0, ChunkBuffer.Length)
+                    Dim Chunk_MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(ChunkBuffer)
+                    ChunkHash.AddRange(Chunk_MD4.DigestResult())
+                End If
+            Next
+            If ChunkCount = 1 Then
+                If ToUpper Then
+                    Return BitConverter.ToString(ChunkHash.ToArray()).Replace("-", "").ToUpper()
+                Else
+                    Return BitConverter.ToString(ChunkHash.ToArray()).Replace("-", "").ToLower()
+                End If
+            Else
+                Dim Total_MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(ChunkHash.ToArray())
+                If ToUpper Then
+                    Return BitConverter.ToString(Total_MD4.DigestResult()).Replace("-", "").ToUpper()
+                Else
+                    Return BitConverter.ToString(Total_MD4.DigestResult()).Replace("-", "").ToLower()
+                End If
+            End If
+        End Function
+
+        ''' <summary>
         ''' 根据文件的名称、大小、哈希值，生成文件的ED2K下载链接
         ''' </summary>
-        ''' <param name="FileName">文件名称（不必准确）</param>
-        ''' <param name="FileLength">文件大小（必须准确）</param>
-        ''' <param name="FileHash">文件哈希值（必须准确，32位字符串）</param>
+        ''' <param name="FileName">文件名称（不能为空字符串）</param>
+        ''' <param name="FileLength">文件大小（必须大于0）</param>
+        ''' <param name="FileHash">文件哈希值（用于ED2K链接中的MD4混合哈希值）</param>
         ''' <returns>生成的ED2K链接结果字符串（失败返回空字符串）</returns>
         ''' <remarks></remarks>
-        Public Shared Function Generate_ED2K(ByVal FileName As String, ByVal FileLength As Integer, ByVal FileHash As String) As String
-            If FileHash.Length <> 32 Then
+        Public Shared Function Generate_ED2K_Link(ByVal FileName As String, ByVal FileLength As Integer, ByVal FileHash As String) As String
+            If FileName = "" OrElse FileHash.Length <> 32 OrElse FileLength <= 0 Then
                 Return ""
             End If
             FileName = System.Web.HttpUtility.UrlEncode(FileName, System.Text.Encoding.UTF8)
             Return "ed2k://|file|" & FileName & "|" & FileLength & "|" & FileHash & "|/"
+        End Function
+        ''' <summary>
+        ''' 根据文件的名称和字节内容，生成文件的ED2K下载链接
+        ''' </summary>
+        ''' <param name="FileName">文件名称（不能为空字符串）</param>
+        ''' <param name="Source">文件内容（不能为空Byte数组）</param>
+        ''' <returns>生成的ED2K链接结果字符串（失败返回空字符串）</returns>
+        ''' <remarks></remarks>
+        Public Shared Function Generate_ED2K_Link(ByVal FileName As String, ByVal Source As Byte()) As String
+            If FileName = "" OrElse Source.Length = 0 Then
+                Return ""
+            End If
+            FileName = System.Web.HttpUtility.UrlEncode(FileName, System.Text.Encoding.UTF8)
+            Dim ChunkSize As Integer = 9728000
+            Dim ChunkCount As Integer = Math.Ceiling(Source.Length / ChunkSize)
+            Dim ChunkBuffer(ChunkSize - 1) As Byte
+            Dim ChunkHash As New List(Of Byte)
+            For I = 0 To ChunkCount - 1
+                If Source.Length - (ChunkSize * I) > ChunkSize Then
+                    Array.Copy(Source, ChunkSize * I, ChunkBuffer, 0, ChunkSize)
+                    Dim Chunk_MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(ChunkBuffer)
+                    ChunkHash.AddRange(Chunk_MD4.DigestResult())
+                    For J = 0 To ChunkBuffer.Length - 1
+                        ChunkBuffer(J) = 0
+                    Next
+                Else
+                    ReDim ChunkBuffer(Source.Length - (ChunkSize * I) - 1)
+                    Array.Copy(Source, ChunkSize * I, ChunkBuffer, 0, ChunkBuffer.Length)
+                    Dim Chunk_MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(ChunkBuffer)
+                    ChunkHash.AddRange(Chunk_MD4.DigestResult())
+                End If
+            Next
+            Dim FileHash As String
+            If ChunkCount = 1 Then
+                FileHash = BitConverter.ToString(ChunkHash.ToArray()).Replace("-", "")
+            Else
+                Dim Total_MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(ChunkHash.ToArray())
+                FileHash = BitConverter.ToString(Total_MD4.DigestResult()).Replace("-", "")
+            End If
+            Return "ed2k://|file|" & FileName & "|" & Source.Length & "|" & FileHash & "|/"
         End Function
 
     End Class
