@@ -660,6 +660,170 @@
 
 
 
+        Public Class MD4_Hash_Algorithm
+            Private Const BlockSize As Integer = 512 / 8
+            Private Context As UInt32() = New UInt32() {1732584193, 4023233417, 2562383102, 271733878}
+            Private ProcessedCount As Integer = 0
+            Private InputBuffer(BlockSize - 1) As Byte
+            Private WorkBuffer(BlockSize / 4 - 1) As UInt32
+            Public Sub New(ByVal InputBytes As Byte())
+                Update(InputBytes)
+            End Sub
+            Private Sub Update(ByVal InputBytes As Byte())
+                Dim UnhashedBufferLength As Integer = ProcessedCount Mod BlockSize
+                Dim PartLength As Integer = BlockSize - UnhashedBufferLength
+                Dim I As Integer = 0
+                If InputBytes.Length >= PartLength Then
+                    Array.Copy(InputBytes, I, InputBuffer, UnhashedBufferLength, PartLength)
+                    Transform(InputBuffer, 0)
+                    I = PartLength
+                    Do While (I + BlockSize - 1) < InputBytes.Length
+                        Transform(InputBytes, I)
+                        I += BlockSize
+                    Loop
+                    UnhashedBufferLength = 0
+                End If
+                If I < InputBytes.Length Then
+                    Array.Copy(InputBytes, I, InputBuffer, UnhashedBufferLength, InputBytes.Length - I)
+                End If
+                ProcessedCount += InputBytes.Length
+            End Sub
+            Private Sub Transform(ByRef Block As Byte(), ByVal Offset As Integer)
+                For I = 0 To 15
+                    If Offset >= Block.Length Then
+                        Exit For
+                    End If
+                    WorkBuffer(I) = (CType(Block(Offset + 0), UInt32) And Byte.MaxValue)
+                    WorkBuffer(I) = WorkBuffer(I) Or ((CType(Block(Offset + 1), UInt32) And Byte.MaxValue) << 8)
+                    WorkBuffer(I) = WorkBuffer(I) Or ((CType(Block(Offset + 2), UInt32) And Byte.MaxValue) << 16)
+                    WorkBuffer(I) = WorkBuffer(I) Or ((CType(Block(Offset + 3), UInt32) And Byte.MaxValue) << 24)
+                    Offset += 4
+                Next
+                Dim A As UInt32 = Context(0)
+                Dim B As UInt32 = Context(1)
+                Dim C As UInt32 = Context(2)
+                Dim D As UInt32 = Context(3)
+                A = Round1(A, B, C, D, WorkBuffer(0), 3)
+                D = Round1(D, A, B, C, WorkBuffer(1), 7)
+                C = Round1(C, D, A, B, WorkBuffer(2), 11)
+                B = Round1(B, C, D, A, WorkBuffer(3), 19)
+                A = Round1(A, B, C, D, WorkBuffer(4), 3)
+                D = Round1(D, A, B, C, WorkBuffer(5), 7)
+                C = Round1(C, D, A, B, WorkBuffer(6), 11)
+                B = Round1(B, C, D, A, WorkBuffer(7), 19)
+                A = Round1(A, B, C, D, WorkBuffer(8), 3)
+                D = Round1(D, A, B, C, WorkBuffer(9), 7)
+                C = Round1(C, D, A, B, WorkBuffer(10), 11)
+                B = Round1(B, C, D, A, WorkBuffer(11), 19)
+                A = Round1(A, B, C, D, WorkBuffer(12), 3)
+                D = Round1(D, A, B, C, WorkBuffer(13), 7)
+                C = Round1(C, D, A, B, WorkBuffer(14), 11)
+                B = Round1(B, C, D, A, WorkBuffer(15), 19)
+                A = Round2(A, B, C, D, WorkBuffer(0), 3)
+                D = Round2(D, A, B, C, WorkBuffer(4), 5)
+                C = Round2(C, D, A, B, WorkBuffer(8), 9)
+                B = Round2(B, C, D, A, WorkBuffer(12), 13)
+                A = Round2(A, B, C, D, WorkBuffer(1), 3)
+                D = Round2(D, A, B, C, WorkBuffer(5), 5)
+                C = Round2(C, D, A, B, WorkBuffer(9), 9)
+                B = Round2(B, C, D, A, WorkBuffer(13), 13)
+                A = Round2(A, B, C, D, WorkBuffer(2), 3)
+                D = Round2(D, A, B, C, WorkBuffer(6), 5)
+                C = Round2(C, D, A, B, WorkBuffer(10), 9)
+                B = Round2(B, C, D, A, WorkBuffer(14), 13)
+                A = Round2(A, B, C, D, WorkBuffer(3), 3)
+                D = Round2(D, A, B, C, WorkBuffer(7), 5)
+                C = Round2(C, D, A, B, WorkBuffer(11), 9)
+                B = Round2(B, C, D, A, WorkBuffer(15), 13)
+                A = Round3(A, B, C, D, WorkBuffer(0), 3)
+                D = Round3(D, A, B, C, WorkBuffer(8), 9)
+                C = Round3(C, D, A, B, WorkBuffer(4), 11)
+                B = Round3(B, C, D, A, WorkBuffer(12), 15)
+                A = Round3(A, B, C, D, WorkBuffer(2), 3)
+                D = Round3(D, A, B, C, WorkBuffer(10), 9)
+                C = Round3(C, D, A, B, WorkBuffer(6), 11)
+                B = Round3(B, C, D, A, WorkBuffer(14), 15)
+                A = Round3(A, B, C, D, WorkBuffer(1), 3)
+                D = Round3(D, A, B, C, WorkBuffer(9), 9)
+                C = Round3(C, D, A, B, WorkBuffer(5), 11)
+                B = Round3(B, C, D, A, WorkBuffer(13), 15)
+                A = Round3(A, B, C, D, WorkBuffer(3), 3)
+                D = Round3(D, A, B, C, WorkBuffer(11), 9)
+                C = Round3(C, D, A, B, WorkBuffer(7), 11)
+                B = Round3(B, C, D, A, WorkBuffer(15), 15)
+                Context(0) = &HFFFFFFFFUI And (Context(0) + Convert.ToInt64(A))
+                Context(1) = &HFFFFFFFFUI And (Context(1) + Convert.ToInt64(B))
+                Context(2) = &HFFFFFFFFUI And (Context(2) + Convert.ToInt64(C))
+                Context(3) = &HFFFFFFFFUI And (Context(3) + Convert.ToInt64(D))
+            End Sub
+            Private Function Round1(ByVal P1 As UInt32, ByVal P2 As UInt32, ByVal P3 As UInt32, ByVal P4 As UInt32, ByVal X As UInt32, ByVal S As Integer) As UInt32
+                Dim T As UInt32 = &HFFFFFFFFUI And (&HFFFFFFFFUI And (Convert.ToInt64(P1) + ((P2 And P3) Or ((Not P2) And P4))) + Convert.ToInt64(X))
+                Return T << S Or T >> (32 - S)
+            End Function
+            Private Function Round2(ByVal P1 As UInt32, ByVal P2 As UInt32, ByVal P3 As UInt32, ByVal P4 As UInt32, ByVal X As UInt32, ByVal S As Integer) As UInt32
+                Dim T As UInt32 = &HFFFFFFFFUI And (&HFFFFFFFFUI And (Convert.ToInt64(P1) + ((P2 And (P3 Or P4)) Or (P3 And P4))) + Convert.ToInt64(X) + 1518500249)      '&H5A827999
+                Return T << S Or T >> (32 - S)
+            End Function
+            Private Function Round3(ByVal P1 As UInt32, ByVal P2 As UInt32, ByVal P3 As UInt32, ByVal P4 As UInt32, ByVal X As UInt32, ByVal S As Integer) As UInt32
+                Dim T As UInt32 = &HFFFFFFFFUI And (&HFFFFFFFFUI And (Convert.ToInt64(P1) + (P2 Xor P3 Xor P4)) + Convert.ToInt64(X) + &H6ED9EBA1)
+                Return T << S Or T >> (32 - S)
+            End Function
+            Public Function DigestResult() As Byte()
+                Dim UnhashedBufferLength As Integer = CType(ProcessedCount Mod BlockSize, Integer)
+                Dim PaddingLength As Integer
+                If UnhashedBufferLength < 56 Then
+                    PaddingLength = 56 - UnhashedBufferLength
+                Else
+                    PaddingLength = 120 - UnhashedBufferLength
+                End If
+                Dim Tail(PaddingLength + 8 - 1) As Byte
+                Tail(0) = CType(128, Byte)
+                Dim TempArray As Byte()
+                TempArray = BitConverter.GetBytes(ProcessedCount * 8)
+                TempArray.CopyTo(Tail, PaddingLength)
+                Update(Tail)
+                Dim Result(16 - 1) As Byte
+                For I As Integer = 0 To 3
+                    Dim TempStore(4 - 1) As Byte
+                    TempStore = BitConverter.GetBytes(Context(I))
+                    TempStore.CopyTo(Result, I * 4)
+                Next
+                Return Result
+            End Function
+        End Class
+        ''' <summary>
+        ''' MD4加密（摘要结果为32位16进制字符串）
+        ''' </summary>
+        ''' <param name="Source">要加密的Byte数组</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>加密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function MD4_Encode(ByVal Source As Byte(), Optional ByVal ToUpper As Boolean = True) As String
+            Dim MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(Source)
+            If ToUpper Then
+                Return BitConverter.ToString(MD4.DigestResult()).Replace("-", "").ToUpper()
+            Else
+                Return BitConverter.ToString(MD4.DigestResult()).Replace("-", "").ToLower()
+            End If
+        End Function
+        ''' <summary>
+        ''' MD4加密（摘要结果为32位16进制字符串）
+        ''' </summary>
+        ''' <param name="Source">要加密的字符串</param>
+        ''' <param name="ToUpper">是否将结果转换为大写字母形式</param>
+        ''' <returns>加密后的结果字符串</returns>
+        ''' <remarks></remarks>
+        Public Shared Function MD4_Encode(ByVal Source As String, Optional ByVal ToUpper As Boolean = True) As String
+            Dim MD4 As MD4_Hash_Algorithm = New MD4_Hash_Algorithm(System.Text.Encoding.UTF8.GetBytes(Source))
+            If ToUpper Then
+                Return BitConverter.ToString(MD4.DigestResult()).Replace("-", "").ToUpper()
+            Else
+                Return BitConverter.ToString(MD4.DigestResult()).Replace("-", "").ToLower()
+            End If
+        End Function
+
+
+
         ''' <summary>
         ''' 根据文件的名称、大小、哈希值，生成文件的ED2K下载链接
         ''' </summary>
