@@ -662,7 +662,7 @@
 
         Public Class MD4_Hash_Algorithm
             Private Const BlockSize As Integer = 512 / 8
-            Private Context As UInt32() = New UInt32() {1732584193, 4023233417, 2562383102, 271733878}
+            Private Context As UInt32() = New UInt32() {&H67452301UI, &HEFCDAB89UI, &H98BADCFEUI, &H10325476UI}
             Private ProcessedCount As Integer = 0
             Private InputBuffer(BlockSize - 1) As Byte
             Private WorkBuffer(BlockSize / 4 - 1) As UInt32
@@ -672,19 +672,19 @@
             Private Sub Update(ByVal InputBytes As Byte())
                 Dim UnhashedBufferLength As Integer = ProcessedCount Mod BlockSize
                 Dim PartLength As Integer = BlockSize - UnhashedBufferLength
-                Dim I As Integer = 0
+                Dim Index As Integer = 0
                 If InputBytes.Length >= PartLength Then
-                    Array.Copy(InputBytes, I, InputBuffer, UnhashedBufferLength, PartLength)
+                    Array.Copy(InputBytes, Index, InputBuffer, UnhashedBufferLength, PartLength)
                     Transform(InputBuffer, 0)
-                    I = PartLength
-                    Do While (I + BlockSize - 1) < InputBytes.Length
-                        Transform(InputBytes, I)
-                        I += BlockSize
+                    Index = PartLength
+                    Do While (Index + BlockSize - 1) < InputBytes.Length
+                        Transform(InputBytes, Index)
+                        Index += BlockSize
                     Loop
                     UnhashedBufferLength = 0
                 End If
-                If I < InputBytes.Length Then
-                    Array.Copy(InputBytes, I, InputBuffer, UnhashedBufferLength, InputBytes.Length - I)
+                If Index < InputBytes.Length Then
+                    Array.Copy(InputBytes, Index, InputBuffer, UnhashedBufferLength, InputBytes.Length - Index)
                 End If
                 ProcessedCount += InputBytes.Length
             End Sub
@@ -761,11 +761,11 @@
                 Return T << S Or T >> (32 - S)
             End Function
             Private Function Round2(ByVal P1 As UInt32, ByVal P2 As UInt32, ByVal P3 As UInt32, ByVal P4 As UInt32, ByVal X As UInt32, ByVal S As Integer) As UInt32
-                Dim T As UInt32 = &HFFFFFFFFUI And (&HFFFFFFFFUI And (Convert.ToInt64(P1) + ((P2 And (P3 Or P4)) Or (P3 And P4))) + Convert.ToInt64(X) + 1518500249)      '&H5A827999
+                Dim T As UInt32 = &HFFFFFFFFUI And (&HFFFFFFFFUI And (Convert.ToInt64(P1) + ((P2 And (P3 Or P4)) Or (P3 And P4))) + Convert.ToInt64(X) + &H5A827999UI)
                 Return T << S Or T >> (32 - S)
             End Function
             Private Function Round3(ByVal P1 As UInt32, ByVal P2 As UInt32, ByVal P3 As UInt32, ByVal P4 As UInt32, ByVal X As UInt32, ByVal S As Integer) As UInt32
-                Dim T As UInt32 = &HFFFFFFFFUI And (&HFFFFFFFFUI And (Convert.ToInt64(P1) + (P2 Xor P3 Xor P4)) + Convert.ToInt64(X) + &H6ED9EBA1)
+                Dim T As UInt32 = &HFFFFFFFFUI And (&HFFFFFFFFUI And (Convert.ToInt64(P1) + (P2 Xor P3 Xor P4)) + Convert.ToInt64(X) + &H6ED9EBA1UI)
                 Return T << S Or T >> (32 - S)
             End Function
             Public Function DigestResult() As Byte()
@@ -778,15 +778,11 @@
                 End If
                 Dim Tail(PaddingLength + 8 - 1) As Byte
                 Tail(0) = CType(128, Byte)
-                Dim TempArray As Byte()
-                TempArray = BitConverter.GetBytes(ProcessedCount * 8)
-                TempArray.CopyTo(Tail, PaddingLength)
+                BitConverter.GetBytes(ProcessedCount * 8).CopyTo(Tail, PaddingLength)
                 Update(Tail)
                 Dim Result(16 - 1) As Byte
                 For I As Integer = 0 To 3
-                    Dim TempStore(4 - 1) As Byte
-                    TempStore = BitConverter.GetBytes(Context(I))
-                    TempStore.CopyTo(Result, I * 4)
+                    BitConverter.GetBytes(Context(I)).CopyTo(Result, I * 4)
                 Next
                 Return Result
             End Function
