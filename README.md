@@ -189,3 +189,4 @@ Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间
 18. 要想让窗体在启动的时候就隐藏，最好使用“Opacity = 0”来隐藏  
     如果使用“Visible = False”或“Hide()”，写在Form_Load事件中无效果，写在Form_Shown事件中会导致窗体闪一下再消失  
 19. 在Visual Studio中设定制表符：工具，选项，文本编辑器，所有语言，制表符，大小4，缩进4，插入空格  
+20. VB.NET中，将UInt64转换为UInt32的方法：Convert.ToUInt32(&HFFFFFFFFUI And UInt64.MaxValue)，位运算结果为UInt32.MaxValue  

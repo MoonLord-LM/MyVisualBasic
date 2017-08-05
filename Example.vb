@@ -236,7 +236,7 @@
                     Dim FileInfo As New System.IO.FileInfo(File)
                     Dim Buffer As New System.Text.StringBuilder()
                     Buffer.Append(vbCrLf)
-                    Buffer.Append("""" & I + 1 & """")
+                    Buffer.Append("""" & (I + 1) & """")
                     Buffer.Append(" ")
                     Buffer.Append("""" & FileInfo.FullName & """")
                     Buffer.Append(" ")
