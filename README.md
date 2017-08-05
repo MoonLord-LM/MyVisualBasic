@@ -148,7 +148,7 @@ Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间
 - 项目需要引用：System，System.Drawing，System.Web，System.Windows.Forms  
 - 代码空行规则：可以重载的或功能类似的函数不用空行隔开，有一定关系的函数隔开一行，无关的函数隔开三行  
 - 代码注释示例：“结果字符串（失败返回空字符串）”，“结果Byte数组（失败返回空Byte数组）”，“使用特定的字符编码（默认UTF-8）”  
-- 总体设计准则：采用面向过程(Procedure Oriented)为主，面向对象（Object Oriented）为辅的设计和实现方法，函数功能模块化  
+- 总体设计准则：采用面向过程（Procedure Oriented）为主，面向对象（Object Oriented）为辅的设计和实现方法，函数功能模块化  
 - 函数实现准则：所有可供外部调用的函数功能，都采用公共静态（Public Shared）声明，并且保证相互之间没有依赖关系  
 - 其它语言实现：<a href="https://github.com/MoonLord-LM/MyCSharp">MyCSharp（本函数库的 C# 语言等价实现）</a>
   
@@ -189,4 +189,4 @@ Windows应用程序开发函数库，扩展 VB.NET 中的 "My" 命名空间
 18. 要想让窗体在启动的时候就隐藏，最好使用“Opacity = 0”来隐藏  
     如果使用“Visible = False”或“Hide()”，写在Form_Load事件中无效果，写在Form_Shown事件中会导致窗体闪一下再消失  
 19. 在Visual Studio中设定制表符：工具，选项，文本编辑器，所有语言，制表符，大小4，缩进4，插入空格  
-20. VB.NET中，将UInt64转换为UInt32的方法：Convert.ToUInt32(&HFFFFFFFFUI And UInt64.MaxValue)，位运算结果为UInt32.MaxValue  
+20. VB.NET中，将UInt64转换为UInt32（保留较低的32位）的方法：Convert.ToUInt32(&HFFFFFFFFUI And UInt64.MaxValue)，位运算结果为UInt32.MaxValue  
