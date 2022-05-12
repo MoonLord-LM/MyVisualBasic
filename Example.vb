@@ -16,7 +16,7 @@
             Dim BlockSize As UInt32 = 256 * 1024 * 1024
             Dim BlockSizeMB As UInt32 = Int(BlockSize / 1024 / 1024)
             Dim TestedGB As UInt32 = 0
-            While My.Computer.Info.AvailablePhysicalMemory > BlockSize
+            While True 'My.Computer.Info.AvailablePhysicalMemory > BlockSize
                 Dim Testing As UInt32() = Nothing
                 '初始0
                 Try
