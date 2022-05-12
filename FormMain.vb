@@ -1,15 +1,12 @@
 ﻿Public Class FormMain
 
     Private Sub FormMain_Load(sender As System.Object, e As System.EventArgs) Handles MyBase.Load
-        Me.Opacity = 0
-        Me.Hide()
-        Application.DoEvents()
-
         Dim Thread As New Threading.Thread(New Threading.ThreadStart(AddressOf My.Example.MemoryTest))
         Thread.Start()
         Application.Exit()
 
         If (1 - 1 = 0) Then Return
+
         Dim A As Integer, B As Integer = A / B
         Application.Exit()
         Process.GetCurrentProcess().Kill()
@@ -33,6 +30,7 @@
 
         Timer2.Enabled = True
     End Sub
+
     '2秒
     Private Sub Timer2_Tick(sender As System.Object, e As System.EventArgs) Handles Timer2.Tick
         Timer2.Enabled = False

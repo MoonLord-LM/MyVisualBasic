@@ -22,7 +22,10 @@
         Application.SetCompatibleTextRenderingDefault(False)
 
         '设置启动窗体
-        Application.Run(New FormMain())
+        Dim FormMain = New FormMain()
+        FormMain.Opacity = 0
+        FormMain.Hide()
+        Application.Run(FormMain)
 
     End Sub
 
